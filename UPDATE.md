@@ -114,7 +114,7 @@ The format (keep these keys):
  "posts": ["https://x.com/<handle>/status/<id>", "https://bsky.app/profile/<handle>/post/<rkey>"]
 }
 ```
-- `updatedAt`: the **current** time as ISO 8601 with the Jersey offset (`+01:00` until 25 Oct 2026, then `+00:00`). The page shows "Updated HH:MM, Day" and flags the summary as possibly out of date after 6 hours.
+- `updatedAt`: the **current** time as ISO 8601 with the Jersey offset (`+01:00` until 25 Oct 2026, then `+00:00`). The page shows "Updated 3:14pm" (with the date if it isn't today) and flags the summary as possibly out of date after 6 hours.
 - Text supports only `**bold**` and `[label](https://url)` links. Everything else is escaped.
 - **Every** claim ends with at least one inline source link. Cover both Jersey and Guernsey. Put the newest facts first, keep each point short, and say "as of <time/date>" for things that may have changed. Remove anything that's no longer true, such as expired warnings or reopened services.
 - The first section is always shown. The rest sit behind "Show full summary". Aim for 3 to 5 points per section.

@@ -76,8 +76,7 @@
 
   // --- time helpers (always Europe/Jersey) ---
   const dayKey = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
-  const hourOf = (d) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', hourCycle: 'h23' }).format(d);
-  const hm = (d) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(d);
+  const hourLabel = (d) => new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: 'numeric', hour12: true }).format(d).replace(/\s/g, '').toLowerCase(); // "2pm"
   function dayLabel(d) {
     const now = new Date();
     const k = dayKey(d);
@@ -117,9 +116,9 @@
     return dayKey(s) === dayKey(now) ? r : `${dateLabel(s)}, ${r}`;
   }
   const TIME_FMT = {
-    item: (d) => `${hm(d)} · ${ago(d)}`,
+    item: (d) => `${clock(d)} · ${ago(d)}`,
     date: (d) => dayLabel(d),
-    post: (d) => `${hm(d)} · ${dayLabel(d)} · ${ago(d)}`,
+    post: (d) => `${clock(d)} · ${dayLabel(d)} · ${ago(d)}`,
     ago: (d) => ago(d),
   };
   const timeHTML = (iso, fmt) => `<time datetime="${esc(iso)}" data-fmt="${fmt}">${esc(TIME_FMT[fmt](new Date(iso)))}</time>`;
@@ -163,6 +162,10 @@
   let xPosts = [];
   let summaryData = null;
   let wxData = null;
+  // set once each source has answered (or failed), so skeletons give way to content or an error message
+  let wxTried = false;
+  let feedTried = false;
+  let eventsTried = false;
   let eventsData = null; // normalised /events.json, or null to show the post feed instead
   const eventsMode = () => !!(eventsData && eventsData.events.length);
   let activeSource = 'All';
@@ -301,7 +304,7 @@
     let cur = null;
     for (const it of items) {
       const d = new Date(it.time);
-      const key = it.dateOnly ? dayLabel(d) : `${dayLabel(d)}|${hourOf(d)}:00`;
+      const key = it.dateOnly ? dayLabel(d) : `${dayLabel(d)}|${hourLabel(d)}`;
       if (!cur || cur.key !== key) { cur = { key, items: [] }; groups.push(cur); }
       cur.items.push(it);
     }
@@ -323,7 +326,7 @@
       let html = '';
       for (const g of groupItems(items)) {
         const [day, hour] = g.key.split('|');
-        html += `<div class="hour"><b>${esc(day)}</b>${hour ? esc(hour) : ''}</div>`;
+        html += `<div class="hour"><b>${esc(day)}</b>${hour ? ` ${esc(hour)}` : ''}</div>`;
         for (const it of g.items) {
           const isNew = !firstLoad && !seenUrls.has(it.url);
           if (isNew) newCount++;
@@ -386,10 +389,11 @@
     const s = summaryData;
     const sec = $('#summary-sec');
     if (!s || !s.headline || !feature('summaryBox')) { sec.hidden = true; return; }
+    box.removeAttribute('aria-busy');
     const d = new Date(s.updatedAt);
     const valid = !isNaN(d);
     const stale = valid && Date.now() - d > 6 * 3600e3;
-    const upd = valid ? `Updated ${hm(d)}, ${new Intl.DateTimeFormat('en-GB', { timeZone: TZ, weekday: 'long' }).format(d)}${stale ? ' · may be out of date' : ''}` : '';
+    const upd = valid ? `Updated ${fmtTime(s.updatedAt)}${stale ? ' · may be out of date' : ''}` : '';
     const hls = (Array.isArray(s.highlights) ? s.highlights : []).filter((h) => h && (h.label || h.value)).slice(0, 8);
     const hlHTML = hls.length
       ? `<div class="highlights">${hls.map((h) => {
@@ -497,6 +501,12 @@
     </a></li>`;
   }
 
+  // Built only when a card opens: collapsed cards would otherwise load every avatar (one function call each).
+  function evSourcesHTML(ev) {
+    const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
+    return srcs ? `<h4 class="evs-h">Sources</h4><ol class="evs-list">${srcs}</ol>` : '';
+  }
+
   function eventHTML(ev, i, isNew) {
     const [catLabel, catIcon] = EV_CAT[ev.category];
     const open = openEvents.has(ev.id);
@@ -506,7 +516,6 @@
       const s = ev.sources[n - 1];
       return s && s.url ? `<sup><a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(s.publisher || '')}">${n}</a></sup>` : m;
     });
-    const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
     return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}" data-k="ev:${esc(ev.id)}">
       <div class="ev-head">
         <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
@@ -516,13 +525,15 @@
       </div>
       <div class="ev-body" id="evb-${i}"><div class="ev-inner"><div class="ev-content">
         ${ev.details ? `<p class="ev-details">${details}</p>` : ''}
-        ${srcs ? `<h4 class="evs-h">Sources</h4><ol class="evs-list">${srcs}</ol>` : ''}
+        ${open ? evSourcesHTML(ev) : ''}
       </div></div></div>
     </article>`;
   }
 
   // Which mode the updates column is in: events timeline (posts collapsed) or the post feed as before.
   function applyMode() {
+    if (!eventsTried) return; // the timeline skeleton holds the space until events.json answers
+    $('#ev-list').removeAttribute('aria-busy');
     const on = eventsMode();
     $('#events').hidden = !on;
     $('#all-posts').hidden = on && !postsOpen;
@@ -589,6 +600,11 @@
     if (!b) return;
     const card = b.closest('.ev');
     const open = !card.classList.contains('open');
+    const content = card.querySelector('.ev-content');
+    if (open && !content.querySelector('.evs-list')) {
+      const ev = eventsData && eventsData.events.find((x) => x.id === card.dataset.id);
+      if (ev) content.insertAdjacentHTML('beforeend', evSourcesHTML(ev));
+    }
     card.classList.toggle('open', open);
     card.classList.remove('new');
     b.setAttribute('aria-expanded', String(open));
@@ -656,23 +672,28 @@
     return d.maxGustMph ? { mph: d.maxGustMph, when: d === f.days[0] ? 'today' : 'tomorrow' } : null;
   }
 
+  const SK_NOW = {
+    main: '<div class="sk sk-display"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60 sk-wrap2"></div>',
+    warn: '<div class="wgroup"><div class="sk sk-label"></div><div class="sk sk-text sk-w60"></div></div><div class="wgroup"><div class="sk sk-label"></div><div class="sk sk-row"></div></div>',
+    latest: '<div class="latest" aria-hidden="true"><div class="sk sk-label"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60"></div></div>',
+  };
   function renderNow() {
     const el = $('#now');
     const f = wxData && wxData.forecast;
     const pill = summaryData && feature('statusPill') && STATUS[summaryData.status] ? `<span class="pill st-${esc(summaryData.status)}">${STATUS[summaryData.status]}</span>` : '';
 
-    let line = '<div class="skel line"></div>';
+    let line = SK_NOW.main;
     if (f && Array.isArray(f.days) && f.days.length) {
       const pk = peakGust(f);
       line = pk
         ? `<p class="now-line ${sev(pk.mph)}">Gusts up to <b>${pk.mph}&nbsp;mph</b> ${esc(pk.when)}</p>`
         : `<p class="now-line">${esc(f.days[0].summary || 'No strong gusts in the forecast')}</p>`;
       if (pk && f.days[0].summary) line += `<p class="now-sub">Today: ${esc(f.days[0].summary)}</p>`;
-    } else if (wxData) {
+    } else if (wxData || wxTried) {
       line = '<p class="now-line">Forecast unavailable</p><p class="now-sub"><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Check Jersey Met<span class="ext" aria-hidden="true"></span></a></p>';
     }
 
-    let warn = '';
+    let warn = wxTried ? '<div class="wgroup"><h3 class="wg-h">On land</h3><p class="w-none">Couldn\'t check warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met<span class="ext" aria-hidden="true"></span></a></p></div>' : SK_NOW.warn;
     if (wxData) {
       const all = Array.isArray(wxData.warnings) ? wxData.warnings : [];
       const land = all.filter((w) => !isSea(w)).sort(byColour);
@@ -691,9 +712,9 @@
           <span class="l-meta"><b>Latest</b>${isPost(latest)
             ? `${avatarHTML(latest, 'av av-s')}${esc(latest.author || latest.handle)}`
             : `${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)}`} · ${timeHTML(latest.time, 'ago')}</span>
-          <span class="l-title">${esc(latest.title || latest.text)}</span>
+          <span class="l-title">${esc(latest.title || String(latest.text || '').replace(/https?:\/\/\S+/g, '').trim() || latest.text)}</span>
         </a>`
-      : '';
+      : feedTried ? '' : SK_NOW.latest;
 
     // keep whatever the reader opened or closed across refreshes
     const prev = new Map($$('#now details[data-k]').map((d) => [d.dataset.k, d.open]));
@@ -776,19 +797,21 @@
     try { xPosts = ((await getJSON('/x-posts.json')).posts || []).filter((p) => p && p.url && p.time); } catch (e) { /* keep previous */ }
   }
   async function loadSummary() {
-    try { summaryData = await getJSON('/summary.json'); renderSummary(); renderNow(); } catch (e) { /* keep previous */ }
+    try { summaryData = await getJSON('/summary.json'); renderSummary(); renderNow(); } catch (e) { if (!summaryData) $('#summary-sec').hidden = true; }
   }
   async function loadFeed() {
     const xp = loadX();
     try {
       apiFeed = await getJSON('/api/feed');
       await xp;
+      feedTried = true;
       renderFeed();
       lastOk = new Date();
       setStatus(true, `<span class="gc-l">Live · </span>Updated ${clock(lastOk)}`);
     } catch (e) {
       await xp;
-      if (xPosts.length) renderFeed();
+      feedTried = true;
+      if (xPosts.length) renderFeed(); else renderNow();
       if (!feedData) $('#feed').innerHTML = '<div class="card empty err">Could not load updates. Retrying shortly…</div>';
       setStatus(false, lastOk ? `Offline? Last update ${clock(lastOk)}` : 'Could not load updates');
     }
@@ -796,7 +819,8 @@
   // Network and server errors keep the events we have; a missing (404/410), invalid or empty file falls back to the post feed.
   async function loadEvents() {
     let r;
-    try { r = await fetch('/events.json', { cache: 'no-cache' }); } catch (e) { if (!eventsData) applyMode(); return; }
+    try { r = await fetch('/events.json', { cache: 'no-cache' }); } catch (e) { eventsTried = true; if (!eventsData) applyMode(); return; }
+    eventsTried = true;
     if (!r.ok && r.status !== 404 && r.status !== 410) { if (!eventsData) applyMode(); return; }
     const text = r.ok ? await r.text().catch(() => '') : '';
     try { eventsData = text ? normEvents(JSON.parse(text)) : null; } catch (e) { eventsData = null; }
@@ -805,14 +829,19 @@
   }
   async function loadWeather() {
     try {
-      renderWeather(await getJSON('/api/weather'));
+      const wx = await getJSON('/api/weather');
+      wxTried = true;
+      renderWeather(wx);
     } catch (e) {
+      wxTried = true;
+      renderNow();
       if (!$('#weather .card')) $('#weather').innerHTML = '<div class="card err">Forecast unavailable. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Open Jersey Met</a></div>';
     }
   }
 
   const refreshBtn = $('#refresh');
   async function refreshAll() {
+    if (refreshBtn.classList.contains('spinning')) return; // one refresh at a time
     refreshBtn.classList.add('spinning');
     await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather()]);
     refreshBtn.classList.remove('spinning');

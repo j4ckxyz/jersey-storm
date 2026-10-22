@@ -29,7 +29,7 @@ This file feeds the "What's happening" box. It is rewritten by the refresh.
 
 | Field | Type | Req. | Meaning |
 |---|---|---|---|
-| `updatedAt` | string (ISO 8601) | required | When the summary was written. The UI shows "Updated HH:MM, Weekday" and adds "may be out of date" after 6 h. |
+| `updatedAt` | string (ISO 8601) | required | When the summary was written. The UI shows "Updated 3:14pm" (or "Updated Wed 21 Oct, 3:14pm" on another day) and adds "may be out of date" after 6 h. |
 | `headline` | string (mini-markdown) | required | Lead paragraph. If it is missing or empty, the box is hidden. |
 | `sections` | array of `{ title: string, points: string[] }` | required (may be empty) | The first section is always shown. The rest sit inside "Show full summary". Each `points` entry is mini-markdown. |
 | `posts` | string[] | optional | **URLs** of any feed item (tweets, Bluesky posts, BBC/JEP/gov.je articles, etc.) shown under "Key updates", sorted newest first regardless of type. |
@@ -223,7 +223,7 @@ It always returns HTTP 200 JSON. It is cached for 60 s (browser) and 120 s (Clou
 ```
 
 - `items` holds only the last 5 days, deduped by `url`, sorted newest first, with at most 150 entries. Future timestamps are clamped to "now".
-- **The API does not group items.** The UI groups them into headings itself: "Today 14:00" per hour, or just the day for `dateOnly` items, in Europe/Jersey time.
+- **The API does not group items.** The UI groups them into headings itself: "Today 2pm" per hour, or just the day for `dateOnly` items, in Europe/Jersey time.
 - If the whole function fails: `{ "items": [], "sources": [{ "name": "feed", "ok": false, "error": "..." }], "generatedAt": "..." }`.
 
 **Source** (one per fetcher): `{ name: string, ok: boolean, count: number, error?: string }`. `error` is present only when `ok` is false (max 200 characters). The UI lists sources with `ok: false` as "unavailable: …".
@@ -341,7 +341,7 @@ If the whole function fails: `{ forecast: null, warnings: [], sources: { error: 
 
 - Header: avatar (or the initial letter), `author || handle`, `@handle`, and the platform icon.
 - Body: `text` (escaped), then media.
-- Footer: `HH:MM · Today|Yesterday|<date> · N min ago` and "View on X ↗" or "View on Bluesky ↗". The whole card links to `url`.
+- Footer: `3:10pm · Today|Yesterday|<date> · N min ago` and "View on X" or "View on Bluesky" with an arrow icon. The whole card links to `url`.
 - `id` (X) and `title` (`""` on Bluesky) are not used by the card.
 
 Any new UI should rely only on these fields and treat `author`, `avatar` and `media` as optional.
