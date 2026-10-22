@@ -131,7 +131,9 @@
       .replace(/\b(\d{1,3})(?:\s*(?:–|-|to)\s*(\d{1,3}))?\s?(knots|kts|kt)\b(?!\s*\(\d)/gi, (m, a, b) => `${m} (${b ? `${mph(a)}–${mph(b)}` : mph(a)} mph)`);
   }
   // Raw links in source text become just the site ("bit.ly/…"); markdown links "[label](url)" are left alone.
-  const shortUrls = (s) => String(s ?? '').replace(/(?<!\]\()https?:\/\/(?:www\.)?([^\s/)]+)(\/[^\s)]*)?/g, (m, host, path) => host + (path && path.length > 1 ? '/…' : ''));
+  // (No regex look-behind: Safari before 16.4 can't parse one, which would stop the whole script.)
+  const shortUrls = (s) => String(s ?? '').replace(/https?:\/\/(?:www\.)?([^\s/)]+)(\/[^\s)]*)?/g, (m, host, path, at, str) =>
+    (str.slice(at - 2, at) === '](' ? m : host + (path && path.length > 1 ? '/…' : '')));
   const plain = (s) => shortUrls(tidy(s));
   // "07:12" (24-hour) → "7:12am"; anything else is left as it is
   const clock24 = (s) => String(s ?? '').replace(/^(\d{1,2}):(\d{2})$/, (m, h, mi) => `${+h % 12 || 12}:${mi}${+h < 12 ? 'am' : 'pm'}`);
