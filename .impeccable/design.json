@@ -1,0 +1,622 @@
+{
+ "schemaVersion": 2,
+ "generatedAt": "2026-10-22T16:10:24+00:00",
+ "title": "Design System: Jersey Storm Tracker",
+ "extensions": {
+  "colorMeta": {
+   "channel-blue": {
+    "role": "primary",
+    "displayName": "Channel Blue",
+    "canonical": "oklch(51.6% 0.163 255)",
+    "tonalRamp": [
+     "#000b1f",
+     "#01234b",
+     "#003e7e",
+     "#065cb2",
+     "#397ed2",
+     "#69a1e8",
+     "#9cc7ff",
+     "#e4f0ff"
+    ]
+   },
+   "channel-blue-night": {
+    "role": "primary",
+    "displayName": "Channel Blue (night)",
+    "canonical": "oklch(76.9% 0.100 250)",
+    "tonalRamp": [
+     "#040c15",
+     "#192532",
+     "#2e4256",
+     "#43607e",
+     "#5a81a8",
+     "#72a3d5",
+     "#96c9fe",
+     "#e3f0ff"
+    ]
+   },
+   "warning-red": {
+    "role": "secondary",
+    "displayName": "Warning Red",
+    "canonical": "oklch(54.0% 0.219 26)",
+    "tonalRamp": [
+     "#1f0001",
+     "#4b0004",
+     "#7c020d",
+     "#b20117",
+     "#dc3535",
+     "#f66d64",
+     "#feaba3",
+     "#fee9e6"
+    ]
+   },
+   "warning-red-night": {
+    "role": "secondary",
+    "displayName": "Warning Red (night)",
+    "canonical": "oklch(71.0% 0.151 22)",
+    "tonalRamp": [
+     "#180505",
+     "#3b1817",
+     "#632d2c",
+     "#8e4343",
+     "#bc5b5b",
+     "#ed7474",
+     "#feaaa7",
+     "#ffe9e7"
+    ]
+   },
+   "warning-amber": {
+    "role": "secondary",
+    "displayName": "Warning Amber",
+    "canonical": "oklch(66.7% 0.180 49)",
+    "tonalRamp": [
+     "#180600",
+     "#3e1700",
+     "#682c00",
+     "#944204",
+     "#c45a05",
+     "#f07827",
+     "#ffae83",
+     "#feeadf"
+    ]
+   },
+   "warning-amber-night": {
+    "role": "secondary",
+    "displayName": "Warning Amber (night)",
+    "canonical": "oklch(79.0% 0.131 65)",
+    "tonalRamp": [
+     "#140800",
+     "#2f2112",
+     "#533a1f",
+     "#7a542e",
+     "#a4713c",
+     "#cf8f4c",
+     "#fcb268",
+     "#ffead8"
+    ]
+   },
+   "warning-yellow": {
+    "role": "secondary",
+    "displayName": "Warning Yellow",
+    "canonical": "oklch(80.1% 0.164 91)",
+    "tonalRamp": [
+     "#100a00",
+     "#2b230a",
+     "#4d3e10",
+     "#715b13",
+     "#977a12",
+     "#bf9a0d",
+     "#ebbf25",
+     "#ffeebd"
+    ]
+   },
+   "warning-yellow-night": {
+    "role": "secondary",
+    "displayName": "Warning Yellow (night)",
+    "canonical": "oklch(87.1% 0.121 95)",
+    "tonalRamp": [
+     "#0f0b00",
+     "#292413",
+     "#46402a",
+     "#675d39",
+     "#8b7d49",
+     "#b09e59",
+     "#dbc36b",
+     "#ffefb2"
+    ]
+   },
+   "live-green": {
+    "role": "tertiary",
+    "displayName": "Live Green",
+    "canonical": "oklch(62.7% 0.170 149)",
+    "tonalRamp": [
+     "#001003",
+     "#012d0e",
+     "#024e1e",
+     "#01712e",
+     "#129642",
+     "#4db867",
+     "#88db97",
+     "#c8ffd0"
+    ]
+   },
+   "live-green-night": {
+    "role": "tertiary",
+    "displayName": "Live Green (night)",
+    "canonical": "oklch(76.1% 0.141 150)",
+    "tonalRamp": [
+     "#020f04",
+     "#142a19",
+     "#25492d",
+     "#366b43",
+     "#498f5a",
+     "#5db572",
+     "#83dc97",
+     "#c7ffd1"
+    ]
+   },
+   "sea-mist": {
+    "role": "neutral",
+    "displayName": "Sea Mist",
+    "canonical": "oklch(97.6% 0.003 265)",
+    "tonalRamp": [
+     "#0b0b0b",
+     "#242424",
+     "#3f4040",
+     "#5d5d5e",
+     "#7d7d7e",
+     "#9e9e9f",
+     "#c3c4c6",
+     "#edeef0"
+    ]
+   },
+   "paper": {
+    "role": "neutral",
+    "displayName": "Paper",
+    "canonical": "oklch(100.0% 0.000 90)",
+    "tonalRamp": [
+     "#0b0b0b",
+     "#242424",
+     "#404040",
+     "#5d5d5d",
+     "#7d7d7d",
+     "#9e9e9e",
+     "#c4c4c4",
+     "#eeeeee"
+    ]
+   },
+   "sea-mist-deep": {
+    "role": "neutral",
+    "displayName": "Deeper Sea Mist",
+    "canonical": "oklch(96.0% 0.005 258)",
+    "tonalRamp": [
+     "#0b0b0c",
+     "#242425",
+     "#3f4040",
+     "#5d5e5e",
+     "#7c7d7f",
+     "#9d9ea0",
+     "#c2c4c7",
+     "#eceff2"
+    ]
+   },
+   "harbour-ink": {
+    "role": "neutral",
+    "displayName": "Harbour Ink",
+    "canonical": "oklch(18.8% 0.013 249)",
+    "tonalRamp": [
+     "#070c10",
+     "#20252a",
+     "#3c4045",
+     "#5a5e62",
+     "#7b7e80",
+     "#9d9fa1",
+     "#c2c4c6",
+     "#edeff0"
+    ]
+   },
+   "slate": {
+    "role": "neutral",
+    "displayName": "Slate",
+    "canonical": "oklch(50.6% 0.025 253)",
+    "tonalRamp": [
+     "#080c10",
+     "#1e252c",
+     "#38414a",
+     "#545f6b",
+     "#747e8a",
+     "#979faa",
+     "#bec5cd",
+     "#eaeff5"
+    ]
+   },
+   "hairline": {
+    "role": "neutral",
+    "displayName": "Hairline",
+    "canonical": "oklch(92.6% 0.008 254)",
+    "tonalRamp": [
+     "#0b0b0c",
+     "#232425",
+     "#3f4041",
+     "#5c5e5f",
+     "#7b7d80",
+     "#9c9fa2",
+     "#c1c4c8",
+     "#ebeff4"
+    ]
+   },
+   "hairline-strong": {
+    "role": "neutral",
+    "displayName": "Strong Hairline",
+    "canonical": "oklch(88.3% 0.012 252)",
+    "tonalRamp": [
+     "#0a0b0c",
+     "#232425",
+     "#3e4041",
+     "#5b5e60",
+     "#7a7e81",
+     "#9a9fa4",
+     "#bfc5cb",
+     "#e9eff6"
+    ]
+   },
+   "graphite-night": {
+    "role": "neutral",
+    "displayName": "Graphite Night",
+    "canonical": "oklch(20.4% 0.009 264)",
+    "tonalRamp": [
+     "#090b0f",
+     "#222428",
+     "#3e4043",
+     "#5c5e61",
+     "#7c7d80",
+     "#9d9ea0",
+     "#c3c4c5",
+     "#eeeef0"
+    ]
+   },
+   "graphite-surface": {
+    "role": "neutral",
+    "displayName": "Graphite Surface",
+    "canonical": "oklch(24.6% 0.009 256)",
+    "tonalRamp": [
+     "#090b0e",
+     "#212428",
+     "#3d4044",
+     "#5b5e61",
+     "#7b7d80",
+     "#9d9ea0",
+     "#c3c4c5",
+     "#edeef0"
+    ]
+   },
+   "graphite-raised": {
+    "role": "neutral",
+    "displayName": "Raised Graphite",
+    "canonical": "oklch(29.1% 0.009 248)",
+    "tonalRamp": [
+     "#090b0e",
+     "#212428",
+     "#3c4044",
+     "#5b5e61",
+     "#7b7e80",
+     "#9c9fa1",
+     "#c3c4c5",
+     "#edeff0"
+    ]
+   },
+   "night-text": {
+    "role": "neutral",
+    "displayName": "Night Text",
+    "canonical": "oklch(93.0% 0.006 255)",
+    "tonalRamp": [
+     "#0b0b0c",
+     "#232425",
+     "#3f4040",
+     "#5d5e5f",
+     "#7c7d7f",
+     "#9d9ea1",
+     "#c2c4c7",
+     "#eceff2"
+    ]
+   },
+   "night-slate": {
+    "role": "neutral",
+    "displayName": "Night Slate",
+    "canonical": "oklch(73.9% 0.012 257)",
+    "tonalRamp": [
+     "#0a0b0c",
+     "#232426",
+     "#3e4043",
+     "#5b5e62",
+     "#7a7e83",
+     "#9a9fa6",
+     "#c0c4cb",
+     "#ebeff4"
+    ]
+   },
+   "night-hairline": {
+    "role": "neutral",
+    "displayName": "Night Hairline",
+    "canonical": "oklch(30.0% 0.008 256)",
+    "tonalRamp": [
+     "#090b0e",
+     "#222428",
+     "#3d4044",
+     "#5b5e61",
+     "#7b7d80",
+     "#9d9ea1",
+     "#c3c4c5",
+     "#edeef0"
+    ]
+   },
+   "night-hairline-strong": {
+    "role": "neutral",
+    "displayName": "Strong Night Hairline",
+    "canonical": "oklch(35.9% 0.010 261)",
+    "tonalRamp": [
+     "#090b0e",
+     "#222428",
+     "#3d4045",
+     "#5b5e62",
+     "#7b7d81",
+     "#9c9ea2",
+     "#c3c4c6",
+     "#edeef0"
+    ]
+   },
+   "warning-red-tint": {
+    "role": "secondary",
+    "displayName": "Warning Red Tint",
+    "canonical": "#fdecee",
+    "tonalRamp": [
+     "#1f0001",
+     "#4b0004",
+     "#7c020d",
+     "#b20117",
+     "#dc3535",
+     "#f66d64",
+     "#feaba3",
+     "#fee9e6"
+    ]
+   },
+   "warning-amber-tint": {
+    "role": "secondary",
+    "displayName": "Warning Amber Tint",
+    "canonical": "#fff3e6",
+    "tonalRamp": [
+     "#180600",
+     "#3e1700",
+     "#682c00",
+     "#944204",
+     "#c45a05",
+     "#f07827",
+     "#ffae83",
+     "#feeadf"
+    ]
+   },
+   "warning-yellow-tint": {
+    "role": "secondary",
+    "displayName": "Warning Yellow Tint",
+    "canonical": "#fff9e0",
+    "tonalRamp": [
+     "#100a00",
+     "#2b230a",
+     "#4d3e10",
+     "#715b13",
+     "#977a12",
+     "#bf9a0d",
+     "#ebbf25",
+     "#ffeebd"
+    ]
+   }
+  },
+  "typographyMeta": {
+   "display": {
+    "displayName": "Display",
+    "purpose": "The forecast panel's maximum-gust numeral."
+   },
+   "headline": {
+    "displayName": "Headline",
+    "purpose": "The 'Right now' line; the number inside takes its severity colour."
+   },
+   "title": {
+    "displayName": "Title",
+    "purpose": "Section headings."
+   },
+   "item-title": {
+    "displayName": "Item title",
+    "purpose": "Event, news and warning titles; Major events step up to 700 at 1.06rem."
+   },
+   "body": {
+    "displayName": "Body",
+    "purpose": "Summary, posts and event details."
+   },
+   "label": {
+    "displayName": "Label",
+    "purpose": "Sentence-case small headings: Right now, On land, So far, Sources, day headings."
+   },
+   "meta": {
+    "displayName": "Meta",
+    "purpose": "Times, sources and counts, with tabular figures."
+   }
+  },
+  "shadows": [
+   {
+    "name": "ambient",
+    "value": "0 1px 2px rgba(15,20,25,.04), 0 1px 3px rgba(15,20,25,.06)",
+    "purpose": "Cards and panels at rest in light mode; none in dark mode."
+   },
+   {
+    "name": "floating",
+    "value": "0 8px 24px rgba(15,20,25,.12)",
+    "purpose": "Only floating elements such as the new-updates pill (dark mode: 0 8px 28px rgba(0,0,0,.35))."
+   }
+  ],
+  "motion": [
+   {
+    "name": "ease-out",
+    "value": "cubic-bezier(.16,1,.3,1)",
+    "purpose": "Every transition and animation."
+   },
+   {
+    "name": "press",
+    "value": "120ms",
+    "purpose": "Scale feedback on controls."
+   },
+   {
+    "name": "colour",
+    "value": "150–200ms",
+    "purpose": "Hover and state colour changes."
+   },
+   {
+    "name": "crossfade",
+    "value": "240ms",
+    "purpose": "Theme and mobile tab switches (View Transitions)."
+   },
+   {
+    "name": "glide",
+    "value": "260–340ms",
+    "purpose": "Timeline cards moving on filter changes, event expand."
+   }
+  ],
+  "breakpoints": [
+   {
+    "name": "single-column",
+    "value": "899px"
+   },
+   {
+    "name": "stacked-controls",
+    "value": "600px"
+   },
+   {
+    "name": "compact-header",
+    "value": "480px"
+   },
+   {
+    "name": "tight-padding",
+    "value": "420px"
+   }
+  ]
+ },
+ "components": [
+  {
+   "name": "Icon Button",
+   "kind": "button",
+   "refersTo": "button-icon",
+   "description": "38px round control in the header (refresh, theme).",
+   "html": "<button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Refresh now\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/></svg></button>",
+   "css": ".ds-icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line,#e3e7ec);background:var(--surface,#fff);color:var(--text,#0f1419);display:grid;place-items:center;cursor:pointer;transition:background .15s,border-color .15s,transform .12s cubic-bezier(.16,1,.3,1)}.ds-icon-btn:hover{border-color:var(--line-2,#d3d9e0);background:var(--surface-2,#f0f2f5)}.ds-icon-btn:active{transform:scale(.95)}.ds-icon-btn:focus-visible{outline:2px solid var(--accent,#0a66c2);outline-offset:2px}"
+  },
+  {
+   "name": "Filter Chips",
+   "kind": "chip",
+   "refersTo": "chip-filter",
+   "description": "Timeline filters; the selected chip inverts to ink.",
+   "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">All <span>16</span></button><button class=\"ds-chip\" aria-pressed=\"false\">Major <span>7</span></button><button class=\"ds-chip\" aria-pressed=\"false\">Travel <span>4</span></button></div>",
+   "css": ".ds-chips{display:flex;gap:8px;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line,#e3e7ec);background:var(--surface,#fff);color:var(--text,#0f1419);font:550 .84rem/1 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;cursor:pointer;transition:transform .12s cubic-bezier(.16,1,.3,1),border-color .15s}.ds-chip span{color:var(--muted,#5b6673);font-variant-numeric:tabular-nums}.ds-chip:hover{border-color:var(--line-2,#d3d9e0)}.ds-chip:active{transform:scale(.95)}.ds-chip[aria-pressed=true]{background:var(--text,#0f1419);color:var(--bg,#f6f7f9);border-color:var(--text,#0f1419)}.ds-chip[aria-pressed=true] span{color:inherit;opacity:.7}.ds-chip:focus-visible{outline:2px solid var(--accent,#0a66c2);outline-offset:2px}"
+  },
+  {
+   "name": "Warning Badge",
+   "kind": "chip",
+   "refersTo": "badge-warning-red",
+   "description": "Jersey Met colour label; the only capitals in the system.",
+   "html": "<span class=\"ds-badge ds-red\">Red</span> <span class=\"ds-badge ds-amber\">Amber</span> <span class=\"ds-badge ds-yellow\">Yellow</span>",
+   "css": ".ds-badge{display:inline-flex;font:800 .7rem/1.2 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px}.ds-red{background:var(--red,#d0021b);color:#fff}.ds-amber{background:var(--amber,#e86a00);color:#1a0d00}.ds-yellow{background:var(--yellow,#e6b800);color:#1a1400}"
+  },
+  {
+   "name": "Event Card",
+   "kind": "card",
+   "refersTo": "event-card",
+   "description": "Timeline unit: severity dot, category, time, title, summary; the header expands it.",
+   "html": "<article class=\"ds-ev\"><button class=\"ds-ev-head\" type=\"button\" aria-expanded=\"false\"><span class=\"ds-ev-meta\"><span class=\"ds-ev-sev\">Major</span><span>· Travel · Guernsey</span><time>2:31–2:44pm</time></span><span class=\"ds-ev-title\">Guernsey and Alderney airports close until Friday noon</span><span class=\"ds-ev-sum\">Guernsey Airport closed to flights from Thursday afternoon and expects to reopen at noon on Friday.</span><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button></article>",
+   "css": ".ds-ev{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--surface,#fff);border:1px solid color-mix(in oklab,var(--red,#d0021b) 22%,var(--line,#e3e7ec));border-radius:16px;box-shadow:0 1px 2px rgba(15,20,25,.04),0 1px 3px rgba(15,20,25,.06);max-width:560px;transition:border-color .15s}.ds-ev:hover{border-color:color-mix(in oklab,var(--red,#d0021b) 40%,var(--line,#e3e7ec))}.ds-ev-head{display:grid;grid-template-columns:1fr auto;gap:4px 12px;width:100%;padding:12px 14px 14px 16px;border:0;background:none;text-align:left;color:var(--text,#0f1419);font:inherit;cursor:pointer;border-radius:16px}.ds-ev-head:focus-visible{outline:2px solid var(--accent,#0a66c2);outline-offset:-2px}.ds-ev-meta{grid-column:1/-1;display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--muted,#5b6673)}.ds-ev-meta time{margin-left:auto;font-variant-numeric:tabular-nums}.ds-ev-sev{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--red,#d0021b)}.ds-ev-sev::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px color-mix(in srgb,currentColor 18%,transparent)}.ds-ev-title{font-size:1.06rem;font-weight:700;line-height:1.35;text-wrap:balance}.ds-ev-sum{grid-column:1;font-size:.92rem;line-height:1.5}.ds-ev-head svg{grid-column:2;grid-row:2;color:var(--muted,#5b6673);transition:transform .3s cubic-bezier(.16,1,.3,1)}.ds-ev-head[aria-expanded=true] svg{transform:rotate(180deg)}"
+  },
+  {
+   "name": "Warning Row",
+   "kind": "custom",
+   "refersTo": "warning-row-red",
+   "description": "Tinted <details> for a Jersey Met warning; opens to validity and impacts.",
+   "html": "<details class=\"ds-wrow\"><summary><span class=\"ds-wbadge\">Red</span><span class=\"ds-wmain\"><b>Wind warning</b><span>S severe gale F9 with gusts to 60kt expected soon</span></span><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></summary><p>From 21:00 Thu to 15:00 Fri</p></details>",
+   "css": ".ds-wrow{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;max-width:520px;background:var(--red-bg,#fdecee);border:1px solid color-mix(in oklab,var(--red,#d0021b) 32%,transparent);border-radius:12px;color:var(--text,#0f1419)}.ds-wrow summary{list-style:none;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;min-height:52px;padding:8px 12px;cursor:pointer}.ds-wrow summary::-webkit-details-marker{display:none}.ds-wbadge{font:800 .7rem/1.2 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--red,#d0021b);color:#fff}.ds-wmain{display:flex;flex-direction:column;min-width:0;font-size:.88rem;line-height:1.35}.ds-wmain b{font-size:.95rem}.ds-wmain span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-wrow svg{color:var(--muted,#5b6673);transition:transform .2s}.ds-wrow[open] svg{transform:rotate(180deg)}.ds-wrow p{margin:0;padding:0 12px 12px;font-size:.92rem}"
+  },
+  {
+   "name": "Mobile Tab Bar",
+   "kind": "nav",
+   "refersTo": "nav-tab-active",
+   "description": "Bottom navigation on phones; active tab gets a soft Channel Blue pill.",
+   "html": "<nav class=\"ds-tabbar\"><button aria-pressed=\"true\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2\"/><path d=\"M18 14h-8M15 18h-5M10 6h8v4h-8z\"/></svg><span>Updates</span></button><button aria-pressed=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2\"/><path d=\"M16 14v6M8 14v6M12 16v6\"/></svg><span>Forecast</span></button><button aria-pressed=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 16v-4M12 8h.01\"/></svg><span>Info</span></button></nav>",
+   "css": ".ds-tabbar{display:flex;max-width:390px;height:64px;padding:6px 8px;background:color-mix(in srgb,var(--surface,#fff) 88%,transparent);backdrop-filter:saturate(180%) blur(16px);border-top:1px solid var(--line,#e3e7ec);font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}.ds-tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:none;color:var(--muted,#5b6673);font-size:.7rem;font-weight:600;cursor:pointer}.ds-tabbar svg{width:22px;height:22px;box-sizing:content-box;padding:3px 18px;border-radius:999px;transition:background-color .25s cubic-bezier(.16,1,.3,1),transform .12s}.ds-tabbar button[aria-pressed=true]{color:var(--accent,#0a66c2)}.ds-tabbar button[aria-pressed=true] svg{background:color-mix(in srgb,var(--accent,#0a66c2) 15%,transparent)}.ds-tabbar button:active svg{transform:scale(.92)}"
+  },
+  {
+   "name": "New Updates Pill",
+   "kind": "button",
+   "refersTo": "new-pill",
+   "description": "Floating Channel Blue pill that slides in when new events arrive.",
+   "html": "<button class=\"ds-pill\" type=\"button\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 19V5M5 12l7-7 7 7\"/></svg>3 new events</button>",
+   "css": ".ds-pill{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:8px 16px 8px 12px;background:var(--accent,#0a66c2);color:var(--accent-ink,#fff);font:650 .86rem/1 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;box-shadow:0 8px 24px rgba(15,20,25,.12);cursor:pointer;animation:ds-pill-in .4s cubic-bezier(.16,1,.3,1);transition:transform .12s cubic-bezier(.16,1,.3,1)}.ds-pill:active{transform:scale(.95)}.ds-pill:focus-visible{outline:2px solid var(--accent,#0a66c2);outline-offset:2px}@keyframes ds-pill-in{from{opacity:0;transform:translateY(-10px)}}"
+  },
+  {
+   "name": "Show All Posts",
+   "kind": "button",
+   "refersTo": "posts-toggle",
+   "description": "Quiet full-width toggle for the full post feed under the timeline.",
+   "html": "<button class=\"ds-toggle\" type=\"button\" aria-expanded=\"false\">Show all posts <span>67</span><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+   "css": ".ds-toggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;max-width:560px;min-height:44px;border:1px solid var(--line,#e3e7ec);border-radius:12px;background:transparent;color:var(--muted,#5b6673);font:600 .88rem/1 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;cursor:pointer;transition:color .15s,border-color .15s,transform .12s cubic-bezier(.16,1,.3,1)}.ds-toggle span{font-variant-numeric:tabular-nums;opacity:.75}.ds-toggle svg{width:16px;height:16px;transition:transform .2s}.ds-toggle:hover{color:var(--text,#0f1419);border-color:var(--line-2,#d3d9e0)}.ds-toggle:active{transform:scale(.98)}.ds-toggle[aria-expanded=true] svg{transform:rotate(180deg)}"
+  }
+ ],
+ "narrative": {
+  "northStar": "The Harbour Noticeboard",
+  "overview": "The tracker is a trusted local noticeboard that neighbours check during a storm. Everything on it is pinned up plainly, in date order, with its source attached. The board itself is quiet: soft sea-mist paper, hairline edges, the device's own system typeface. Whatever is pinned to it can then speak at the right volume. The only loud things are the official warnings, in Jersey Met's red, amber and yellow. A red warning has to read as red because nothing else on the page competes with it.\n\nThe feel is a calm news app with the polish of a well-made native weather app: big numerals where a number is the news, generous line height, sentence-case labels and soft surfaces. Components are quiet and tactile. Surfaces barely lift, controls give a small press response, and motion only shows something changing (a filter moving cards, a panel opening, a theme switching). Nothing loops for attention, and nothing plays on page load.\n\nIt's rejected as a generic SaaS dashboard (a grid of stat tiles, glassy chrome) and as tabloid or alarmist (flashing red, sirens, shouting capitals).",
+  "keyCharacteristics": [
+   "Quiet neutral surfaces, so the official warning colours are the only loud colour.",
+   "One system typeface family carries everything. Hierarchy comes from size and weight, not from a second font.",
+   "Big tabular numerals for wind speeds, and sentence-case labels everywhere else.",
+   "Hairline borders, with a faint ambient shadow in light mode. Dark mode is flat and layered by tone.",
+   "Short ease-out motion that explains a change of state, and is cut back when reduce motion is on.",
+   "Light and dark themes are equal partners. They follow the system by default, and there's a manual toggle."
+  ],
+  "rules": [
+   {
+    "name": "The Only-Warnings-Shout Rule",
+    "body": "Red, amber and yellow appear only when Jersey Met's data puts them there: a warning colour, a gust threshold (≥70 mph red, ≥50 amber, ≥40 yellow) or an event's severity. Decorative uses, error-coloured headings and red badges for emphasis are all forbidden.",
+    "section": "colors"
+   },
+   {
+    "name": "The Blue-Means-Touch Rule",
+    "body": "Channel Blue marks what can be tapped or what is live. Don't use it as a section colour or a background wash.",
+    "section": "colors"
+   },
+   {
+    "name": "The Sentence-Case Rule",
+    "body": "Labels and headings are in sentence case. The only capitals are on Jersey Met's colour badges (RED, AMBER, YELLOW), because they quote an official classification.",
+    "section": "typography"
+   },
+   {
+    "name": "The Tabular-Figures Rule",
+    "body": "Any number that updates or sits in a column (times, mph, counts, temperatures) uses tabular figures, so refreshes don't make the text jitter.",
+    "section": "typography"
+   },
+   {
+    "name": "The Barely-There Rule",
+    "body": "Surfaces are separated by a hairline first and shadow second. If a shadow is noticeable at a glance, it's too strong.",
+    "section": "elevation"
+   }
+  ],
+  "dos": [
+   "Do take every colour from the CSS custom properties on `:root`, and define both themes (the `prefers-color-scheme` block and the `[data-theme]` overrides).",
+   "Do keep motion between 120 and 340ms, using `cubic-bezier(.16,1,.3,1)`: press feedback about 120ms; colour changes 150–200ms; crossfades about 240ms; glides and expands 260–340ms.",
+   "Do give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.",
+   "Do use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.",
+   "Do use tabular figures for times and measurements, and balanced wrapping for headings.",
+   "Do keep tap targets at least 44px on phones, text contrast at least 4.5:1, and the page free of horizontal scrolling at 390px."
+  ],
+  "donts": [
+   "Don't use red, amber or yellow for anything except Jersey Met warnings and gust or event severity. See the Only-Warnings-Shout Rule.",
+   "Don't use tracked capitals for labels or headings. Capitals are only for the official warning badges.",
+   "Don't mark severity with a thick coloured left or right edge. Use the dot and label, plus a tinted border for Major.",
+   "Don't use Unicode arrows, triangles or emoji as icons.",
+   "Don't add web fonts, heavy images or page-load choreography. The page has to stay quick on a weak storm-time connection.",
+   "Don't add stat-tile grids, glass panels, gradient text or flashing or looping alerts. The tone is calm news, not a SaaS dashboard or a tabloid."
+  ]
+ }
+}
