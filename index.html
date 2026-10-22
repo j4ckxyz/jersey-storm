@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/style.css">
 </head>
 <body data-active="updates">
-<a class="skip" href="#feed">Skip to updates</a>
+<a class="skip" href="#feed-h">Skip to updates</a>
 
 <header class="top">
   <div class="wrap top-inner">
@@ -55,11 +55,21 @@
         <h2 id="feed-h">Latest updates</h2>
         <span id="feed-count" class="muted small"></span>
       </div>
-      <div id="filters" class="filters" role="group" aria-label="Filter by source"></div>
-      <div id="feed" class="feed">
-        <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+      <div id="events" class="events" hidden>
+        <div class="ev-controls">
+          <div id="ev-filters" class="filters" role="group" aria-label="Filter events"></div>
+          <label class="area-sw"><input id="ev-gsy" type="checkbox" role="switch" checked><span><span class="sw-x">Include </span>Guernsey</span></label>
+        </div>
+        <div id="ev-list" class="ev-list"></div>
+        <button id="posts-toggle" class="posts-toggle" type="button" aria-expanded="false" aria-controls="all-posts">Show all posts</button>
       </div>
-      <details id="feed-sources" class="sources"></details>
+      <div id="all-posts" class="all-posts">
+        <div id="filters" class="filters" role="group" aria-label="Filter by source"></div>
+        <div id="feed" class="feed">
+          <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+        </div>
+        <details id="feed-sources" class="sources"></details>
+      </div>
     </section>
   </div>
 

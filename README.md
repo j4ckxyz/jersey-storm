@@ -10,6 +10,7 @@ Live at **https://jersey-storm-tracker.vercel.app** (Vercel project `jersey-stor
 index.html, app.js, style.css   Frontend (plain HTML/CSS/JS, no build step)
 summary.json                    "What's happening" box. Rewritten by the automated refresh
 x-posts.json                    X posts merged into the feed. Rewritten by the automated refresh
+events.json                     Grouped storm events for the timeline. Rewritten by the scheduled runs
 api/feed.js                     GET /api/feed: news, gov.je, Jersey Met warnings, Bluesky
 api/weather.js                  GET /api/weather: Jersey Met forecast and warnings
 lib/feed.js, lib/weather.js, lib/util.js   Shared code for the functions (no dependencies)

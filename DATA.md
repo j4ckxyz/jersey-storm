@@ -413,7 +413,7 @@ These are site-wide switches, so Claude Code can add features behind flags inste
   "title": "Storm Austen tracker",
   "subtitle": null,
   "theme": { "accent": "#e53935", "mode": "auto" },   // "auto" | "light" | "dark"
-  "refresh": { "feedSeconds": 180, "weatherSeconds": 300 },
+  "refresh": { "feedSeconds": 180, "weatherSeconds": 300, "eventsSeconds": 120 },
   "filters": { "regions": ["jersey", "channel-islands"], "showGuernseyOnlyIfImportant": true },
   "features": { "favicons": true, "postCards": true, "summaryBox": true, "statusPill": false }
 }

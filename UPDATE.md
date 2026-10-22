@@ -19,13 +19,14 @@ This file is self-contained. A scheduled run should follow it from top to bottom
 |---|---|---|
 | `summary.json` | The "What's happening" box at the top of the page | **Yes** |
 | `x-posts.json` | X posts merged into the feed (the site has no X API key) | **Yes** (regenerate with the script) |
+| `events.json` | Grouped storm events shown as the timeline under "Latest updates" (format in `DATA.md`) | **Yes** (the assistant's scheduled runs rewrite it) |
 | `tools/build_x_posts.py` | Builds `x-posts.json` from saved X search results | No |
 | `tools/prepare_deploy.py` | Validates the JSON files and computes sha1 and size for upload | No |
 | `index.html`, `app.js`, `style.css` | Frontend | No |
 | `api/feed.js`, `api/weather.js`, `lib/*.js` | Serverless functions (live news, Bluesky, Jersey Met) | No |
 | `vercel.json`, `package.json` | Config | No |
 
-The live news feed (BBC Jersey and Guernsey, gov.je, JEP, Bailiwick Express, The Quarry, Jersey Met warnings, Bluesky) and the weather update themselves. Only `summary.json` and `x-posts.json` need refreshing.
+The live news feed (BBC Jersey and Guernsey, gov.je, JEP, Bailiwick Express, The Quarry, Jersey Met warnings, Bluesky) and the weather update themselves. Only `summary.json`, `x-posts.json` and `events.json` need refreshing. The scheduled runs also rewrite `events.json`; the page polls it every 2 minutes and falls back to the plain post feed if it is missing or empty.
 
 ---
 
@@ -158,7 +159,7 @@ CallDynamicTool {
  }
 }
 ```
-- The deployment must include **all 12 files** every time, because each deployment is a full snapshot.
+- The deployment must include **all 18 files** (everything listed in `FILES` in `tools/prepare_deploy.py`) every time, because each deployment is a full snapshot.
 - A `missing_files` error means an upload was skipped. Upload the listed sha(s) and retry.
 - Don't add `buildMachine`, `customEnvironmentSlugOrId` or anything else.
 
