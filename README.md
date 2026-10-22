@@ -46,6 +46,17 @@ Pages project settings:
 
 Everything stays within the free plan: there's no KV, D1 or other paid feature. Two limits to keep in mind are 500 builds a month, where each data commit is one build, and 100,000 function requests a day.
 
+### Asset caching
+
+The `storm.jsylabs.uk` zone has a Cloudflare **Browser Cache TTL** that overrides `_headers` for JS and CSS, which are then cached for 4 hours. It doesn't apply to the HTML at `/`. Without versioned names, iOS Safari would keep old JS and CSS next to a fresh page, leaving skeletons stuck, tiles empty and detailed-only cards visible. So:
+
+- **Hashed names.** `node build.mjs` writes `app.<hash>.js`, `style.<hash>.css` and `bsky.<hash>.js` (the first 10 hex characters of the content's SHA-256) and points `dist/index.html` and `dist/404.html` at them. `app.js` imports bsky by its hashed name. The unhashed names are also written, with the same content, for HTML cached before a deploy.
+- **Headers.** `_headers` gives the hashed files `max-age=31536000, immutable`, the HTML `no-cache, must-revalidate`, and the unhashed copies `max-age=0`.
+- **Build check.** `index.html` carries `<meta name="build-id">`, and the built `app.js` carries the same `BUILD_ID`. If they differ, the page reloads once per build id, guarded by sessionStorage `storm-reloaded`, so it can't loop. A few seconds after load, the page also fetches `/` once and does the same if a newer build is live.
+- **Reload button.** If our script fails during boot, or a part is still a skeleton after 15 s, the placeholders become "Something went wrong — tap to reload".
+
+Local dev without a build, such as `python3 -m http.server`, serves the source files as they are. There, `BUILD_ID` is still the placeholder `__BUILD_ID__`, so the build checks are skipped.
+
 ## Run locally
 
 The whole site, including the functions, runs with Wrangler:

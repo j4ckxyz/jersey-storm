@@ -40,9 +40,10 @@ export function toItems(posts) {
   for (const p of posts) {
     if (!p || !p.uri || seen.has(p.uri)) continue;
     seen.add(p.uri);
+    const author = p.author || {}; // a post view without an author (deleted or taken down) still mustn't throw
     const text = (p.record && p.record.text) || '';
-    const handle = (p.author && p.author.handle) || '';
-    if (!text.trim() || handle === 'handle.invalid') continue;
+    const handle = author.handle || '';
+    if (!text.trim() || !handle || handle === 'handle.invalid') continue; // no handle: no link to the post
     const local = LOCAL_HANDLES.test(handle) || LOCAL_WORDS.test(text);
     if (!local || NOT_LOCAL.test(text) || MIRROR(handle, text)) continue;
     if (!(STORMY.test(text) || (/storm|school|clos|cancel|ferr|flight/i.test(text) && LOCAL_HANDLES.test(handle)))) continue;
@@ -50,10 +51,10 @@ export function toItems(posts) {
     const rkey = p.uri.split('/').pop();
     out.push({
       source: 'Bluesky',
-      author: p.author.displayName && p.author.displayName.length <= 32 ? p.author.displayName : '',
+      author: author.displayName && author.displayName.length <= 32 ? author.displayName : '',
       handle,
       title: '',
-      avatar: p.author.avatar || '',
+      avatar: author.avatar || '',
       text: truncate(text.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim(), 500),
       media: media(p.embed),
       platform: 'bsky',

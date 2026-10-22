@@ -1,5 +1,73 @@
 (() => {
   'use strict';
+  const BUILD_ID = '__BUILD_ID__'; // build.mjs writes the real id; unbuilt (local dev) copies skip the checks below
+
+  // --- self-heal after a deploy: this script must belong to the page that loaded it ---
+  // Stale JS next to fresh HTML (or the other way round) left skeletons stuck. If the page's build id isn't ours,
+  // reload once per build id (sessionStorage guard, so it can never loop).
+  const built = !BUILD_ID.startsWith('__');
+  const metaBuild = () => { const m = document.querySelector('meta[name="build-id"]'); return m ? m.content : ''; };
+  function reloadFor(id) {
+    try {
+      if (sessionStorage.getItem('storm-reloaded') === id) return false;
+      sessionStorage.setItem('storm-reloaded', id);
+    } catch (e) { return false; } // no sessionStorage: no guard, so no automatic reload
+    location.replace(`${location.pathname}?v=${encodeURIComponent(id)}${location.hash}`);
+    return true;
+  }
+  if (built && metaBuild() !== BUILD_ID && reloadFor(metaBuild() || BUILD_ID)) return; // stop: a matching copy is loading
+  if (built && /[?&]v=/.test(location.search)) history.replaceState(null, '', location.pathname + location.hash); // tidy the URL
+
+  // --- if boot fails, or parts are still loading after 15 s, offer a reload instead of grey skeletons forever ---
+  let booted = false;
+  let gaveUp = false; // set once the reload button has been offered, so later renders don't bring skeletons back
+  const BROKEN_BTN = '<button type="button" class="broken-btn">Something went wrong — tap to reload</button>';
+  // Each placeholder box and where its reload button goes. The renders replace these boxes' contents (or unhide
+  // them) when data does arrive, which also removes the button. The tiles and the travel line are buttons
+  // themselves, so they're hidden and the tiles' message goes in the line above them.
+  const PLACEHOLDERS = {
+    '#tiles': (box) => { box.hidden = true; return document.querySelector('#obs-time'); },
+    '#travel-sum': (box) => { box.hidden = true; return null; },
+    '#now-live': (box) => box,
+    '#summary': (box) => box,
+    '#ev-list': (box) => box,
+    '#weather': (box) => box,
+    '#feed': (box) => box,
+  };
+  function offerReload() {
+    gaveUp = true;
+    const sel = Object.keys(PLACEHOLDERS).join(', ');
+    const stuck = [...document.querySelectorAll('.sk, .skel')].filter((el) => el.offsetParent !== null);
+    const boxes = new Set(stuck.map((el) => el.closest(sel)).filter(Boolean));
+    if (!booted && !boxes.size) boxes.add(document.querySelector('#now-live')); // boot failed before anything drew
+    const banner = document.querySelector('#warn-banner.pending');
+    if (banner) banner.hidden = true; // a link can't hold a button
+    for (const box of boxes) {
+      if (!box) continue;
+      const key = Object.keys(PLACEHOLDERS).find((k) => box.matches(k));
+      const target = PLACEHOLDERS[key](box);
+      if (!target || target.querySelector('.broken-btn')) continue;
+      box.removeAttribute('aria-busy');
+      target.innerHTML = BROKEN_BTN;
+    }
+  }
+  document.addEventListener('click', (e) => {
+    if (e.target instanceof Element && e.target.closest('.broken-btn')) location.replace(`${location.pathname}?v=${Date.now()}${location.hash}`);
+  });
+  // Only our own failures during boot count. Third-party frames (Windy, Blitzortung) report "Script error." with
+  // no file, extensions report their own URLs, and network failures are already handled where they happen.
+  const ours = (file) => !file || (file.startsWith(location.origin) && /\/(app|bsky)(\.[0-9a-f]+)?\.js/.test(file));
+  window.addEventListener('error', (e) => {
+    if (booted || e.message === 'Script error.' || !e.filename || !ours(e.filename)) return;
+    offerReload();
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    const r = e.reason || {};
+    if (booted || r.name === 'AbortError' || /fetch|network|load failed/i.test(String(r.message || r))) return;
+    offerReload();
+  });
+  setTimeout(() => { if (document.querySelector('.sk, .skel')) offerReload(); }, 15000);
+
   const TZ = 'Europe/Jersey';
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => [...document.querySelectorAll(s)];
@@ -836,7 +904,7 @@
     const f = wxData && wxData.forecast;
     const pill = summaryData && feature('statusPill') && STATUS[summaryData.status] ? `<span class="pill st-${esc(summaryData.status)}">${STATUS[summaryData.status]}</span>` : '';
 
-    let line = SK_NOW.main;
+    let line = gaveUp ? BROKEN_BTN : SK_NOW.main;
     let peakMph = null;
     if (f && Array.isArray(f.days) && f.days.length) {
       const pk = peakGust(f);
@@ -857,7 +925,7 @@
             : `${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)}`} · ${timeHTML(latest.time, 'ago')}</span>
           <span class="l-title">${esc(plain(latest.title || String(latest.text || '').replace(/https?:\/\/\S+/g, '').trim() || latest.text))}</span>
         </a>`
-      : feedTried ? '' : SK_NOW.latest;
+      : feedTried || gaveUp ? '' : SK_NOW.latest;
 
     const wasSk = ['.now-main', '.latest'].filter((sel) => el.querySelector(`${sel} .sk`));
     const fix = anchor();
@@ -1404,10 +1472,18 @@
     }
     if (srcs && srcs.sources && typeof srcs.sources === 'object') customSources = srcs.sources;
   }).finally(() => {
+    try {
+      boot();
+    } catch (e) {
+      offerReload();
+      throw e; // still reaches the console
+    }
+  });
+  function boot() {
     const secs = (v, d) => (typeof v === 'number' && v >= 30 ? v : d) * 1000;
     const dataEvery = secs(config.refresh.feedSeconds, 180);
     const wxEvery = secs(config.refresh.weatherSeconds, 300);
-    refreshAll();
+    refreshAll().then(() => { booted = true; }, offerReload);
     // Poll only while the tab is visible; coming back to it catches up at once if a poll is due.
     const poll = () => {
       if (document.visibilityState !== 'visible') return;
@@ -1418,7 +1494,16 @@
     };
     setInterval(poll, 15e3);
     document.addEventListener('visibilitychange', poll);
-  });
+    // the HTML can change under a long-open tab: check once, a little after load, whether a newer build is live
+    if (built) {
+      setTimeout(() => {
+        fetch('/', { cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')).then((html) => {
+          const id = (html.match(/<meta name="build-id" content="([0-9a-f]+)"/) || [])[1];
+          if (id && id !== BUILD_ID) reloadFor(id);
+        }).catch(() => { /* offline: try again next visit */ });
+      }, 5000);
+    }
+  }
 
   // --- unique visitor count (functions/api/visit.js): a random ID kept in localStorage and a cookie ---
   (() => {

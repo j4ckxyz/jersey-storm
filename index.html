@@ -26,6 +26,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<style>/* before style.css, so a stale or missing stylesheet can't show the detailed view; style.css has the full rules */
+.detail{display:none}body:not(.detailed) .posts-toggle{display:none}</style>
 <link rel="stylesheet" href="/style.css">
 </head>
 <body data-active="updates">
