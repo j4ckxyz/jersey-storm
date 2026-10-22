@@ -297,6 +297,12 @@ A `<details>` element tinted in its warning colour, with a 12px radius and a 32%
   - colour changes 150–200ms;
   - crossfades about 240ms;
   - glides and expands 260–340ms.
+- **Do** signal a live refresh once, never in a loop:
+  - the Live dot pings once per successful refresh;
+  - a number that changed rolls up into place (420ms);
+  - a warning that appeared or changed colour gets two soft rings in its own colour (1.3s each);
+  - new events rise in.
+- **Do** fade content in where it replaces a skeleton (opacity only, 260ms), so nothing moves.
 - **Do** give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.
 - **Do** use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.
 - **Do** use tabular figures for times and measurements, and balanced wrapping for headings.

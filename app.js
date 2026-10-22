@@ -157,6 +157,19 @@
       }
     }
   }
+  // Skeleton → content: the first real render of a part fades in (opacity only, so nothing moves).
+  function fadeIn(nodes) {
+    if (reduceMotion.matches || !Element.prototype.animate) return;
+    for (const n of nodes) if (n) n.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+  }
+  // A live number that changed since the last refresh rolls up into place, so the change gets noticed.
+  const lastNums = new Map();
+  function tick(key, el, value) {
+    const was = lastNums.get(key);
+    lastNums.set(key, value);
+    if (was === undefined || was === value || !el || reduceMotion.matches || !el.animate) return;
+    el.animate([{ opacity: 0, transform: 'translateY(0.45em)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: EASE_OUT });
+  }
   let feedData = null; // merged: {items, sources}
   let apiFeed = null;
   let xPosts = [];
@@ -389,7 +402,6 @@
     const s = summaryData;
     const sec = $('#summary-sec');
     if (!s || !s.headline || !feature('summaryBox')) { sec.hidden = true; return; }
-    box.removeAttribute('aria-busy');
     const d = new Date(s.updatedAt);
     const valid = !isNaN(d);
     const stale = valid && Date.now() - d > 6 * 3600e3;
@@ -411,11 +423,14 @@
     const updEl = $('#sum-upd');
     updEl.textContent = upd;
     updEl.className = `small ${stale ? 'err' : 'muted'}`;
+    const wasBusy = box.hasAttribute('aria-busy');
+    box.removeAttribute('aria-busy');
     box.innerHTML = `<p class="sum-lead">${md(s.headline)}</p>
       ${hlHTML}
       ${first}
       ${rest || posts.length ? `<details${wasOpen ? ' open' : ''}><summary>Show full summary ${ICON.chev}</summary>${rest}<div id="sum-posts" class="sum-posts"></div></details>` : ''}`;
     sec.hidden = false;
+    if (wasBusy) fadeIn([...box.children]);
     renderSummaryPosts();
   }
   function renderSummaryPosts() {
@@ -581,9 +596,11 @@
       html += eventHTML(ev, i, isNew);
     });
     const before = evGlide ? rowTops($('#ev-list')) : null;
+    const firstPaint = $('#ev-list').hasAttribute('aria-busy');
     evGlide = false;
     $('#ev-list').innerHTML = html || '<div class="card empty muted">No events match this filter.</div>';
     glide($('#ev-list'), before);
+    if (firstPaint) fadeIn([...$('#ev-list').children].slice(0, 10));
     for (const e of eventsData.events) seenEvents.add(e.id);
     evFirstLoad = false;
 
@@ -672,6 +689,9 @@
     return d.maxGustMph ? { mph: d.maxGustMph, when: d === f.days[0] ? 'today' : 'tomorrow' } : null;
   }
 
+  let warnColours = null; // warning colours at the last render, to spot a warning that changed
+  const ringSince = new Map(); // warning key → when its change ring started
+  const RING_MS = 2600; // two 1.3s rings (.wrow.changed)
   const SK_NOW = {
     main: '<div class="sk sk-display"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60 sk-wrap2"></div>',
     warn: '<div class="wgroup"><div class="sk sk-label"></div><div class="sk sk-text sk-w60"></div></div><div class="wgroup"><div class="sk sk-label"></div><div class="sk sk-row"></div></div>',
@@ -683,8 +703,10 @@
     const pill = summaryData && feature('statusPill') && STATUS[summaryData.status] ? `<span class="pill st-${esc(summaryData.status)}">${STATUS[summaryData.status]}</span>` : '';
 
     let line = SK_NOW.main;
+    let peakMph = null;
     if (f && Array.isArray(f.days) && f.days.length) {
       const pk = peakGust(f);
+      peakMph = pk ? pk.mph : null;
       line = pk
         ? `<p class="now-line ${sev(pk.mph)}">Gusts up to <b>${pk.mph}&nbsp;mph</b> ${esc(pk.when)}</p>`
         : `<p class="now-line">${esc(f.days[0].summary || 'No strong gusts in the forecast')}</p>`;
@@ -718,11 +740,25 @@
 
     // keep whatever the reader opened or closed across refreshes
     const prev = new Map($$('#now details[data-k]').map((d) => [d.dataset.k, d.open]));
+    const wasSk = ['.now-main', '.now-warn', '.latest'].filter((sel) => el.querySelector(`${sel} .sk`));
     el.innerHTML = `<div class="now-head"><h2 id="now-h">Right now</h2>${pill}</div>
       <div class="now-main">${line}</div>
       ${warn ? `<div class="now-warn">${warn}</div>` : ''}
       ${latestHTML}`;
     $$('#now details[data-k]').forEach((d) => { if (prev.has(d.dataset.k)) d.open = prev.get(d.dataset.k); });
+    fadeIn(wasSk.map((sel) => el.querySelector(sel)).filter((n) => n && !n.querySelector('.sk')));
+    tick('peak', el.querySelector('.now-line b'), peakMph);
+    if (wxData) {
+      const colourOf = (d) => ['red', 'amber', 'orange', 'yellow'].find((c) => d.classList.contains(c));
+      const now = Date.now();
+      for (const d of $$('#now details.wrow[data-k]')) {
+        if (warnColours && warnColours.get(d.dataset.k) !== colourOf(d) && !reduceMotion.matches) ringSince.set(d.dataset.k, now);
+        // other sources re-render this panel moments later: carry on the ring from where it was, don't restart it
+        const since = ringSince.get(d.dataset.k);
+        if (since && now - since < RING_MS) { d.classList.add('changed'); d.style.animationDelay = `${since - now}ms`; }
+      }
+      warnColours = new Map($$('#now details.wrow[data-k]').map((d) => [d.dataset.k, colourOf(d)]));
+    }
   }
 
   function renderWeather(wx) {
@@ -740,7 +776,7 @@
     // Highest gust mentioned for today/tonight or tomorrow
     const gustDay = [today, next].filter(Boolean).reduce((a, b) => ((b.maxGustMph || 0) > (a.maxGustMph || 0) ? b : a));
     const gust = gustDay.maxGustMph;
-    if (gust) { chip.innerHTML = `<span class="gc-l">Gusts </span>${gust} mph`; chip.className = `gust-chip ${sev(gust)}`; chip.hidden = false; } else chip.hidden = true;
+    if (gust) { chip.innerHTML = `<span class="gc-l">Gusts </span>${gust} mph`; chip.className = `gust-chip ${sev(gust)}`; chip.hidden = false; tick('chip', chip, gust); } else chip.hidden = true;
 
     const periods = Array.isArray(today.periods) ? today.periods : [];
     const sunBits = [today.sunrise && `Sunrise ${esc(today.sunrise)}`, today.sunset && `Sunset ${esc(today.sunset)}`, today.uv && `UV ${esc(today.uv)}`].filter(Boolean);
@@ -783,13 +819,18 @@
       </div>`;
     }
     html += `<p class="issued">Jersey Met forecast issued ${esc(f.issued)} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
+    const firstPaint = !!$('#weather .skel');
     $('#weather').innerHTML = html;
+    if (firstPaint) fadeIn([...$('#weather').children]);
+    tick('cond', $('#weather .cond-big'), gust);
   }
 
   // --- status + loading ---
   let lastOk = null;
   function setStatus(ok, msg) {
-    $('#live-dot').className = 'dot ' + (ok ? 'ok' : 'err');
+    const dot = $('#live-dot');
+    dot.className = 'dot ' + (ok ? 'ok' : 'err');
+    if (ok && !reduceMotion.matches) { void dot.offsetWidth; dot.classList.add('ping'); } // restart the one-shot ping
     $('#updated').innerHTML = msg; // msg is built from our own strings and times only
   }
 
@@ -844,7 +885,11 @@
     if (refreshBtn.classList.contains('spinning')) return; // one refresh at a time
     refreshBtn.classList.add('spinning');
     await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather()]);
-    refreshBtn.classList.remove('spinning');
+    const svg = refreshBtn.querySelector('svg');
+    if (reduceMotion.matches || !svg) { refreshBtn.classList.remove('spinning'); return; }
+    const done = () => { svg.removeEventListener('animationiteration', done); clearTimeout(timer); refreshBtn.classList.remove('spinning'); };
+    const timer = setTimeout(done, 1000); // one turn is 0.9s
+    svg.addEventListener('animationiteration', done);
   }
   refreshBtn.addEventListener('click', refreshAll);
 
