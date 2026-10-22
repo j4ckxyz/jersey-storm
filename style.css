@@ -67,7 +67,8 @@ button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:tra
 h1{font-size:1.06rem;font-weight:700;white-space:nowrap}
 .status{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);display:inline-block;flex:none}
-.dot.ok{background:var(--ok);animation:pulse 2.4s infinite}
+.dot.ok{background:var(--ok)}
+.dot.ping{animation:pulse 1.4s var(--ease-out)}
 .dot.err{background:var(--red)}
 @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}70%,100%{box-shadow:0 0 0 7px transparent}}
 .actions{display:flex;align-items:center;gap:6px;flex:none}
@@ -114,7 +115,7 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .now-head h2{font-size:.95rem;font-weight:650;letter-spacing:0;color:var(--muted)}
 .now-main{grid-area:main;display:flex;flex-direction:column;gap:var(--space-xs)}
 .now-line{font-size:1.75rem;font-weight:700;line-height:1.15;letter-spacing:-.025em;text-wrap:balance}
-.now-line b{font-weight:800;font-variant-numeric:tabular-nums}
+.now-line b{display:inline-block;font-weight:800;font-variant-numeric:tabular-nums}
 .now-line.sev-red b{color:var(--red)}
 .now-line.sev-amber b{color:var(--amber)}
 .now-line.sev-yellow b{color:color-mix(in srgb,var(--yellow) 70%,var(--text))}
@@ -127,6 +128,9 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .wrow{--wc:var(--yellow);--wb:var(--yellow-bg);background:var(--wb);border:1px solid color-mix(in oklab,var(--wc) 32%,transparent);border-radius:12px}
 .wrow.red{--wc:var(--red);--wb:var(--red-bg)}
 .wrow.amber,.wrow.orange{--wc:var(--amber);--wb:var(--amber-bg)}
+/* a warning that appeared or changed colour since the last refresh: one soft ring, twice, then still */
+.wrow.changed{animation:warn-ring 1.3s var(--ease-out) 2}
+@keyframes warn-ring{from{box-shadow:0 0 0 0 color-mix(in srgb,var(--wc) 50%,transparent)}to{box-shadow:0 0 0 9px transparent}}
 .wrow>summary{list-style:none;cursor:pointer;min-height:52px;padding:var(--space-xs) var(--space-sm);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--space-sm);align-items:center}
 .wrow>summary::-webkit-details-marker{display:none}
 .w-main{display:flex;flex-direction:column;min-width:0;line-height:1.35}
@@ -194,6 +198,7 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
 .item:hover,.pcard:hover{border-color:var(--line-2)}
 .item:active,.pcard:active{transform:scale(.995)}
 .new{animation:flash 2.6s ease-out}
+.ev.new{animation:flash 2.6s ease-out,rise .4s var(--ease-out)}
 @keyframes flash{from{background:color-mix(in srgb,var(--accent) 16%,var(--surface))}to{background:var(--surface)}}
 .meta{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);margin-bottom:6px;min-width:0}
 .meta .src{font-weight:650;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
