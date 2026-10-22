@@ -140,6 +140,18 @@ export async function onRequest(ctx) {
   };
   const ua = req.headers.get('User-Agent') || '';
   try {
+    // TEMP, branch only, never merged: VISIT_TEST=1 counts preview/local hosts into separate t_ tables
+    if (env.VISIT_TEST === '1') {
+      cfg.prefix = 't_';
+      cfg.countHost = /\.jersey-storm\.pages\.dev$|^localhost$|^127\.0\.0\.1$/.test(url.hostname);
+      if (req.headers.get('X-Test-ASN')) cfg.asn = Number(req.headers.get('X-Test-ASN'));
+      if (req.headers.get('X-Test-IP')) cfg.ip = req.headers.get('X-Test-IP');
+      const secret = req.headers.get('X-Test-Cleanup');
+      if (secret && method === 'POST' && Date.now() < Number(env.VISIT_TEST_UNTIL || 0) && (await sha256(secret)) === env.VISIT_TEST_CLEANUP_SHA) {
+        await db.batch(['visitors', 'daily', 'limits', 'meta'].map((t) => db.prepare(`DROP TABLE IF EXISTS t_${t}`)));
+        return json({ dropped: true });
+      }
+    }
     if (method === 'GET') {
       const { count, salt } = await withSchema(db, cfg.prefix, () => readMeta(db, cfg.prefix));
       return json({ count, token: await makeToken(env.VISIT_SECRET || salt, ua) });

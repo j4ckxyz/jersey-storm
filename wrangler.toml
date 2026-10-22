@@ -10,3 +10,9 @@ compatibility_date = "2026-10-01"
 binding = "VISITS_DB"
 database_name = "jersey-storm-visits"
 database_id = "62c6c904-d117-4cbb-8c10-f67ec4741a6c"
+
+# TEMP branch-only test mode: never merge
+[vars]
+VISIT_TEST = "1"
+VISIT_TEST_UNTIL = "1792703186000"
+VISIT_TEST_CLEANUP_SHA = "c5bf1668cbba1cd79e1030bc7411ad4cf353b92f97a0ddac8d3854b18f4d31a9"
