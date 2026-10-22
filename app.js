@@ -788,6 +788,7 @@
 
   // --- theme: auto (follows OS) / light / dark, persisted ---
   const THEMES = ['auto', 'light', 'dark'];
+  const THEME_ICON = { auto: ICON.auto, light: ICON.sun, dark: ICON.moon };
   const themeBtn = $('#theme-toggle');
   const storedTheme = () => { try { return localStorage.getItem('theme'); } catch (e) { return null; } };
   function applyTheme(t, persist) {
@@ -799,7 +800,7 @@
       if (!m.dataset.orig) m.dataset.orig = m.content;
       m.content = t === 'auto' ? m.dataset.orig : t === 'dark' ? '#15171b' : '#f6f7f9';
     });
-    themeBtn.innerHTML = ICON[t];
+    themeBtn.innerHTML = THEME_ICON[t];
     themeBtn.setAttribute('aria-label', `Theme: ${t}. Click to change`);
     themeBtn.title = `Theme: ${t === 'auto' ? 'auto (follows system)' : t}`;
   }
