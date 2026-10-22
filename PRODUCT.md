@@ -6,7 +6,7 @@
 
 web
 
-The website is the product. The Expo app in `mobile/` is an experiment or a thin wrapper, not a separate design language.
+The website is the product. There's no native app.
 
 ## Users
 
