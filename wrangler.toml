@@ -4,3 +4,9 @@
 name = "jersey-storm"
 pages_build_output_dir = "./dist"
 compatibility_date = "2026-10-01"
+
+# Unique visitor counter (functions/api/visit.js). Tables are created on first use.
+[[d1_databases]]
+binding = "VISITS_DB"
+database_name = "jersey-storm-visits"
+database_id = "62c6c904-d117-4cbb-8c10-f67ec4741a6c"
