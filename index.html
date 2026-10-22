@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Storm Austen · Jersey &amp; Guernsey live tracker</title>
 <meta name="description" content="Live Storm Austen updates for Jersey: news, gov.je, Jersey Met warnings, Bluesky posts and the official forecast.">
-<meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#15171b" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
 <meta property="og:title" content="Storm Austen · Jersey live tracker">
 <meta property="og:description" content="Live updates, warnings and forecast for Storm Austen in Jersey.">
@@ -45,7 +45,10 @@
 
 <main class="wrap layout">
   <div class="col-main" data-view="updates">
-    <section id="summary" class="card summary" hidden aria-live="polite"></section>
+    <section id="summary-sec" class="sum-sec" aria-labelledby="sum-h" hidden>
+      <div class="sec-head"><h2 id="sum-h">What's happening</h2><span id="sum-upd" class="muted small"></span></div>
+      <div id="summary" class="card summary"></div>
+    </section>
 
     <section class="feed-wrap" aria-labelledby="feed-h">
       <div class="sec-head">

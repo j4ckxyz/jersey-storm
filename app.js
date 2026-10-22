@@ -156,12 +156,24 @@
     const tags = Array.isArray(disp(it).tags) ? disp(it).tags.filter((t) => typeof t === 'string' && t).slice(0, 5) : [];
     return tags.length ? `<div class="tags">${tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : '';
   }
+  // X avatars: use the stored URL, then a fresh lookup via /api/x-avatar (tweet syndication), then the initial
+  function xAvatarApi(it) {
+    const m = String(it.id || '').match(/^\d+$/) || String(it.url || '').match(/\/status\/(\d+)/);
+    return m ? `/api/x-avatar?id=${m[1] || m[0]}` : '';
+  }
+  function avatarHTML(it, cls = 'av') {
+    const x = it.platform === 'x' || it.source === 'X';
+    const name = it.author || it.handle;
+    const ff = `<span class="${cls} av-f">${initials(name)}</span>`;
+    const chain = [it.avatar ? safeUrl(it.avatar) : '', x ? xAvatarApi(it) : ''].filter((u) => u && u !== '#');
+    if (!chain.length) return ff;
+    const [first, ...rest] = chain;
+    return `<img class="${cls}" src="${esc(first)}" data-fb="${esc(rest.join(' '))}" alt="" loading="lazy" referrerpolicy="no-referrer" data-ff="${esc(ff)}">`;
+  }
   function postCardHTML(it, extraCls = '') {
     const x = it.platform === 'x' || it.source === 'X';
     const name = it.author || it.handle;
-    const av = it.avatar
-      ? `<img class="av" src="${esc(safeUrl(it.avatar))}" alt="" loading="lazy" referrerpolicy="no-referrer" data-ff="${esc(`<span class="av av-f">${initials(name)}</span>`)}">`
-      : `<span class="av av-f">${initials(name)}</span>`;
+    const av = avatarHTML(it);
     return `<a class="pcard ${x ? 'is-x' : 'is-bsky'} ${extraCls}" href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="phead">${av}<div class="pwho"><span class="pname">${esc(name)}</span><span class="phandle">@${esc(it.handle)}</span></div>${x ? ICON_X : ICON_BSKY}</div>
       <div class="ptext">${esc(it.text)}</div>
@@ -312,7 +324,8 @@
   function renderSummary() {
     const box = $('#summary');
     const s = summaryData;
-    if (!s || !s.headline || !feature('summaryBox')) { box.hidden = true; return; }
+    const sec = $('#summary-sec');
+    if (!s || !s.headline || !feature('summaryBox')) { sec.hidden = true; return; }
     const d = new Date(s.updatedAt);
     const valid = !isNaN(d);
     const stale = valid && Date.now() - d > 6 * 3600e3;
@@ -331,12 +344,14 @@
     const rest = secs.slice(1).map(secHTML).join('');
     const posts = Array.isArray(s.posts) ? s.posts : [];
     const wasOpen = box.querySelector('details') && box.querySelector('details').open;
-    box.innerHTML = `<div class="sum-head"><div class="sum-head-l"><h2>What's happening</h2></div><span class="small ${stale ? 'err' : 'muted'}">${esc(upd)}</span></div>
-      <p class="sum-lead">${md(s.headline)}</p>
+    const updEl = $('#sum-upd');
+    updEl.textContent = upd;
+    updEl.className = `small ${stale ? 'err' : 'muted'}`;
+    box.innerHTML = `<p class="sum-lead">${md(s.headline)}</p>
       ${hlHTML}
       ${first}
       ${rest || posts.length ? `<details${wasOpen ? ' open' : ''}><summary>Show full summary ${ICON.chev}</summary>${rest}<div id="sum-posts" class="sum-posts"></div></details>` : ''}`;
-    box.hidden = false;
+    sec.hidden = false;
     renderSummaryPosts();
   }
   function renderSummaryPosts() {
@@ -423,7 +438,9 @@
     const latest = feedData && feedData.items.find((i) => !i.dateOnly);
     const latestHTML = latest
       ? `<a class="latest" href="${esc(safeUrl(latest.url))}" target="_blank" rel="noopener noreferrer">
-          <span class="l-meta"><b>Latest</b>${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)} · ${timeHTML(latest.time, 'ago')}</span>
+          <span class="l-meta"><b>Latest</b>${isPost(latest)
+            ? `${avatarHTML(latest, 'av av-s')}${esc(latest.author || latest.handle)}`
+            : `${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)}`} · ${timeHTML(latest.time, 'ago')}</span>
           <span class="l-title">${esc(latest.title || latest.text)}</span>
         </a>`
       : '';
@@ -553,7 +570,7 @@
     const metas = $$('meta[name="theme-color"]');
     metas.forEach((m) => {
       if (!m.dataset.orig) m.dataset.orig = m.content;
-      m.content = t === 'auto' ? m.dataset.orig : t === 'dark' ? '#0b0f14' : '#f6f7f9';
+      m.content = t === 'auto' ? m.dataset.orig : t === 'dark' ? '#15171b' : '#f6f7f9';
     });
     themeBtn.innerHTML = ICON[t];
     themeBtn.setAttribute('aria-label', `Theme: ${t}. Click to change`);
