@@ -10,3 +10,7 @@ compatibility_date = "2026-10-01"
 binding = "VISITS_DB"
 database_name = "jersey-storm-visits"
 database_id = "62c6c904-d117-4cbb-8c10-f67ec4741a6c"
+
+# TEMPORARY, branch only: count visits on preview hosts for testing
+[vars]
+VISIT_COUNT_ANY_HOST = "1"
