@@ -279,6 +279,22 @@ It always returns HTTP 200 JSON. It is cached for 60 s (browser) and 120 s (Clou
 
 ---
 
+## `GET /api/warnings` (Pages Function, `lib/weather.js`)
+
+Feeds the warning banner at the top of the page. It reads Jersey Met's `JerseyWarningStatusXML.json`, which is the file that https://www.gov.je/weather/jerseywarnings/ loads in the browser. The page's HTML is a static shell that always says "no weather warnings in force", so the function doesn't parse it. Cached for 5 minutes per data centre.
+
+```
+{
+  warnings: [{ colour: "red"|"amber"|"yellow", title: "Red wind warning · Channel Islands Shipping Area",
+               issuedAt: string|null (ISO 8601), summary: string, sea: boolean }],  // most serious first; [] if none
+  checkedAt: string | null,   // Jersey Met's "lastChecked"
+  source: "https://www.gov.je/weather/jerseywarnings/",
+  generatedAt: string
+}
+```
+
+If Jersey Met can't be reached, the function returns HTTP 502 with `no-store`. The page keeps the last warning for up to 30 minutes and then hides the banner.
+
 ## `GET /api/weather` (Pages Function, `lib/weather.js`)
 
 It always returns HTTP 200 JSON, with the same caching as `/api/feed`. The data comes from Jersey Met.
@@ -413,7 +429,7 @@ These are site-wide switches, so Claude Code can add features behind flags inste
   "title": "Storm Austen tracker",
   "subtitle": null,
   "theme": { "accent": "#e53935", "mode": "auto" },   // "auto" | "light" | "dark"
-  "refresh": { "feedSeconds": 180, "weatherSeconds": 300, "eventsSeconds": 120 },
+  "refresh": { "feedSeconds": 180, "weatherSeconds": 300 },   // feedSeconds also paces summary.json and events.json; polling pauses while the tab is hidden
   "filters": { "regions": ["jersey", "channel-islands"], "showGuernseyOnlyIfImportant": true },
   "features": { "favicons": true, "postCards": true, "summaryBox": true, "statusPill": false }
 }

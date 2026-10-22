@@ -115,6 +115,23 @@
     const r = `${cs.slice(-2) === ce.slice(-2) ? cs.slice(0, -2) : cs}–${ce}`;
     return dayKey(s) === dayKey(now) ? r : `${dateLabel(s)}, ${r}`;
   }
+  // One way to write times and wind speeds, whatever the source wrote: "14:43 UTC" and "5.30pm" become Jersey time
+  // like "3:43pm", and knots get mph alongside ("60kt (69 mph)", "20–30 knots (23–35 mph)").
+  const MONTH_NAMES = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+  const mph = (kt) => Math.round(kt * 1.15078);
+  function tidy(s) {
+    return String(s ?? '')
+      .replace(/\b(\d{1,2}):(\d{2})\s*(?:UTC|GMT)\b((?:\s+on)?\s+\w+day\s+(\d{1,2})\s+([A-Za-z]+)\s+(\d{4}))?/g, (m, h, mi, rest, dd, mon, yy) => {
+        const now = new Date();
+        const mo = mon ? MONTH_NAMES.indexOf(mon.toLowerCase()) : -1;
+        const d = mo >= 0 ? new Date(Date.UTC(+yy, mo, +dd, +h, +mi)) : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), +h, +mi));
+        return isNaN(d) ? m : clock(d) + (rest || '');
+      })
+      .replace(/\b(\d{1,2})[.:](\d{2})\s?([ap])\.?m\b\.?/gi, (m, h, mi, ap) => `${+h}:${mi}${ap.toLowerCase()}m`)
+      .replace(/\b(\d{1,3})(?:\s*(?:–|-|to)\s*(\d{1,3}))?\s?(knots|kts|kt)\b(?!\s*\(\d)/gi, (m, a, b) => `${m} (${b ? `${mph(a)}–${mph(b)}` : mph(a)} mph)`);
+  }
+  // "07:12" (24-hour) → "7:12am"; anything else is left as it is
+  const clock24 = (s) => String(s ?? '').replace(/^(\d{1,2}):(\d{2})$/, (m, h, mi) => `${+h % 12 || 12}:${mi}${+h < 12 ? 'am' : 'pm'}`);
   const TIME_FMT = {
     item: (d) => `${clock(d)} · ${ago(d)}`,
     date: (d) => dayLabel(d),
@@ -214,6 +231,30 @@
   const seenUrls = new Set();
   let firstLoad = true;
 
+  // Keep what the reader is looking at in place while content above it re-renders (an innerHTML swap
+  // defeats the browser's own scroll anchoring). Call before the change; call the returned function after.
+  function anchor() {
+    if (window.scrollY < 8) return () => {};
+    const y = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 60) + 12;
+    // prefer a card to a day heading: new cards arrive just under the heading, so the heading itself doesn't move
+    let el = null;
+    for (let dy = 0; dy < 240 && !el; dy += 24) {
+      const hit = document.elementFromPoint(window.innerWidth / 2, y + dy);
+      el = hit && hit.closest('[data-k]:not(.hour)');
+    }
+    if (!el) { const hit = document.elementFromPoint(window.innerWidth / 2, y); el = hit && hit.closest('[id]'); }
+    if (!el || el === document.body) return () => {};
+    const scope = el.dataset.k && el.parentElement.closest('[id]');
+    const sel = el.dataset.k ? `${scope ? `#${CSS.escape(scope.id)} ` : ''}[data-k="${CSS.escape(el.dataset.k)}"]` : `#${CSS.escape(el.id)}`;
+    const top = el.getBoundingClientRect().top;
+    return () => {
+      const now = document.querySelector(sel);
+      const dy = now ? now.getBoundingClientRect().top - top : 0;
+      if (Math.abs(dy) > 1) window.scrollBy(0, dy);
+    };
+  }
+  const bust = (url) => `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`;
+
   async function getJSON(url) {
     const r = await fetch(url, { cache: 'no-cache' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -274,11 +315,11 @@
     const [first, ...rest] = chain;
     return `<img class="${cls}" src="${esc(first)}" data-fb="${esc(rest.join(' '))}" alt="" loading="lazy" referrerpolicy="no-referrer" data-ff="${esc(ff)}">`;
   }
-  function postCardHTML(it, extraCls = '') {
+  function postCardHTML(it, extraCls = '', k = '') {
     const x = it.platform === 'x' || it.source === 'X';
     const name = it.author || it.handle;
     const av = avatarHTML(it);
-    return `<a class="pcard ${x ? 'is-x' : 'is-bsky'} ${extraCls}" href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
+    return `<a class="pcard ${x ? 'is-x' : 'is-bsky'} ${extraCls}"${k ? ` data-k="${esc(k)}"` : ''} href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="phead">${av}<div class="pwho"><span class="pname">${esc(name)}</span><span class="phandle">@${esc(it.handle)}</span></div>${x ? ICON_X : ICON_BSKY}</div>
       <div class="ptext">${esc(it.text)}</div>
       ${mediaHTML(it.media)}
@@ -286,17 +327,17 @@
       <div class="pfoot">${timeHTML(it.time, 'post')}<span>View on ${x ? 'X' : 'Bluesky'}<span class="ext" aria-hidden="true"></span></span></div>
     </a>`;
   }
-  function itemHTML(it, isNew) {
+  function itemHTML(it, isNew, k = '') {
     const s = src(it.source);
     const d = disp(it);
     const title = it.title || (isPost(it) ? it.author || (it.handle ? '@' + it.handle : '') : '');
     const warn = it.warning ? `<span class="badge ${esc(it.warning)}">${esc(it.warning)}</span>` : '';
     const img = isUrl(d.image) ? `<img class="thumb" src="${esc(d.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : '';
-    return `<a class="item ${itemClasses(it, isNew)}" href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
+    return `<a class="item ${itemClasses(it, isNew)}"${k ? ` data-k="${esc(k)}"` : ''} href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="meta">${faviconHTML(it.source, it.favicon)}<span class="src">${esc(s.label)}</span>${s.official ? ICON.check : ''}${warn}${d.pinned ? '<span class="pin">Pinned</span>' : ''}${timeHTML(it.time, it.dateOnly ? 'date' : 'item')}</div>
       <div class="item-body"><div>
-        ${title ? `<h3 class="title">${esc(title)}</h3>` : ''}
-        ${it.text ? `<p class="text">${esc(it.text)}</p>` : ''}
+        ${title ? `<h3 class="title">${esc(tidy(title))}</h3>` : ''}
+        ${it.text ? `<p class="text">${esc(tidy(it.text))}</p>` : ''}
         ${tagsHTML(it)}
       </div>${img}</div>
     </a>`;
@@ -361,6 +402,7 @@
     if (!feedData) return;
     renderFilters();
     const items = feedData.items.filter((i) => activeSource === 'All' || i.source === activeSource);
+    const fix = anchor();
     let newCount = 0;
     if (!items.length) {
       $('#feed').innerHTML = '<div class="card empty muted">No storm updates found right now. Check back soon.</div>';
@@ -372,11 +414,13 @@
         for (const it of g.items) {
           const isNew = !firstLoad && !seenUrls.has(it.url);
           if (isNew) newCount++;
-          html += isPost(it) && feature('postCards') ? postCardHTML(it, itemClasses(it, isNew)) : itemHTML(it, isNew);
+          const k = `u:${it.url}`;
+          html += isPost(it) && feature('postCards') ? postCardHTML(it, itemClasses(it, isNew), k) : itemHTML(it, isNew, k);
         }
       }
       $('#feed').innerHTML = html;
     }
+    fix();
     for (const it of feedData.items) seenUrls.add(it.url);
     firstLoad = false;
     renderSources();
@@ -407,10 +451,10 @@
   // --- "N new updates" pill when new items arrive while scrolled down ---
   const pill = $('#new-pill');
   const listEl = () => (eventsMode() ? $('#ev-list') : $('#feed'));
-  function showNewPill(n, noun = 'update') {
+  function showNewPill(n) {
     if (mobile.matches && document.body.dataset.active !== 'updates') return;
     if (listEl().getBoundingClientRect().top > 0) return; // top of the list already visible
-    pill.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>${n} new ${noun}${n === 1 ? '' : 's'}`;
+    pill.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>${n} new update${n === 1 ? '' : 's'}`;
     pill.hidden = false;
   }
   pill.addEventListener('click', () => {
@@ -421,7 +465,7 @@
 
   // --- summary box (static /summary.json) ---
   function md(s) {
-    return esc(s)
+    return esc(tidy(s))
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, label, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`);
   }
@@ -438,7 +482,7 @@
     const hls = (Array.isArray(s.highlights) ? s.highlights : []).filter((h) => h && (h.label || h.value)).slice(0, 8);
     const hlHTML = hls.length
       ? `<div class="highlights">${hls.map((h) => {
-          const inner = `<span class="hl-v">${esc(h.value)}</span><span class="hl-l">${esc(h.label)}</span>`;
+          const inner = `<span class="hl-v">${esc(tidy(h.value))}</span><span class="hl-l">${esc(tidy(h.label))}</span>`;
           return isUrl(h.source) ? `<a class="hl" href="${esc(h.source)}" target="_blank" rel="noopener noreferrer">${inner}</a>` : `<div class="hl">${inner}</div>`;
         }).join('')}</div>`
       : '';
@@ -453,6 +497,7 @@
     updEl.textContent = upd;
     updEl.className = `small ${stale ? 'err' : 'muted'}`;
     const wasBusy = box.hasAttribute('aria-busy');
+    const fix = anchor();
     box.removeAttribute('aria-busy');
     box.innerHTML = `<p class="sum-lead">${md(s.headline)}</p>
       ${hlHTML}
@@ -461,6 +506,7 @@
     sec.hidden = false;
     if (wasBusy) fadeIn([...box.children]);
     renderSummaryPosts();
+    fix();
   }
   function renderSummaryPosts() {
     const el = document.getElementById('sum-posts');
@@ -541,7 +587,7 @@
       <span class="evs-n">${n}</span><span class="evs-ic">${evSourceIcon(s)}</span>
       <span class="evs-who"><b>${esc(s.publisher || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${pick(EV_SRC, s.type) || 'Web'}</span></span>
       ${okTime(s.time) ? `<time datetime="${esc(s.time)}">${esc(fmtTime(s.time))}</time>` : ''}
-      ${s.title ? `<span class="evs-t">${esc(s.title)}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
+      ${s.title ? `<span class="evs-t">${esc(tidy(s.title))}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
     </a></li>`;
   }
 
@@ -556,15 +602,15 @@
     const open = openEvents.has(ev.id);
     const sev = ev.severity === 'info' ? '<span class="sr-only">Info:</span>' : `<span class="ev-sev">${ev.severity === 'major' ? 'Major' : 'Notable'}</span>`;
     // [n] refs become superscript links to sources[n-1]; out-of-range refs stay as text
-    const details = esc(ev.details).replace(/\[(\d+)\]/g, (m, n) => {
+    const details = esc(tidy(ev.details)).replace(/\[(\d+)\]/g, (m, n) => {
       const s = ev.sources[n - 1];
       return s && s.url ? `<sup><a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(s.publisher || '')}">${n}</a></sup>` : m;
     });
     return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}" data-k="ev:${esc(ev.id)}">
       <div class="ev-head">
         <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
-        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(ev.title)}</button></h3>
-        ${ev.summary ? `<p class="ev-sum">${esc(ev.summary)}</p>` : ''}
+        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(tidy(ev.title))}</button></h3>
+        ${ev.summary ? `<p class="ev-sum">${esc(tidy(ev.summary))}</p>` : ''}
         ${ICON.chev}
       </div>
       <div class="ev-body" id="evb-${i}"><div class="ev-inner"><div class="ev-content">
@@ -627,7 +673,9 @@
     const before = evGlide ? rowTops($('#ev-list')) : null;
     const firstPaint = $('#ev-list').hasAttribute('aria-busy');
     evGlide = false;
+    const fix = anchor();
     $('#ev-list').innerHTML = html || '<div class="card empty muted">No events match this filter.</div>';
+    fix();
     glide($('#ev-list'), before);
     if (firstPaint) fadeIn([...$('#ev-list').children].slice(0, 10));
     for (const e of eventsData.events) seenEvents.add(e.id);
@@ -638,7 +686,7 @@
       if (el) el.focus({ preventScroll: true });
     }
     applyMode();
-    if (newCount) showNewPill(newCount, 'event');
+    if (newCount) showNewPill(newCount);
   }
 
   $('#ev-list').addEventListener('click', (e) => {
@@ -682,27 +730,31 @@
   const sev = (mph) => (mph >= 70 ? 'sev-red' : mph >= 50 ? 'sev-amber' : mph >= 40 ? 'sev-yellow' : '');
   const val = (v, unit = '') => (v == null || v === '' ? '—' : `${v}${unit}`);
 
-  const RANK = { red: 0, amber: 1, orange: 1, yellow: 2 };
-  const byColour = (a, b) => (RANK[a.colour] ?? 3) - (RANK[b.colour] ?? 3);
-  // Marine warnings (e.g. "Channel Islands Shipping Area Wind") must not read as a warning for the island itself.
-  const isSea = (w) => /shipping|sea area|marine|inshore|waters|small craft/i.test(`${w.type || ''} ${w.island || ''}`);
-  function warnRowHTML(w) {
-    const c = String(w.colour || 'yellow').toLowerCase();
-    const name = isSea(w) ? `${w.kind || 'Wind'} warning` : w.type || `${w.kind || ''} warning`;
-    const where = !isSea(w) && w.island && !String(name).includes(w.island) ? ` · ${w.island}` : '';
-    return `<details class="wrow ${esc(c)}" data-k="${esc(`${w.type}|${w.island}`)}">
-      <summary>
-        <span class="badge ${esc(c)}">${esc(c)}</span>
-        <span class="w-main"><span class="w-name">${esc(name)}${esc(where)}</span>${w.text ? `<span class="w-text">${esc(w.text)}</span>` : ''}</span>
-        ${ICON.chev}
-      </summary>
-      <div class="w-body">
-        ${w.validity ? `<p>${esc(w.validity)}</p>` : ''}
-        ${Array.isArray(w.impacts) && w.impacts.length ? `<ul>${w.impacts.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
-        ${w.extra ? `<p>${esc(w.extra)}</p>` : ''}
-        <p class="small muted">${w.issued ? `${esc(w.issued)} · ` : ''}<a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>
-      </div>
-    </details>`;
+  // --- warning banner (/api/warnings): the most serious Jersey Met warning; hidden when none is in force ---
+  const WARN_COLOURS = ['red', 'amber', 'orange', 'yellow'];
+  let warnData = null;
+  let warnOkAt = 0;
+  function renderBanner() {
+    const el = $('#warn-banner');
+    const ws = warnData && Array.isArray(warnData.warnings) ? warnData.warnings.filter((w) => w && w.title) : [];
+    const fix = anchor();
+    if (!ws.length) { el.hidden = true; fix(); return; }
+    const w = ws[0];
+    const c = WARN_COLOURS.includes(w.colour) ? w.colour : 'yellow';
+    const meta = [okTime(w.issuedAt) && `Issued ${fmtTime(w.issuedAt)}`, ws.length > 1 && `+${ws.length - 1} more`].filter(Boolean).join(' · ');
+    el.className = `warn-banner ${c}`;
+    if (isUrl(warnData.source)) el.href = warnData.source;
+    el.innerHTML = `<span class="badge ${c}">${esc(c)}</span>
+      <span class="wb-main"><b class="wb-title">${esc(w.title)}</b>${w.summary ? `<span class="wb-sum">${esc(tidy(w.summary))}</span>` : ''}
+      <span class="wb-meta">${meta ? `${esc(meta)} · ` : ''}Jersey Met<span class="ext" aria-hidden="true"></span></span></span>`;
+    el.hidden = false;
+    fix();
+  }
+  async function loadWarnings() {
+    try { warnData = await getJSON(bust('/api/warnings')); warnOkAt = Date.now(); } catch (e) {
+      if (Date.now() - warnOkAt > 30 * 60e3) warnData = null; // a passing blip keeps the last warning; a long outage hides it
+    }
+    renderBanner();
   }
 
   // Highest period gust over today and tomorrow, with a plain-language "when".
@@ -719,16 +771,12 @@
     return d.maxGustMph ? { mph: d.maxGustMph, when: d === f.days[0] ? 'today' : 'tomorrow' } : null;
   }
 
-  let warnColours = null; // warning colours at the last render, to spot a warning that changed
-  const ringSince = new Map(); // warning key → when its change ring started
-  const RING_MS = 2600; // two 1.3s rings (.wrow.changed)
   const SK_NOW = {
     main: '<div class="sk sk-display"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60 sk-wrap2"></div>',
-    warn: '<div class="wgroup"><div class="sk sk-label"></div><div class="sk sk-text sk-w60"></div></div><div class="wgroup"><div class="sk sk-label"></div><div class="sk sk-row"></div></div>',
     latest: '<div class="latest" aria-hidden="true"><div class="sk sk-label"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60"></div></div>',
   };
   function renderNow() {
-    const el = $('#now');
+    const el = $('#now-live');
     const f = wxData && wxData.forecast;
     const pill = summaryData && feature('statusPill') && STATUS[summaryData.status] ? `<span class="pill st-${esc(summaryData.status)}">${STATUS[summaryData.status]}</span>` : '';
 
@@ -745,50 +793,24 @@
       line = '<p class="now-line">Forecast unavailable</p><p class="now-sub"><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Check Jersey Met<span class="ext" aria-hidden="true"></span></a></p>';
     }
 
-    let warn = wxTried ? '<div class="wgroup"><h3 class="wg-h">On land</h3><p class="w-none">Couldn\'t check warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met<span class="ext" aria-hidden="true"></span></a></p></div>' : SK_NOW.warn;
-    if (wxData) {
-      const all = Array.isArray(wxData.warnings) ? wxData.warnings : [];
-      const land = all.filter((w) => !isSea(w)).sort(byColour);
-      const sea = all.filter(isSea).sort(byColour);
-      const failed = wxData.sources && wxData.sources.warnings && wxData.sources.warnings.ok === false;
-      const none = failed
-        ? '<p class="w-none">Couldn\'t check warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>'
-        : '<p class="w-none">No warnings in force</p>';
-      warn = `<div class="wgroup"><h3 class="wg-h">On land</h3>${land.length ? land.map(warnRowHTML).join('') : none}</div>`;
-      if (sea.length) warn += `<div class="wgroup"><h3 class="wg-h">At sea <span>for boats and shipping</span></h3>${sea.map(warnRowHTML).join('')}</div>`;
-    }
-
     const latest = feedData && feedData.items.find((i) => !i.dateOnly);
     const latestHTML = latest
       ? `<a class="latest" href="${esc(safeUrl(latest.url))}" target="_blank" rel="noopener noreferrer">
           <span class="l-meta"><b>Latest</b>${isPost(latest)
             ? `${avatarHTML(latest, 'av av-s')}${esc(latest.author || latest.handle)}`
             : `${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)}`} · ${timeHTML(latest.time, 'ago')}</span>
-          <span class="l-title">${esc(latest.title || String(latest.text || '').replace(/https?:\/\/\S+/g, '').trim() || latest.text)}</span>
+          <span class="l-title">${esc(tidy(latest.title || String(latest.text || '').replace(/https?:\/\/\S+/g, '').trim() || latest.text))}</span>
         </a>`
       : feedTried ? '' : SK_NOW.latest;
 
-    // keep whatever the reader opened or closed across refreshes
-    const prev = new Map($$('#now details[data-k]').map((d) => [d.dataset.k, d.open]));
-    const wasSk = ['.now-main', '.now-warn', '.latest'].filter((sel) => el.querySelector(`${sel} .sk`));
+    const wasSk = ['.now-main', '.latest'].filter((sel) => el.querySelector(`${sel} .sk`));
+    const fix = anchor();
     el.innerHTML = `<div class="now-head"><h2 id="now-h">Right now</h2>${pill}</div>
       <div class="now-main">${line}</div>
-      ${warn ? `<div class="now-warn">${warn}</div>` : ''}
       ${latestHTML}`;
-    $$('#now details[data-k]').forEach((d) => { if (prev.has(d.dataset.k)) d.open = prev.get(d.dataset.k); });
+    fix();
     fadeIn(wasSk.map((sel) => el.querySelector(sel)).filter((n) => n && !n.querySelector('.sk')));
     tick('peak', el.querySelector('.now-line b'), peakMph);
-    if (wxData) {
-      const colourOf = (d) => ['red', 'amber', 'orange', 'yellow'].find((c) => d.classList.contains(c));
-      const now = Date.now();
-      for (const d of $$('#now details.wrow[data-k]')) {
-        if (warnColours && warnColours.get(d.dataset.k) !== colourOf(d) && !reduceMotion.matches) ringSince.set(d.dataset.k, now);
-        // other sources re-render this panel moments later: carry on the ring from where it was, don't restart it
-        const since = ringSince.get(d.dataset.k);
-        if (since && now - since < RING_MS) { d.classList.add('changed'); d.style.animationDelay = `${since - now}ms`; }
-      }
-      warnColours = new Map($$('#now details.wrow[data-k]').map((d) => [d.dataset.k, colourOf(d)]));
-    }
   }
 
   function renderWeather(wx) {
@@ -809,7 +831,7 @@
     if (gust) { chip.innerHTML = `<span class="gc-l">Gusts </span>${gust} mph`; chip.className = `gust-chip ${sev(gust)}`; chip.hidden = false; tick('chip', chip, gust); } else chip.hidden = true;
 
     const periods = Array.isArray(today.periods) ? today.periods : [];
-    const sunBits = [today.sunrise && `Sunrise ${esc(today.sunrise)}`, today.sunset && `Sunset ${esc(today.sunset)}`, today.uv && `UV ${esc(today.uv)}`].filter(Boolean);
+    const sunBits = [today.sunrise && `Sunrise ${esc(clock24(today.sunrise))}`, today.sunset && `Sunset ${esc(clock24(today.sunset))}`, today.uv && `UV ${esc(today.uv)}`].filter(Boolean);
     let html = `<div class="card cond ${sev(gust || 0)}">
       <div class="cond-top"><div>
         <div class="cond-big">${gust ? `${gust}<small>mph</small>` : '—'}</div>
@@ -848,7 +870,7 @@
       ${next && next.windDescription ? `<p class="wind-desc"><strong>${esc(next.day)}:</strong> ${esc(next.windDescription)}</p>` : ''}
       </div>`;
     }
-    html += `<p class="issued">Jersey Met forecast issued ${esc(f.issued)} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
+    html += `<p class="issued">Jersey Met forecast issued ${esc(tidy(f.issued))} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
     const firstPaint = !!$('#weather .skel');
     $('#weather').innerHTML = html;
     if (firstPaint) fadeIn([...$('#weather').children]);
@@ -856,47 +878,67 @@
   }
 
   // --- status + loading ---
-  let lastOk = null;
-  function setStatus(ok, msg) {
+  // The header says how old the data is (summary.json / events.json's own timestamps), not when we last fetched it.
+  const STALE_MS = 30 * 60e3;
+  let netOk = true;
+  function dataTime() {
+    const ts = [summaryData && summaryData.updatedAt, eventsData && eventsData.updated].filter(okTime).map((t) => new Date(t));
+    return ts.length ? new Date(Math.max(...ts)) : null;
+  }
+  function renderStatus(ping) {
+    const t = dataTime();
     const dot = $('#live-dot');
-    dot.className = 'dot ' + (ok ? 'ok' : 'err');
-    if (ok && !reduceMotion.matches) { void dot.offsetWidth; dot.classList.add('ping'); } // restart the one-shot ping
-    $('#updated').innerHTML = msg; // msg is built from our own strings and times only
+    const upd = $('#updated');
+    if (!t) { if (!netOk) { dot.className = 'dot err'; upd.textContent = 'Could not load updates'; } return; }
+    const stale = Date.now() - t > STALE_MS;
+    const state = !netOk ? 'err' : stale ? 'stale' : 'ok';
+    dot.className = `dot ${state}`;
+    if (ping && state === 'ok' && !reduceMotion.matches) { void dot.offsetWidth; dot.classList.add('ping'); } // restart the one-shot ping
+    upd.className = state === 'ok' ? '' : state;
+    upd.textContent = `${netOk ? '' : 'Offline? '}Updated ${ago(t)}`;
+    upd.title = `Data last updated ${fmtTime(t.toISOString())}`;
   }
 
   async function loadX() {
-    try { xPosts = ((await getJSON('/x-posts.json')).posts || []).filter((p) => p && p.url && p.time); } catch (e) { /* keep previous */ }
+    try { xPosts = ((await getJSON(bust('/x-posts.json'))).posts || []).filter((p) => p && p.url && p.time); } catch (e) { /* keep previous */ }
   }
+  let summaryRaw = '';
   async function loadSummary() {
-    try { summaryData = await getJSON('/summary.json'); renderSummary(); renderNow(); } catch (e) { if (!summaryData) $('#summary-sec').hidden = true; }
+    try {
+      const d = await getJSON(bust('/summary.json'));
+      const raw = JSON.stringify(d);
+      if (raw !== summaryRaw) { summaryRaw = raw; summaryData = d; renderSummary(); renderNow(); } // unchanged: leave the page alone
+      renderStatus(true);
+    } catch (e) { if (!summaryData) $('#summary-sec').hidden = true; }
   }
   async function loadFeed() {
     const xp = loadX();
     try {
-      apiFeed = await getJSON('/api/feed');
+      apiFeed = await getJSON(bust('/api/feed'));
       await xp;
       feedTried = true;
+      netOk = true;
       renderFeed();
-      lastOk = new Date();
-      setStatus(true, `<span class="gc-l">Live · </span>Updated ${clock(lastOk)}`);
     } catch (e) {
       await xp;
       feedTried = true;
+      netOk = false;
       if (xPosts.length) renderFeed(); else renderNow();
       if (!feedData) $('#feed').innerHTML = '<div class="card empty err">Could not load updates. Retrying shortly…</div>';
-      setStatus(false, lastOk ? `Offline? Last update ${clock(lastOk)}` : 'Could not load updates');
     }
+    renderStatus(netOk);
   }
   // Network and server errors keep the events we have; a missing (404/410), invalid or empty file falls back to the post feed.
   async function loadEvents() {
     let r;
-    try { r = await fetch('/events.json', { cache: 'no-cache' }); } catch (e) { eventsTried = true; if (!eventsData) applyMode(); return; }
+    try { r = await fetch(bust('/events.json'), { cache: 'no-cache' }); } catch (e) { eventsTried = true; if (!eventsData) applyMode(); return; }
     eventsTried = true;
     if (!r.ok && r.status !== 404 && r.status !== 410) { if (!eventsData) applyMode(); return; }
     const text = r.ok ? await r.text().catch(() => '') : '';
     try { eventsData = text ? normEvents(JSON.parse(text)) : null; } catch (e) { eventsData = null; }
     evRaw = text;
     renderEvents();
+    renderStatus(true);
   }
   async function loadWeather() {
     try {
@@ -910,11 +952,13 @@
     }
   }
 
+  const lastPoll = { data: 0, wx: 0 };
   const refreshBtn = $('#refresh');
   async function refreshAll() {
     if (refreshBtn.classList.contains('spinning')) return; // one refresh at a time
     refreshBtn.classList.add('spinning');
-    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather()]);
+    lastPoll.data = lastPoll.wx = Date.now();
+    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather(), loadWarnings()]);
     const svg = refreshBtn.querySelector('svg');
     if (reduceMotion.matches || !svg) { refreshBtn.classList.remove('spinning'); return; }
     const done = () => { svg.removeEventListener('animationiteration', done); clearTimeout(timer); refreshBtn.classList.remove('spinning'); };
@@ -979,14 +1023,18 @@
     if (srcs && srcs.sources && typeof srcs.sources === 'object') customSources = srcs.sources;
   }).finally(() => {
     const secs = (v, d) => (typeof v === 'number' && v >= 30 ? v : d) * 1000;
-    const feedEvery = secs(config.refresh.feedSeconds, 180);
+    const dataEvery = secs(config.refresh.feedSeconds, 180);
     const wxEvery = secs(config.refresh.weatherSeconds, 300);
-    const eventsEvery = secs(config.refresh.eventsSeconds, 120);
     refreshAll();
-    setInterval(loadEvents, eventsEvery);
-    setInterval(loadFeed, feedEvery);
-    setInterval(loadWeather, wxEvery);
-    setInterval(loadSummary, wxEvery);
+    // Poll only while the tab is visible; coming back to it catches up at once if a poll is due.
+    const poll = () => {
+      if (document.visibilityState !== 'visible') return;
+      const now = Date.now();
+      if (now - lastPoll.data >= dataEvery) { lastPoll.data = now; loadSummary(); loadEvents(); loadFeed(); }
+      if (now - lastPoll.wx >= wxEvery) { lastPoll.wx = now; loadWeather(); loadWarnings(); }
+    };
+    setInterval(poll, 15e3);
+    document.addEventListener('visibilitychange', poll);
   });
 
   // --- unique visitor count (functions/api/visit.js): a random ID kept in localStorage and a cookie ---
@@ -1013,9 +1061,6 @@
     }).catch(() => { /* leave the line hidden */ });
   })();
 
-  // refresh relative times every minute, and refresh on return to the tab
-  setInterval(() => { updateTimes(); renderEvents(); }, 60 * 1000);
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && (!lastOk || Date.now() - lastOk > 60 * 1000)) refreshAll();
-  });
+  // refresh relative times and the data's age every minute
+  setInterval(() => { updateTimes(); renderEvents(); renderStatus(); }, 60 * 1000);
 })();

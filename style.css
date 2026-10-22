@@ -70,6 +70,9 @@ h1{font-size:1.06rem;font-weight:700;white-space:nowrap}
 .dot.ok{background:var(--ok)}
 .dot.ping{animation:pulse 1.4s var(--ease-out)}
 .dot.err{background:var(--red)}
+.dot.stale{background:var(--amber)}
+#updated.stale{color:color-mix(in oklab,var(--amber) 70%,var(--text))}
+#updated.err{color:color-mix(in oklab,var(--red) 75%,var(--text))}
 @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}70%,100%{box-shadow:0 0 0 7px transparent}}
 .actions{display:flex;align-items:center;gap:6px;flex:none}
 .icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--text);transition:background .15s,border-color .15s,transform .12s var(--ease-out)}
@@ -110,7 +113,8 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .sum-sec[hidden]{display:none}
 
 /* ---------- right now ---------- */
-.now{margin-top:var(--space-md);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-lg);display:grid;gap:var(--space-md) var(--space-xl);grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-template-areas:"head warn" "main warn" "latest warn";align-items:start}
+.now{margin-top:var(--space-md);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-lg);display:grid;gap:var(--space-md) var(--space-xl);grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-template-areas:"head todo" "main todo" "latest todo";align-items:start}
+.now-live{display:contents}
 .now-head{grid-area:head;display:flex;align-items:center;gap:var(--space-sm)}
 .now-head h2{font-size:.95rem;font-weight:650;letter-spacing:0;color:var(--muted)}
 .now-main{grid-area:main;display:flex;flex-direction:column;gap:var(--space-xs)}
@@ -120,28 +124,25 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .now-line.sev-amber b{color:var(--amber)}
 .now-line.sev-yellow b{color:color-mix(in srgb,var(--yellow) 70%,var(--text))}
 .now-sub{color:var(--muted);font-size:.95rem}
-.now-warn{grid-area:warn;display:flex;flex-direction:column;gap:var(--space-md)}
-.wgroup{display:flex;flex-direction:column;gap:var(--space-xs)}
 .wg-h{font-size:.88rem;font-weight:650;color:var(--muted)}
-.wg-h span{font-weight:500;margin-left:var(--space-2xs)}
-.w-none{font-size:.92rem;color:var(--muted)}
-.wrow{--wc:var(--yellow);--wb:var(--yellow-bg);background:var(--wb);border:1px solid color-mix(in oklab,var(--wc) 32%,transparent);border-radius:12px}
-.wrow.red{--wc:var(--red);--wb:var(--red-bg)}
-.wrow.amber,.wrow.orange{--wc:var(--amber);--wb:var(--amber-bg)}
-/* a warning that appeared or changed colour since the last refresh: one soft ring, twice, then still */
-.wrow.changed{animation:warn-ring 1.3s var(--ease-out) 2}
-@keyframes warn-ring{from{box-shadow:0 0 0 0 color-mix(in srgb,var(--wc) 50%,transparent)}to{box-shadow:0 0 0 9px transparent}}
-.wrow>summary{list-style:none;cursor:pointer;min-height:52px;padding:var(--space-xs) var(--space-sm);display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--space-sm);align-items:center}
-.wrow>summary::-webkit-details-marker{display:none}
-.w-main{display:flex;flex-direction:column;min-width:0;line-height:1.35}
-.w-name{font-weight:700;font-size:.95rem}
-.w-text{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wrow[open] .w-text{white-space:normal}
-.wrow .chev{color:var(--muted);transition:transform .2s}
-.wrow[open] .chev{transform:rotate(180deg)}
-.w-body{padding:0 var(--space-sm) var(--space-sm);font-size:.92rem;display:flex;flex-direction:column;gap:var(--space-xs)}
-.w-body ul{margin:0;padding-left:20px}
-.w-body li{margin:2px 0}
+/* what to do tonight: short sourced actions beside "Right now" */
+.todo{grid-area:todo;display:flex;flex-direction:column;gap:var(--space-xs)}
+.todo ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
+.todo li{padding:var(--space-xs) 0;border-top:1px solid var(--line);font-size:.95rem;line-height:1.45}
+.todo li:first-child{border-top:0;padding-top:0}
+.todo a[href^="tel:"],.todo a[href^="mailto:"]{font-weight:650;white-space:nowrap}
+.todo-src{font-size:.82rem;color:var(--muted);white-space:nowrap}
+/* one warning banner: the most serious Jersey Met warning, in its own colour */
+.warn-banner{--wc:var(--yellow);--wb:var(--yellow-bg);margin-top:var(--space-md);display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-sm);align-items:start;padding:var(--space-sm) var(--space-md);background:var(--wb);border:1px solid color-mix(in oklab,var(--wc) 40%,transparent);border-left-width:4px;border-left-color:var(--wc);border-radius:12px;color:var(--text);text-decoration:none}
+.warn-banner[hidden]{display:none}
+.warn-banner.red{--wc:var(--red);--wb:var(--red-bg)}
+.warn-banner.amber,.warn-banner.orange{--wc:var(--amber);--wb:var(--amber-bg)}
+.warn-banner .badge{margin-top:2px}
+.wb-main{display:flex;flex-direction:column;gap:2px;min-width:0;line-height:1.4}
+.wb-title{font-size:1rem;font-weight:700}
+.wb-sum{font-size:.92rem}
+.wb-meta{font-size:.82rem;color:var(--muted)}
+.warn-banner:hover .wb-meta{color:var(--accent)}
 .latest{grid-area:latest;display:flex;flex-direction:column;gap:var(--space-2xs);padding-top:var(--space-md);border-top:1px solid var(--line);text-decoration:none;color:var(--text)}
 .latest:hover .l-title{color:var(--accent)}
 .l-meta{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
@@ -409,7 +410,6 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
 .sk-display{height:34px;width:85%;margin-bottom:6px}
 .sk-text{height:15px;width:100%;margin-top:9px}
 .sk-label{height:13px;width:28%;min-width:80px}
-.sk-row{height:52px;border-radius:12px}
 .sk-w60{width:60%}.sk-w70{width:70%}
 .sk-gap{margin-top:24px}
 /* the "Right now" sub-line wraps to two lines except in the wide single-column (tablet) layout */
@@ -440,6 +440,8 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
   body:not([data-active="updates"]) .intro{display:none}
   .now{flex-direction:column;align-items:stretch;gap:var(--space-md);padding:var(--space-md);margin-top:var(--space-sm)}
   .now-line{font-size:1.5rem}
+  .now .latest{order:1}
+  .warn-banner{margin-top:var(--space-sm)}
   .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;height:var(--tabbar);padding:6px max(8px,env(safe-area-inset-left)) env(safe-area-inset-bottom);background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);border-top:1px solid var(--line)}
   .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:none;color:var(--muted);font-size:.7rem;font-weight:600;border-radius:12px}
   .tabbar button[aria-pressed="true"]{color:var(--accent)}

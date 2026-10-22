@@ -12,7 +12,7 @@ index.html, app.js, style.css   Frontend (plain HTML/CSS/JS, no framework)
 summary.json                    "What's happening" box. Rewritten by the scheduled runs
 x-posts.json                    X posts merged into the feed. Rewritten by the scheduled runs
 events.json                     Grouped storm events for the timeline. Rewritten by the scheduled runs
-functions/api/*.js              Cloudflare Pages Functions: /api/feed, /api/weather, /api/x-avatar
+functions/api/*.js              Cloudflare Pages Functions: /api/feed, /api/weather, /api/warnings, /api/x-avatar
 lib/*.js                        Shared API logic (ES modules, web APIs only), used by both runtimes
 lib/edge-cache.js               Cloudflare Cache API layer (stands in for Vercel's s-maxage)
 build.mjs                       Copies the public files into dist/ and checks the data files
@@ -42,7 +42,7 @@ Pages project settings:
 
 `build.mjs` copies only the public files (the page, icons and the three data files) into `dist/`. As a result, `lib/`, `tools/`, `api/`, the Markdown files and the config are never served. The functions in `functions/` are deployed alongside the static files. Only `/api/*` requests run a function, so static files never use the daily request allowance. If `summary.json` or `x-posts.json` is broken, the build fails and Pages keeps serving the previous deployment. An invalid `events.json` only produces a warning, because the page falls back to the post feed.
 
-`/api/feed` and `/api/weather` are cached for 2 minutes per Cloudflare data centre, and `/api/x-avatar` for up to a week. This uses the Cache API (`lib/edge-cache.js`), so the upstream sites aren't hit on every visit. Browsers receive the same `Cache-Control` headers as they did from Vercel. The Cache API only works on the custom domain, not on `*.pages.dev`.
+`/api/feed` and `/api/weather` are cached for 2 minutes per Cloudflare data centre, `/api/warnings` for 5 minutes, and `/api/x-avatar` for up to a week. This uses the Cache API (`lib/edge-cache.js`), so the upstream sites aren't hit on every visit. Browsers receive the same `Cache-Control` headers as they did from Vercel. The Cache API only works on the custom domain, not on `*.pages.dev`.
 
 Everything stays within the free plan: there's no KV, D1 or other paid feature. Two limits to keep in mind are 500 builds a month, where each data commit is one build, and 100,000 function requests a day.
 
