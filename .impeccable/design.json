@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-10-22T16:10:24+00:00",
+ "generatedAt": "2026-10-22T17:00:34+00:00",
  "title": "Design System: Jersey Storm Tracker",
  "extensions": {
   "colorMeta": {
@@ -477,6 +477,11 @@
     "name": "glide",
     "value": "260–340ms",
     "purpose": "Timeline cards moving on filter changes, event expand."
+   },
+   {
+    "name": "tick",
+    "value": "320ms draw, held ~1.4s",
+    "purpose": "Refresh icon becomes a Live Green tick after a manual refresh reaches the feed."
    }
   ],
   "breakpoints": [
@@ -503,7 +508,7 @@
    "name": "Icon Button",
    "kind": "button",
    "refersTo": "button-icon",
-   "description": "38px round control in the header (refresh, theme).",
+   "description": "38px round control in the header (refresh, theme). Refresh spins while loading and briefly shows a Live Green tick once a manual refresh lands.",
    "html": "<button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Refresh now\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/></svg></button>",
    "css": ".ds-icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line,#e3e7ec);background:var(--surface,#fff);color:var(--text,#0f1419);display:grid;place-items:center;cursor:pointer;transition:background .15s,border-color .15s,transform .12s cubic-bezier(.16,1,.3,1)}.ds-icon-btn:hover{border-color:var(--line-2,#d3d9e0);background:var(--surface-2,#f0f2f5)}.ds-icon-btn:active{transform:scale(.95)}.ds-icon-btn:focus-visible{outline:2px solid var(--accent,#0a66c2);outline-offset:2px}"
   },
@@ -562,11 +567,27 @@
    "description": "Quiet full-width toggle for the full post feed under the timeline.",
    "html": "<button class=\"ds-toggle\" type=\"button\" aria-expanded=\"false\">Show all posts <span>67</span><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
    "css": ".ds-toggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;max-width:560px;min-height:44px;border:1px solid var(--line,#e3e7ec);border-radius:12px;background:transparent;color:var(--muted,#5b6673);font:600 .88rem/1 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;cursor:pointer;transition:color .15s,border-color .15s,transform .12s cubic-bezier(.16,1,.3,1)}.ds-toggle span{font-variant-numeric:tabular-nums;opacity:.75}.ds-toggle svg{width:16px;height:16px;transition:transform .2s}.ds-toggle:hover{color:var(--text,#0f1419);border-color:var(--line-2,#d3d9e0)}.ds-toggle:active{transform:scale(.98)}.ds-toggle[aria-expanded=true] svg{transform:rotate(180deg)}"
+  },
+  {
+   "name": "New Tag",
+   "kind": "chip",
+   "refersTo": "new-tag",
+   "description": "Leads an event card's meta row when the event arrived since the reader's last visit on this device.",
+   "html": "<div class=\"ds-ev-meta\"><span class=\"ds-new-tag\">New</span><span class=\"ds-sev\"><i></i>Notable</span><span>· Weather</span><time>3:00pm</time></div>",
+   "css": ".ds-ev-meta{display:flex;align-items:center;gap:6px;font:400 .78rem/1.4 system-ui,-apple-system,sans-serif;color:var(--muted,#5b6673);font-variant-numeric:tabular-nums}.ds-ev-meta time{margin-left:auto}.ds-new-tag{padding:1px 7px;border-radius:999px;background:color-mix(in srgb,var(--accent,#0a66c2) 14%,transparent);color:var(--accent,#0a66c2);font-weight:650}.ds-sev{display:inline-flex;align-items:center;gap:5px;color:var(--amber,#e86a00);font-weight:650}.ds-sev i{width:8px;height:8px;border-radius:50%;background:currentColor}"
+  },
+  {
+   "name": "Already-Seen Divider",
+   "kind": "custom",
+   "refersTo": "since-divider",
+   "description": "Marks where tagged new events give way to ones the reader saw last visit. Shown once, never sticky.",
+   "html": "<div class=\"ds-since\">Already seen when you looked at 2:58pm</div>",
+   "css": ".ds-since{display:flex;align-items:center;gap:8px;padding:10px 0 4px;font:400 .8rem/1.4 system-ui,-apple-system,sans-serif;color:var(--muted,#5b6673);font-variant-numeric:tabular-nums}.ds-since::before,.ds-since::after{content:\"\";flex:1;height:1px;background:var(--line,#e3e7ec)}"
   }
  ],
  "narrative": {
   "northStar": "The Harbour Noticeboard",
-  "overview": "The tracker is a trusted local noticeboard that neighbours check during a storm. Everything on it is pinned up plainly, in date order, with its source attached. The board itself is quiet: soft sea-mist paper, hairline edges, the device's own system typeface. Whatever is pinned to it can then speak at the right volume. The only loud things are the official warnings, in Jersey Met's red, amber and yellow. A red warning has to read as red because nothing else on the page competes with it.\n\nThe feel is a calm news app with the polish of a well-made native weather app: big numerals where a number is the news, generous line height, sentence-case labels and soft surfaces. Components are quiet and tactile. Surfaces barely lift, controls give a small press response, and motion only shows something changing (a filter moving cards, a panel opening, a theme switching). Nothing loops for attention, and nothing plays on page load.\n\nIt's rejected as a generic SaaS dashboard (a grid of stat tiles, glassy chrome) and as tabloid or alarmist (flashing red, sirens, shouting capitals).",
+  "overview": "The tracker is a trusted local noticeboard that neighbours check during a storm. Everything on it is pinned up plainly, in date order, with its source attached. The board itself is quiet: soft sea-mist paper, hairline edges, the device's own system typeface. Whatever is pinned to it can then speak at the right volume. The only loud things are the official warnings, in Jersey Met's red, amber and yellow. A red warning has to read as red because nothing else on the page competes with it.\n\nThe feel is a calm news app with the polish of a well-made native weather app: big numerals where a number is the news, generous line height, sentence-case labels and soft surfaces. Components are **quiet and tactile**. Surfaces barely lift, controls give a small press response, and motion only shows something changing (a filter moving cards, a panel opening, a theme switching). Nothing loops for attention, and nothing plays on page load.\n\nIt's rejected as a generic SaaS dashboard (a grid of stat tiles, glassy chrome) and as tabloid or alarmist (flashing red, sirens, shouting capitals).",
   "keyCharacteristics": [
    "Quiet neutral surfaces, so the official warning colours are the only loud colour.",
    "One system typeface family carries everything. Hierarchy comes from size and weight, not from a second font.",
@@ -603,20 +624,20 @@
    }
   ],
   "dos": [
-   "Do take every colour from the CSS custom properties on `:root`, and define both themes (the `prefers-color-scheme` block and the `[data-theme]` overrides).",
-   "Do keep motion between 120 and 340ms, using `cubic-bezier(.16,1,.3,1)`: press feedback about 120ms; colour changes 150–200ms; crossfades about 240ms; glides and expands 260–340ms.",
-   "Do give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.",
-   "Do use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.",
-   "Do use tabular figures for times and measurements, and balanced wrapping for headings.",
-   "Do keep tap targets at least 44px on phones, text contrast at least 4.5:1, and the page free of horizontal scrolling at 390px."
+   "**Do** take every colour from the CSS custom properties on `:root`, and define both themes (the `prefers-color-scheme` block and the `[data-theme]` overrides).",
+   "**Do** keep motion between 120 and 340ms, using `cubic-bezier(.16,1,.3,1)`: press feedback about 120ms; colour changes 150–200ms; crossfades about 240ms; glides and expands 260–340ms.",
+   "**Do** give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.",
+   "**Do** use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.",
+   "**Do** use tabular figures for times and measurements, and balanced wrapping for headings.",
+   "**Do** keep tap targets at least 44px on phones, text contrast at least 4.5:1, and the page free of horizontal scrolling at 390px."
   ],
   "donts": [
-   "Don't use red, amber or yellow for anything except Jersey Met warnings and gust or event severity. See the Only-Warnings-Shout Rule.",
-   "Don't use tracked capitals for labels or headings. Capitals are only for the official warning badges.",
-   "Don't mark severity with a thick coloured left or right edge. Use the dot and label, plus a tinted border for Major.",
-   "Don't use Unicode arrows, triangles or emoji as icons.",
-   "Don't add web fonts, heavy images or page-load choreography. The page has to stay quick on a weak storm-time connection.",
-   "Don't add stat-tile grids, glass panels, gradient text or flashing or looping alerts. The tone is calm news, not a SaaS dashboard or a tabloid."
+   "**Don't** use red, amber or yellow for anything except Jersey Met warnings and gust or event severity. See the Only-Warnings-Shout Rule.",
+   "**Don't** use tracked capitals for labels or headings. Capitals are only for the official warning badges.",
+   "**Don't** mark severity with a thick coloured left or right edge. Use the dot and label, plus a tinted border for Major.",
+   "**Don't** use Unicode arrows, triangles or emoji as icons.",
+   "**Don't** add web fonts, heavy images or page-load choreography. The page has to stay quick on a weak storm-time connection.",
+   "**Don't** add stat-tile grids, glass panels, gradient text or flashing or looping alerts. The tone is calm news, not a SaaS dashboard or a tabloid."
   ]
  }
 }

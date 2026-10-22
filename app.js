@@ -457,6 +457,22 @@
   let postsOpen = false;
   let evGlide = false; // set by filter and area changes so the next render animates the list
 
+  // --- "since you last looked": event ids this device saw on its previous visit (ignored after a week, e.g. a new storm) ---
+  // The baseline is pinned for the tab session, so reloading doesn't clear the "New" marks.
+  const lastVisit = (() => {
+    try {
+      let raw = sessionStorage.getItem('visit-base');
+      if (raw === null) { raw = localStorage.getItem('seen-events') || ''; sessionStorage.setItem('visit-base', raw); }
+      const v = raw ? JSON.parse(raw) : null;
+      return v && Array.isArray(v.ids) && okTime(v.at) && Date.now() - new Date(v.at) < 7 * 864e5 ? { ids: new Set(v.ids), at: v.at } : null;
+    } catch (e) { return null; }
+  })();
+  const unseen = (ev) => !!lastVisit && !lastVisit.ids.has(ev.id);
+  function saveSeen() {
+    if (!seenEvents.size) return;
+    try { localStorage.setItem('seen-events', JSON.stringify({ ids: [...seenEvents], at: new Date().toISOString() })); } catch (e) { /* private mode */ }
+  }
+
   function normEvents(d) {
     if (!d || !Array.isArray(d.events)) return null;
     const events = d.events
@@ -509,7 +525,7 @@
     const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
     return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}" data-k="ev:${esc(ev.id)}">
       <div class="ev-head">
-        <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
+        <div class="ev-meta">${unseen(ev) ? '<span class="ev-new">New</span>' : ''}${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
         <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(ev.title)}</button></h3>
         ${ev.summary ? `<p class="ev-sum">${esc(ev.summary)}</p>` : ''}
         ${ICON.chev}
@@ -546,15 +562,16 @@
     if (key === evKey) return;
     evKey = key;
 
+    const inArea = eventsData.events.filter((e) => evGuernsey || e.area !== 'guernsey');
+    const fresh = inArea.filter(unseen).length;
     const cnt = $('#feed-count');
-    cnt.textContent = upd ? `Updated ${fmtTime(eventsData.updated, now)}${stale ? ' · may be out of date' : ''}` : '';
+    cnt.textContent = upd ? `Updated ${fmtTime(eventsData.updated, now)}${stale ? ' · may be out of date' : fresh ? ` · ${fresh} new` : ''}` : '';
     cnt.className = `small ${stale ? 'err' : 'muted'}`;
 
     // keep keyboard focus on the same control across a re-render
     const a = document.activeElement;
     const focusSel = a && a.closest && (a.dataset.evf ? `[data-evf="${a.dataset.evf}"]` : a.classList.contains('ev-btn') ? a.closest('.ev').dataset.id : null);
 
-    const inArea = eventsData.events.filter((e) => evGuernsey || e.area !== 'guernsey');
     $('#ev-filters').innerHTML = Object.entries(EV_FILTERS).map(([k, label]) =>
       `<button type="button" data-evf="${k}" aria-pressed="${k === evFilter}">${label} <span class="cnt">${inArea.filter((e) => evMatches(e, k)).length}</span></button>`).join('');
 
@@ -562,7 +579,12 @@
     let newCount = 0;
     let html = '';
     let day = '';
+    let since = list.length && unseen(list[0]) ? 'due' : 'none'; // mark where already-seen events start, once
     list.forEach((ev, i) => {
+      if (since === 'due' && !unseen(ev)) {
+        since = 'done';
+        html += `<div class="since" data-k="since">Already seen when you looked at ${esc(fmtTime(lastVisit.at, now))}</div>`;
+      }
       const d = dayLabel(new Date(ev.end)); // events arrive newest first by end, so group by end day
       if (d !== day) { day = d; html += `<div class="hour" data-k="day:${esc(d)}"><b>${esc(d)}</b></div>`; }
       const isNew = !evFirstLoad && !seenEvents.has(ev.id);
@@ -575,6 +597,7 @@
     glide($('#ev-list'), before);
     for (const e of eventsData.events) seenEvents.add(e.id);
     evFirstLoad = false;
+    saveSeen();
 
     if (focusSel) {
       const el = focusSel.startsWith('[') ? $(focusSel) : $$('#ev-list .ev').find((c) => c.dataset.id === focusSel)?.querySelector('.ev-btn');
@@ -817,7 +840,20 @@
     await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather()]);
     refreshBtn.classList.remove('spinning');
   }
-  refreshBtn.addEventListener('click', refreshAll);
+  // a manual refresh that reached the feed ends on a brief tick, so the reader knows it's current
+  const REFRESH_ICON = refreshBtn.innerHTML;
+  let tickTimer = 0;
+  refreshBtn.addEventListener('click', async () => {
+    const before = lastOk;
+    await refreshAll();
+    if (lastOk === before) return;
+    clearTimeout(tickTimer);
+    refreshBtn.innerHTML = '<svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7.5"/></svg>';
+    tickTimer = setTimeout(() => { refreshBtn.innerHTML = REFRESH_ICON; }, 1400);
+  });
+  // signal drops are normal in a storm: say so, and catch up as soon as it's back
+  window.addEventListener('offline', () => setStatus(false, lastOk ? `No signal · last update ${clock(lastOk)}` : 'No signal'));
+  window.addEventListener('online', refreshAll);
 
   // --- theme: auto (follows OS) / light / dark, persisted ---
   const THEMES = ['auto', 'light', 'dark'];
@@ -888,6 +924,7 @@
   // refresh relative times every minute, and refresh on return to the tab
   setInterval(() => { updateTimes(); renderEvents(); }, 60 * 1000);
   document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') saveSeen();
     if (document.visibilityState === 'visible' && (!lastOk || Date.now() - lastOk > 60 * 1000)) refreshAll();
   });
 })();

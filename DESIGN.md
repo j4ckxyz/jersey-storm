@@ -129,6 +129,15 @@ components:
     textColor: "{colors.harbour-ink}"
     rounded: "{rounded.md}"
     padding: "8px 12px"
+  new-tag:
+    textColor: "{colors.channel-blue}"
+    typography: "{typography.meta}"
+    rounded: "{rounded.full}"
+    padding: "1px 7px"
+  since-divider:
+    textColor: "{colors.slate}"
+    typography: "{typography.meta}"
+    padding: "10px 0 4px"
   new-pill:
     backgroundColor: "{colors.channel-blue}"
     textColor: "{colors.paper}"
@@ -168,13 +177,13 @@ It's rejected as a generic SaaS dashboard (a grid of stat tiles, glassy chrome) 
 A cool sea-mist neutral base, one Channel Blue accent for interaction and live state, and Jersey Met's warning colours reserved for severity.
 
 ### Primary
-- **Channel Blue** (`channel-blue`, night: `channel-blue-night`): links, focus rings, the selected mobile tab, the "new updates" pill, source reference chips and the text-selection tint. It means "this is interactive" or "this is live", and never "this is dangerous".
+- **Channel Blue** (`channel-blue`, night: `channel-blue-night`): links, focus rings, the selected mobile tab, the "new updates" pill, the "New" tag on events added since the reader's last visit, source reference chips and the text-selection tint. It means "this is interactive" or "this is live", and never "this is dangerous".
 
 ### Secondary
 - **Warning Red, Amber and Yellow** (`warning-red`, `warning-amber`, `warning-yellow`, plus their `-night` and `-tint` variants): only for Jersey Met warning colours and gust severity. Their uses are the badge, the warning row's tinted fill and border, the header gust chip, the gust numerals, the forecast bars, and the dot beside "Major" or "Notable" on events. In light mode, badges and chips are solid with white or dark ink. In dark mode they become a 20% tint with coloured text, and the hues are softened (for example `warning-red-night`).
 
 ### Tertiary
-- **Live Green** (`live-green`, night: `live-green-night`): the pulsing "Live" dot and healthy-source indicators. It means "connected", and isn't used for anything else.
+- **Live Green** (`live-green`, night: `live-green-night`): the pulsing "Live" dot, healthy-source indicators, and the brief tick that confirms a manual refresh reached the feed. It means "connected and current", and isn't used for anything else.
 
 ### Neutral
 - **Sea Mist** (`sea-mist`): the page background in light mode.
@@ -254,7 +263,7 @@ Avatars are circles. Borders are always 1px. Severity is never shown as a thick 
 ## Components
 
 ### Buttons
-- **Icon button:** a 38px circle in Paper with a hairline border and an 18px drawn icon. On hover it gets a stronger hairline and a Deeper Sea Mist fill, and it scales to 0.95 when pressed. Refresh spins while loading. The theme toggle cycles auto → light → dark, with a crossfade between themes.
+- **Icon button:** a 38px circle in Paper with a hairline border and an 18px drawn icon. On hover it gets a stronger hairline and a Deeper Sea Mist fill, and it scales to 0.95 when pressed. Refresh spins while loading; when a manual refresh reaches the feed, its icon becomes a Live Green tick (drawn on in 320ms) for about 1.4 seconds, then returns. The theme toggle cycles auto → light → dark, with a crossfade between themes.
 - **"Show all posts":** a full-width 44px row with a hairline border, a 12px radius, Slate text and a count. The text turns ink on hover, and the chevron flips when the list is open.
 - **"New updates" pill:** a floating Channel Blue pill with an up arrow and a count, which slides down into place.
 
@@ -284,6 +293,7 @@ The timeline's unit, one per storm event, grouped under sticky day headings.
 - **Severity:** Major events have a Warning Red dot, a red-tinted border and a heavier title. Notable events have an amber dot. Info events have no label and a slightly sunken background.
 - **Expand:** the whole header is the button, and the chevron flips. The body grows smoothly (grid rows from 0fr to 1fr) and its contents fade in. It shows the details, with `[n]` turned into small Channel Blue reference chips, then a light list of sources (number, avatar or favicon, publisher, @handle, type badge, time, title).
 - **Filter changes:** cards glide to their new places, and newly shown cards fade in.
+- **New since last visit:** events this device hadn't seen on its previous visit (within the last week) lead the meta row with a small "New" tag: a fully round 14% Channel Blue tint with Channel Blue text. Nothing is tagged on a first visit. Where tagged events give way to already-seen ones, a quiet divider reads "Already seen when you looked at 2:58pm": meta-size Slate text centred between two hairlines, not sticky. The section count adds "· 2 new". The baseline holds for the tab session, so a reload doesn't clear the tags.
 
 ### Warning row
 A `<details>` element tinted in its warning colour, with a 12px radius and a 32% colour border. It shows the colour badge, the name and a one-line summary, with a chevron. It opens smoothly to show validity, impacts and the issue time.

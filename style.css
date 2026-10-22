@@ -191,6 +191,11 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
 .item,.pcard{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:border-color .15s,transform .15s}
 .item:hover,.pcard:hover{border-color:var(--line-2)}
 .item:active,.pcard:active{transform:scale(.995)}
+.since{display:flex;align-items:center;gap:8px;padding:10px 0 4px;font-size:.8rem;color:var(--muted)}
+.since::before,.since::after{content:"";flex:1;height:1px;background:var(--line)}
+.ev-new{padding:1px 7px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);font-weight:650}
+.icon-btn .tick{color:var(--ok);stroke-width:2.5;stroke-dasharray:22;animation:tick .32s var(--ease-out)}
+@keyframes tick{from{stroke-dashoffset:22}}
 .new{animation:flash 2.6s ease-out}
 @keyframes flash{from{background:color-mix(in srgb,var(--accent) 16%,var(--surface))}to{background:var(--surface)}}
 .meta{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);margin-bottom:6px;min-width:0}
