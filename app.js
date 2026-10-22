@@ -183,7 +183,7 @@
     label.remove();
   }
   const HAPTIC_FIRM = '#refresh';
-  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, #detail-btn, #mode-toggle, .img-tabs button, details > summary';
+  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, #detail-btn, #mode-toggle, .img-tabs button, #travel-sum, details > summary';
   document.addEventListener('click', (e) => {
     if (!(e.target instanceof Element)) return;
     if (e.target.closest(HAPTIC_FIRM)) haptic(true);
@@ -1073,7 +1073,131 @@
   }
 
   // --- Simple / Detailed view, remembered on this device ---
-  const WINDY_SRC = 'https://embed.windy.com/embed2.html?lat=49.214&lon=-2.131&detailLat=49.214&detailLon=-2.131&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=&metricWind=mph&metricTemp=%C2%B0C&radarRange=-1';
+  // Two live maps share one frame, so only one third-party map loads at a time.
+  // Blitzortung documents these parameters for embedding its map: https://map.blitzortung.org/mapexample.html
+  const MAPS = {
+    wind: {
+      src: 'https://embed.windy.com/embed2.html?lat=49.214&lon=-2.131&detailLat=49.214&detailLon=-2.131&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=&metricWind=mph&metricTemp=%C2%B0C&radarRange=-1',
+      title: 'Windy.com wind forecast map centred on Jersey',
+      credit: 'Forecast model map from <a href="https://www.windy.com/49.214/-2.131?49.214,-2.131,8" target="_blank" rel="noopener noreferrer">Windy.com<span class="ext" aria-hidden="true"></span></a>, not Jersey Met.',
+    },
+    lightning: {
+      src: 'https://map.blitzortung.org/index.php?interactive=0&NavigationControl=1&FullScreenControl=0&Cookies=0&InfoDiv=0&MenuButtonDiv=0&ScaleControl=1&LinksCheckboxChecked=0&MapStyle=3&MapStyleRangeValue=4&Advertisment=0#{z}/49.2/-2.1',
+      title: 'Blitzortung.org live lightning map centred on Jersey',
+      credit: 'Recent strikes from <a href="https://www.blitzortung.org/" target="_blank" rel="noopener noreferrer">Blitzortung.org<span class="ext" aria-hidden="true"></span></a>, a volunteer detector network · not an official warning',
+    },
+  };
+  let mapTab = 'wind';
+  function renderMap() {
+    const m = MAPS[mapTab];
+    $$('.map-tabs [role="tab"]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.map === mapTab)));
+    $('#map-panel').setAttribute('aria-labelledby', `tab-${mapTab}`);
+    $('#map-credit').innerHTML = m.credit;
+    const f = $('#map-frame');
+    f.title = m.title;
+    // a phone shows less map, so the lightning view zooms out a step to keep the approaches from Brittany in sight
+    const src = m.src.replace('{z}', mobile.matches ? '5' : '6');
+    if (detailed && f.getAttribute('src') !== src) f.src = src;
+  }
+  $('.map-tabs').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-map]');
+    if (!b) return;
+    mapTab = b.dataset.map;
+    renderMap();
+  });
+
+  // --- travel (/api/travel): Jersey Airport flights and St Helier harbour sailings ---
+  let travelData = null;
+  let travelTried = false;
+  let flTab = 'arr';
+  const TRAVEL_KIND = { cancelled: 'Cancelled', diverted: 'Diverted', delayed: 'Delayed' };
+  // the airport writes 24-hour times ("Landed at 07:48"); show them like every other time on the page
+  const time24 = (s) => String(s || '').replace(/\b(\d{1,2}):(\d{2})\b/g, (m, h, mi) => clock24(`${h}:${mi}`));
+  function travelSummary() {
+    const now = new Date();
+    const out = [];
+    const fl = travelData && travelData.flights && travelData.flights.flights;
+    if (fl) {
+      // the next 24 hours (late at night, "today" would be nearly over)
+      const soon = fl.filter((f) => new Date(f.at) > now - 3600e3 && new Date(f.at) < +now + 24 * 3600e3);
+      const off = soon.filter((f) => f.kind === 'cancelled' || f.kind === 'diverted').length;
+      if (soon.length) out.push(`<b>Flights, next 24 hours:</b> ${off ? `${off} of ${soon.length} cancelled` : 'none cancelled so far'}`);
+    }
+    const sl = travelData && travelData.harbour && travelData.harbour.sailings;
+    if (sl) {
+      // passenger ferries from 2 hours ago to 36 hours ahead
+      const win = sl.filter((x) => x.passenger && new Date(x.at) > now - 2 * 3600e3 && new Date(x.at) < +now + 36 * 3600e3);
+      const off = win.filter((x) => x.kind === 'cancelled');
+      if (win.length) {
+        const next = win.find((x) => x.kind !== 'cancelled' && new Date(x.at) > now);
+        out.push(`<b>Ferries:</b> ${off.length === win.length ? `all passenger sailings cancelled until at least ${esc(fmtTime(win[win.length - 1].at))}` : off.length ? `${off.length} of ${win.length} passenger sailings cancelled${next ? `, next ${esc(fmtTime(next.at))}` : ''}` : 'passenger sailings running'}`);
+      }
+    }
+    return out;
+  }
+  function renderTravelSum() {
+    const el = $('#travel-sum');
+    if (!travelTried) return;
+    const lines = travelSummary();
+    const fix = anchor();
+    el.hidden = !lines.length;
+    el.innerHTML = lines.map((l) => `<span>${l}</span>`).join('');
+    fix();
+  }
+  // rows (sorted by time) → "Today" / "Tomorrow" sections
+  function byDayHTML(rows, label) {
+    const groups = [];
+    for (const x of rows) {
+      const d = dayLabel(new Date(x.at));
+      if (!groups.length || groups[groups.length - 1].d !== d) groups.push({ d, rows: [] });
+      groups[groups.length - 1].rows.push(x);
+    }
+    return groups.map((g) => `<h4>${esc(g.d)}</h4><ul class="tv-list">${g.rows.map((x) => boardRow(x, label(x))).join('')}</ul>`).join('');
+  }
+  function boardRow(x, label) {
+    const pill = TRAVEL_KIND[x.kind] ? `<span class="tv-st ${x.kind}">${TRAVEL_KIND[x.kind]}</span>` : `<span class="tv-st">${esc(time24(x.status))}</span>`;
+    return `<li class="${x.kind}"><time datetime="${esc(x.at)}">${esc(clock(new Date(x.at)))}</time><span class="tv-what">${label}</span>${pill}</li>`;
+  }
+  function renderBoards() {
+    const now = new Date();
+    const fEl = $('#fl-list');
+    const fl = travelData && travelData.flights;
+    $$('#flights [data-fl]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.fl === flTab)));
+    if (!fl) fEl.innerHTML = `<p class="muted small">${travelTried ? 'Flight information isn\'t available right now.' : 'Loading…'}</p>`;
+    else {
+      // from an hour ago
+      const rows = fl.flights.filter((x) => x.dir === flTab && new Date(x.at) > now - 3600e3);
+      fEl.innerHTML = rows.length ? byDayHTML(rows, (f) => `<b>${esc(f.place)}</b> <span class="muted">${esc(f.flight)}</span>`) : '<p class="muted small">No more flights listed.</p>';
+      fEl.insertAdjacentHTML('beforeend', `<p class="muted small">Ports of Jersey${fl.updated ? `, updated ${esc(time24(fl.updated.replace(/^\d{1,2} \w{3} \d{4} /, '')))}` : ''} · <a href="https://www.jerseyairport.com/flight/${flTab === 'arr' ? 'arrivals' : 'departures'}" target="_blank" rel="noopener noreferrer">jerseyairport.com<span class="ext" aria-hidden="true"></span></a> · check with your airline</p>`);
+    }
+    const sEl = $('#sl-list');
+    const hb = travelData && travelData.harbour;
+    if (!hb) { sEl.innerHTML = `<p class="muted small">${travelTried ? 'Harbour information isn\'t available right now.' : 'Loading…'}</p>`; return; }
+    const pax = hb.sailings.filter((x) => x.passenger && new Date(x.at) > now - 3 * 3600e3);
+    const freight = hb.sailings.filter((x) => !x.passenger && new Date(x.at) > now - 3 * 3600e3);
+    const fOff = freight.filter((x) => x.kind === 'cancelled').length;
+    sEl.innerHTML = (pax.length
+      ? byDayHTML(pax, (x) => `<b>${x.dir === 'arr' ? 'From' : 'To'} ${esc(x.port)}</b> <span class="muted">${esc(x.vessel)}${x.reason ? ` · ${esc(x.reason.toLowerCase())}` : ''}</span>`)
+      : '<p class="muted small">No passenger sailings listed.</p>')
+      + `<p class="muted small">${freight.length ? `Freight: ${fOff} of ${freight.length} sailings cancelled. ` : ''}Ports of Jersey${okTime(hb.updated) ? `, updated ${esc(fmtTime(hb.updated))}` : ''} · <a href="https://www.ports.je/jerseyharbours/arrivals-departures/" target="_blank" rel="noopener noreferrer">ports.je<span class="ext" aria-hidden="true"></span></a> · check with your ferry company</p>`;
+  }
+  $('#flights').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-fl]');
+    if (!b) return;
+    flTab = b.dataset.fl;
+    renderBoards();
+  });
+  $('#travel-sum').addEventListener('click', () => {
+    setDetailed(true, true);
+    $('#flights').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  });
+  async function loadTravel() {
+    try { travelData = await getJSON(bust('/api/travel')); } catch (e) { /* keep what we had */ }
+    travelTried = true;
+    renderTravelSum();
+    if (detailed) { const fix = anchor(); renderBoards(); fix(); }
+  }
+
   function setDetailed(on, persist) {
     detailed = on;
     document.body.classList.toggle('detailed', on);
@@ -1084,7 +1208,8 @@
     db.setAttribute('aria-expanded', String(on));
     db.textContent = on ? 'Hide live data & maps' : 'Show live data & maps';
     if (persist) { try { localStorage.setItem('view-mode', on ? 'detailed' : 'simple'); } catch (e) { /* private mode */ } }
-    if (on && !$('#windy').getAttribute('src')) $('#windy').src = WINDY_SRC;
+    renderMap();
+    if (on) renderBoards();
     renderDetail();
     applyMode();
   }
@@ -1173,7 +1298,7 @@
     if (refreshBtn.classList.contains('spinning')) return; // one refresh at a time
     refreshBtn.classList.add('spinning');
     lastPoll.data = lastPoll.wx = Date.now();
-    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather(), loadWarnings(), loadObs()]);
+    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather(), loadWarnings(), loadObs(), loadTravel()]);
     const svg = refreshBtn.querySelector('svg');
     if (reduceMotion.matches || !svg) { refreshBtn.classList.remove('spinning'); return; }
     const done = () => { svg.removeEventListener('animationiteration', done); clearTimeout(timer); refreshBtn.classList.remove('spinning'); };
@@ -1245,7 +1370,7 @@
     const poll = () => {
       if (document.visibilityState !== 'visible') return;
       const now = Date.now();
-      if (now - lastPoll.data >= dataEvery) { lastPoll.data = now; loadSummary(); loadEvents(); loadFeed(); }
+      if (now - lastPoll.data >= dataEvery) { lastPoll.data = now; loadSummary(); loadEvents(); loadFeed(); loadTravel(); }
       if (now - lastPoll.wx >= wxEvery) { lastPoll.wx = now; loadWeather(); loadWarnings(); loadObs(); }
     };
     setInterval(poll, 15e3);
