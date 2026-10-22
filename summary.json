@@ -1,0 +1,47 @@
+{
+ "updatedAt": "2026-10-22T07:45:00+01:00",
+ "note": "Edit this file to update the summary box. Links use [label](https://...) syntax. 'posts' lists X/Bluesky post URLs to show as cards (X posts must also be in x-posts.json).",
+ "headline": "Storm Austen is due to hit Jersey and Guernsey from Thursday evening, peaking around 7am Friday with gale to severe gale force 8–9 winds and gusts of 70–80 mph ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx), [BBC](https://www.bbc.co.uk/news/articles/ckeq30jp2w1no)). Islanders are advised to avoid outdoor activity where possible ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)).",
+ "sections": [
+  {
+   "title": "So far",
+   "points": [
+    "Jersey Met issued a **red wind warning for the Channel Islands shipping area** at 03:44 Thursday: W–SW F7, backing S and rising to severe gale F9 with gusts to 65 knots later ([Jersey Met](https://www.gov.je/weather/), [@Jersey_MetCI](https://x.com/Jersey_MetCI/status/2113100630868807945)).",
+    "A **yellow thunderstorm warning** covers Jersey, Guernsey and Alderney from 03:00 Thursday for 8 hours, with possible localised flooding ([Jersey Met](https://www.gov.je/weather/), [@Jersey_MetCI](https://x.com/Jersey_MetCI/status/2113100963305361559)).",
+    "**All Government of Jersey schools are closed on Friday**, Education Minister Deputy Catherine Curtis decided on Wednesday evening ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx), [@GovJersey](https://x.com/GovJersey/status/2112956056640934300)). Independent schools and private nurseries had not yet confirmed their plans as of Wednesday night ([JEP](https://jerseyeveningpost.com/news/2026/10/21/state-schools-to-close-on-friday-as-storm-austen-moves-closer-to-island/))."
+   ]
+  },
+  {
+   "title": "What's expected",
+   "points": [
+    "Jersey: winds build on Thursday evening and overnight, then peak on Friday morning at gale F8 to severe gale F9 with **gusts of 70–80 mph**, easing gradually on Friday afternoon. Heavy rain at times and a risk of localised flooding ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)). Storm force 10 is possible at the peak, around 07:00 Friday ([BBC](https://www.bbc.co.uk/news/articles/ckeq30jp2w1no)).",
+    "Jersey Met forecast for tonight: south F6–7, rising to gale F8 by midnight, then veering west and reaching severe gale F9 by dawn **with gusts to 75 mph**. Friday afternoon: gale F8 with gusts to 60 mph ([Jersey Met](https://www.gov.je/weather/)).",
+    "Guernsey: severe gale F9 with **gusts up to 75 mph** on Thursday night and Friday morning. The worst is expected from 6am to midday Friday, with gusts of up to 60 mph later ([BBC Guernsey](https://www.bbc.co.uk/news/articles/c5wyrwyjvmdgo), [The Quarry](https://www.thequarry.media/storm-austen-aurigny-offers-flexibility-pet-and-boat-owners-encouraged-to-prepare/)).",
+    "Expect fallen trees blocking roads, travel disruption and possible damage to infrastructure ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx), [St Brelade Parish](https://stbrelade.je/storm-austen/)). Jersey Met is briefing government departments, emergency planning and the emergency services ([St Brelade Parish](https://stbrelade.je/storm-austen/))."
+   ]
+  },
+  {
+   "title": "Travel & closures",
+   "points": [
+    "**Ferries (Guernsey):** Brittany Ferries has cancelled several Guernsey sailings, including Friday's high-speed services and Thursday evening's conventional sailing from Portsmouth. Extra St Malo sailings have been added ([Bailiwick Express](https://www.bailiwickexpress.com/news-ge/storm-austen-brittany-ferries-cancels-guernsey-sailings-ahead-of-half-term/), [Guernsey Press](https://guernseypress.com/news/2026/10/22/states-warns-that-storm-austen-could-disrupt-more-than-travel-plans)).",
+    "**Ferries (Jersey):** DFDS cancelled some Portsmouth and St Malo sailings earlier this week, with Thursday–Sunday sailings under review (as of 20 Oct). An extra Jersey–St Malo fast ferry runs on Monday 26 Oct and an extra Portsmouth sailing on Sunday 25 Oct ([JEP](https://jerseyeveningpost.com/news/2026/10/20/half-term-travel-disruption-as-weather-turns-windy/), [Bailiwick Express](https://www.bailiwickexpress.com/news/extra-ferry-services-as-strong-winds-threaten-to-disrupt-travel/)). Check before travelling.",
+    "**Flights:** Aurigny's WeatherFlex policy offers free date changes on all Alderney flights from 21 to 23 Oct, all Guernsey flights on Friday 23 Oct and selected ATR flights on Thursday. It plans to fly as scheduled where it is safe, with full refunds if a flight is cancelled ([BBC Guernsey](https://www.bbc.co.uk/news/articles/c5wyrwyjvmdgo)).",
+    "**Jersey Water** is closing Queen's Valley and Val de la Mare reservoirs from Thursday afternoon until further notice ([Jersey Water](https://www.jerseywater.je/reservoirs-to-close-ahead-of-storm-austen/)).",
+    "**Power and emergencies:** none of the sources checked had reported power cuts or storm incidents by 07:45 Thursday."
+   ]
+  },
+  {
+   "title": "Official advice",
+   "points": [
+    "Avoid outdoor activity where possible, especially on Friday morning ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)). The States of Guernsey asks people to be mindful of the weather when planning their day ([BBC](https://www.bbc.co.uk/news/articles/ckeq30jp2w1no)).",
+    "Take extra care around the coast ([St Helier Lifeboat via today.je](https://bsky.app/profile/today.je/post/3myfq3zlla42m)). Stay away from exposed areas and trees ([Jersey Water](https://www.jerseywater.je/reservoirs-to-close-ahead-of-storm-austen/)).",
+    "Boat owners should secure their vessels, check mooring lines and fenders, and remove or tie down loose items on deck ([Guernsey Ports via BBC](https://www.bbc.co.uk/news/articles/c5wyrwyjvmdgo)).",
+    "Pets and livestock need secure shelter. Give seal pups space, and call the GSPCA on 01481 257261 about injured wildlife ([Bailiwick Express](https://www.bailiwickexpress.com/news-ge/austen-power-guernsey-prepares-for-75mph-storm/)). In an emergency, call 999."
+   ]
+  }
+ ],
+ "posts": [
+  "https://x.com/GovJersey/status/2112956056640934300",
+  "https://x.com/Jersey_MetCI/status/2113100630868807945"
+ ]
+}

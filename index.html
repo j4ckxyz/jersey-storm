@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storm Austen · Jersey &amp; Guernsey live tracker</title>
+<meta name="description" content="Live Storm Austen updates for Jersey: news, gov.je, Jersey Met warnings, Bluesky posts and the official forecast.">
+<meta name="theme-color" content="#0f1720" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Storm Austen · Jersey live tracker">
+<meta property="og:description" content="Live updates, warnings and forecast for Storm Austen in Jersey.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌀</text></svg>">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-inner">
+    <div>
+      <h1>🌀 Storm Austen <span class="where">· Jersey &amp; Guernsey</span></h1>
+      <p class="sub">Live tracker · Thu 22 – Fri 23 Oct · gusts up to ~75 mph · schools closed Friday</p>
+    </div>
+    <div class="status">
+      <span id="gust-chip" class="badge red" hidden></span>
+      <span id="live-dot" class="dot"></span>
+      <span id="updated">Loading…</span>
+      <button id="refresh" type="button" title="Refresh now">↻ Refresh</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap"><section id="summary" class="summary" hidden aria-live="polite"></section></div>
+
+<div id="warning-banner" class="wrap" hidden></div>
+
+<main class="wrap grid">
+  <section class="feed-col" aria-labelledby="feed-h">
+    <div class="col-head">
+      <h2 id="feed-h">Latest updates</h2>
+      <span id="feed-count" class="muted"></span>
+    </div>
+    <div id="filters" class="filters" role="group" aria-label="Filter by source"></div>
+    <div id="feed"><p class="muted pad">Loading updates…</p></div>
+    <p id="feed-sources" class="muted small"></p>
+  </section>
+
+  <aside class="wx-col" aria-labelledby="wx-h">
+    <div class="col-head"><h2 id="wx-h">Weather · Jersey Met</h2></div>
+    <div id="weather"><p class="muted pad">Loading forecast…</p></div>
+    <div class="card links">
+      <h3>Useful links</h3>
+      <ul>
+        <li><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met forecast &amp; warnings</a></li>
+        <li><a href="https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx" target="_blank" rel="noopener">gov.je Storm Austen updates</a></li>
+        <li><a href="https://www.bbc.co.uk/news/world/europe/jersey" target="_blank" rel="noopener">BBC Jersey</a> · <a href="https://www.bbc.co.uk/news/world/europe/guernsey" target="_blank" rel="noopener">BBC Guernsey</a></li>
+        <li><a href="https://www.gov.gg/" target="_blank" rel="noopener">States of Guernsey (gov.gg)</a></li>
+        <li><a href="https://www.gov.je/weather/guernsey-forecast/" target="_blank" rel="noopener">Jersey Met Guernsey forecast</a></li>
+        <li><a href="https://jerseyeveningpost.com/" target="_blank" rel="noopener">Jersey Evening Post</a></li>
+        <li><a href="https://www.jerseyairport.com/flight-information/arrivals" target="_blank" rel="noopener">Jersey Airport flights</a></li>
+        <li><a href="https://www.jec.co.uk/" target="_blank" rel="noopener">Jersey Electricity (power cuts)</a></li>
+      </ul>
+      <p class="muted small">Emergency: 999 / 112. Stay away from coastal paths and sea walls during the storm.</p>
+    </div>
+  </aside>
+</main>
+
+<footer class="wrap muted small foot">
+  Unofficial tracker made in Jersey. Data: Jersey Met (gov.je), BBC Jersey &amp; Guernsey, Jersey Evening Post, Bailiwick Express, The Quarry, Bluesky, X. Always follow official advice from <a href="https://www.gov.je/" target="_blank" rel="noopener">gov.je</a>.
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
