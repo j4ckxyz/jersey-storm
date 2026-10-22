@@ -1,8 +1,336 @@
 {
  "version": 1,
- "updated": "2026-10-22T15:47:00+01:00",
+ "updated": "2026-10-22T19:21:00+01:00",
  "timezone": "Europe/Jersey",
  "events": [
+  {
+   "id": "2026-10-22-forecast-525pm",
+   "start": "2026-10-22T17:25:00+01:00",
+   "end": "2026-10-22T18:26:00+01:00",
+   "title": "Evening forecast: severe gale by dawn, storm F10 gusts to 85mph possible",
+   "summary": "Jersey Met's evening forecast has a gale by midnight and severe gale F9 by dawn. Friday morning could bring storm F10 with gusts to 85mph, easing during the afternoon.",
+   "details": "Tonight: south F5, quickly F6 to 7, reaching gale F8 by midnight with gusts to 65mph, then veering west to severe gale F9 by dawn with gusts to 75mph. Rain becomes persistent and heavy, perhaps thundery [1]. Friday morning: west to north-west severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph [1][2]. Friday afternoon: gale F8, occasionally F9 with gusts to 70mph at first, decreasing F7 with gusts to 60mph [1]. Friday night: north-west F7 with gusts to 50mph, then westerly F5 to 6 [1].",
+   "category": "weather",
+   "severity": "notable",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "gov",
+     "publisher": "Jersey Met",
+     "author": "",
+     "title": "Jersey forecast issued 5:25pm, 22 October 2026",
+     "url": "https://www.gov.je/weather/",
+     "time": "2026-10-22T17:25:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Jersey Met",
+     "author": "Jersey_Met",
+     "title": "Wind tomorrow – am: West to northwest severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph",
+     "url": "https://x.com/Jersey_Met/status/2113321134452035970",
+     "time": "2026-10-22T18:26:00+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-report-storm-damage",
+   "start": "2026-10-22T18:00:00+01:00",
+   "end": "2026-10-22T18:14:27+01:00",
+   "title": "How to report fallen trees and storm damage",
+   "summary": "Report fallen trees, blocked roads or storm damage by emailing dfi@gov.je with a photo, the road or location and the parish. A live map shows reported incidents.",
+   "details": "To report a fallen tree, blocked road or storm damage, email dfi@gov.je with a photograph, the road name or location, and the parish [1][2][3]. A live map of reports is available [1][2].",
+   "category": "advice",
+   "severity": "notable",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "x",
+     "publisher": "Government of Jersey",
+     "author": "GovJersey",
+     "title": "Storm Austen | Report fallen trees and other issues.",
+     "url": "https://x.com/GovJersey/status/2113314559507235184",
+     "time": "2026-10-22T18:00:00+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "Government of Jersey",
+     "author": "gov.je",
+     "title": "Storm Austen | Report fallen trees and other issues.",
+     "url": "https://bsky.app/profile/gov.je/post/3myi5ak4dyv25",
+     "time": "2026-10-22T18:00:28+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je (relaying Gov.je X)",
+     "author": "today.je",
+     "title": "[Gov.je X/Twitter] Storm Austen | Report fallen trees and other issues.",
+     "url": "https://bsky.app/profile/today.je/post/3myi5zjytni2m",
+     "time": "2026-10-22T18:14:27+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-21-reservoirs-close",
+   "start": "2026-10-21T18:01:48+01:00",
+   "end": "2026-10-22T18:13:33+01:00",
+   "title": "Queen's Valley and Val de la Mare reservoirs to close",
+   "summary": "Jersey Water is closing both reservoirs from Thursday afternoon until further notice as a precaution.",
+   "details": "Jersey Water said Queen's Valley and Val de la Mare reservoirs would close from Thursday afternoon (22 October) and stay closed until its teams have checked both sites for damage after the storm [1]. Islanders are asked not to visit either reservoir while they are closed [1]. On Thursday evening Jersey Water confirmed that the reservoirs are closed until further notice. It doesn't expect disruption to supply, and customer services are available on 01534 707300 [3].",
+   "category": "closures",
+   "severity": "info",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "web",
+     "publisher": "Jersey Water",
+     "author": "",
+     "title": "Reservoirs to close ahead of Storm Austen",
+     "url": "https://www.jerseywater.je/reservoirs-to-close-ahead-of-storm-austen/",
+     "time": "2026-10-21T18:01:48+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je",
+     "author": "today.je",
+     "title": "[Jersey Water] Reservoirs to close ahead of Storm Austen",
+     "url": "https://bsky.app/profile/today.je/post/3myfnjskgot2v",
+     "time": "2026-10-21T18:14:00+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Jersey Water",
+     "author": "",
+     "title": "Storm Austen: Jersey Water prepares for severe weather",
+     "url": "https://www.jerseywater.je/storm-austen-jersey-water-prepares-for-severe-weather/",
+     "time": "2026-10-22T18:13:33+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-stay-indoors-advice",
+   "start": "2026-10-22T17:30:00+01:00",
+   "end": "2026-10-22T17:38:56+01:00",
+   "title": "Stay indoors until lunchtime Friday, government advises",
+   "summary": "The government's 5.30pm update warns that conditions could become more severe. Islanders should remain indoors during the worst of the weather and avoid unnecessary travel or outdoor activity until lunchtime on Friday.",
+   "details": "The weather situation is still developing, with the potential for conditions to become more severe, and the red warning remains in place [1]. Islanders are advised to remain indoors during the worst of the weather and avoid unnecessary travel or outdoor activity until lunchtime on Friday [1][2][3]. Travel disruption, fallen trees and localised flooding are likely. The clean-up will begin on Friday once the red warning has passed and it is safe [1]. The Customer Hub stays open. The Patient Transport Service will run for Friday outpatient appointments, and anyone who no longer needs it should cancel on 444750 [1]. A further update is due on Friday morning [1].",
+   "category": "advice",
+   "severity": "major",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "gov",
+     "publisher": "Government of Jersey",
+     "author": "",
+     "title": "Storm Austen: Latest update (Update: 5.30pm Thursday 22 October)",
+     "url": "https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx",
+     "time": "2026-10-22T17:30:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Government of Jersey",
+     "author": "GovJersey",
+     "title": "The weather situation continues to develop, with the potential for conditions to become more severe. We are advising Islanders to remain indoors…",
+     "url": "https://x.com/GovJersey/status/2113309137278820555",
+     "time": "2026-10-22T17:38:00+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "Government of Jersey",
+     "author": "gov.je",
+     "title": "Storm Austen update: The weather situation continues to develop…",
+     "url": "https://bsky.app/profile/gov.je/post/3myi3zz7cyy2w",
+     "time": "2026-10-22T17:38:56+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-friday-flights-buses",
+   "start": "2026-10-22T17:30:00+01:00",
+   "end": "2026-10-22T17:30:00+01:00",
+   "title": "Friday morning flights cancelled; double-deckers and school buses off",
+   "summary": "Jersey Airport flights are cancelled until Friday afternoon. School bus services are cancelled, and double-decker buses won't run until the wind eases.",
+   "details": "All Jersey Airport departures and arrivals are cancelled until Friday afternoon [1]. School bus services are cancelled because schools are closed, and double-decker buses will not operate until wind conditions have eased [1].",
+   "category": "travel",
+   "severity": "major",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Storm Austen: All you need to know",
+     "url": "https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/",
+     "time": "2026-10-22T17:30:00+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-dfds-cancellations",
+   "start": "2026-10-22T10:19:00+01:00",
+   "end": "2026-10-22T17:30:00+01:00",
+   "title": "DFDS cancels Jersey–St Malo sailings for the rest of the week and weekend",
+   "summary": "DFDS has cancelled Jersey–St Malo high-speed sailings for the rest of the week and the weekend. An extra return sailing is planned for Monday 26 October.",
+   "details": "DFDS has cancelled Jersey services up to and including Friday and is reviewing Saturday and Sunday sailings between Jersey and St Malo [1]. It has since cancelled Saturday's 07:30 St Malo–Jersey and 09:25 Jersey–St Malo sailings [2], and Sunday's 06:30 St Malo–Jersey and 08:25 Jersey–St Malo sailings [3]. Affected customers will be contacted directly [2][3]. DFDS later cancelled the high-speed Jersey–St Malo service for the rest of the week and the whole weekend. The next sailing is an extra return on Monday 26 October [4][5]. Extra Sunday sailings with Stena Vinga on the Portsmouth route and the freight ship Caesarea Trader are being considered, weather permitting, and DFDS's terminal offices are closed on Friday [4][5].",
+   "category": "travel",
+   "severity": "major",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "jep",
+     "publisher": "Jersey Evening Post",
+     "author": "",
+     "title": "Winds ramp up as Storm Austen bears down on the Island",
+     "url": "https://jerseyeveningpost.com/news/2026/10/22/winds-ramp-up-as-storm-austen-bears-down-on-the-island/",
+     "time": "2026-10-22T10:19:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "DFDS Live Travel Updates",
+     "author": "DFDSLiveUpdates",
+     "title": "CHANNEL ISLANDS | Cancelled services 24/10/2026: ST MALO - JERSEY 07:30, JERSEY - ST MALO 09:25",
+     "url": "https://x.com/DFDSLiveUpdates/status/2113201693609619544",
+     "time": "2026-10-22T10:31:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "DFDS Live Travel Updates",
+     "author": "DFDSLiveUpdates",
+     "title": "CHANNEL ISLANDS | Cancelled services 25/10/2026: ST MALO - JERSEY 06:30, JERSEY - ST MALO 08:25",
+     "url": "https://x.com/DFDSLiveUpdates/status/2113201867195064429",
+     "time": "2026-10-22T10:32:00+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "The Times Jersey",
+     "author": "",
+     "title": "DFDS Changes Ferry Schedules as Storm Austen Approaches Jersey",
+     "url": "https://www.thetimesjersey.com/post/dfds-changes-ferry-schedules-as-storm-austen-approaches-jersey",
+     "time": "2026-10-22T15:59:57+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Storm Austen: All you need to know",
+     "url": "https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/",
+     "time": "2026-10-22T17:30:00+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-businesses-heritage-closures",
+   "start": "2026-10-22T11:30:00+01:00",
+   "end": "2026-10-22T17:25:00+01:00",
+   "title": "Heritage sites, the zoo and many shops shut or open late on Friday; fuel paused",
+   "summary": "Jersey Heritage sites and Jersey Zoo are closed on Friday. Co-op, Waitrose and M&S open at 1pm, and Rubis has paused fuel deliveries and forecourts until at least midday.",
+   "details": "All Jersey Heritage sites are closed on Friday, including Jersey Museum, Mont Orgueil and Elizabeth Castle [3][4]. Jersey Zoo is also closed [2]. M&S stores open from 1pm [1], and Co-op food and pharmacy stores in Jersey and Guernsey open at 1pm, so shoppers are asked to buy essentials on Thursday [5]. There are no Jersey Dairy deliveries on Friday [6]. Friday's Field of Remembrance ceremony is postponed, with a reduced service at the Cenotaph on Saturday at 10.30am [1]. Rubis has closed its offices and paused fuel deliveries and forecourts until at least midday on Friday [7]. The Digital Jersey Hub is closed [8]. Waitrose opens at 1pm on Friday and reopens at 8am on Saturday [9].",
+   "category": "closures",
+   "severity": "notable",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Live updates, 11:20–11:30am: Field of Remembrance postponed; M&S stores open from 1pm Friday",
+     "url": "https://www.channel103.com/local/stormausten/",
+     "time": "2026-10-22T11:30:00+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Live updates, 12:10pm: Jersey Zoo will be closed Friday 23 October",
+     "url": "https://www.channel103.com/local/stormausten/",
+     "time": "2026-10-22T12:10:00+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Live updates, 12:35pm: All Jersey Heritage sites will be closed to the public on Friday",
+     "url": "https://www.channel103.com/local/stormausten/",
+     "time": "2026-10-22T12:35:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Visit Jersey",
+     "author": "VisitJerseyCI",
+     "title": "Storm Austen: Red Wind Warning issued for Jersey. Avoid outdoor activity and coastal areas. Jersey Heritage sites closed Friday (23rd)",
+     "url": "https://x.com/VisitJerseyCI/status/2113248762890215594",
+     "time": "2026-10-22T13:39:01+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je (relaying Channel Islands Co-op)",
+     "author": "today.je",
+     "title": "[Jersey Co-op] Storm Austen Update",
+     "url": "https://bsky.app/profile/today.je/post/3myhqtgbhdy2n",
+     "time": "2026-10-22T14:18:23+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je (relaying Jersey Dairy)",
+     "author": "today.je",
+     "title": "[Jersey Dairy] STORM AUSTEN - PLEASE READ",
+     "url": "https://bsky.app/profile/today.je/post/3myhnuny5y32m",
+     "time": "2026-10-22T13:25:23+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je (relaying Rubis)",
+     "author": "today.je",
+     "title": "[Rubis] Storm Austen Customer Update",
+     "url": "https://bsky.app/profile/today.je/post/3myhwhyfoa52k",
+     "time": "2026-10-22T15:59:22+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je (relaying Digital Jersey)",
+     "author": "today.je",
+     "title": "[DigitalJersey on LinkedIn] Digital Jersey Hub Closure Notice: Storm Austen",
+     "url": "https://bsky.app/profile/today.je/post/3myi2bp4tjo2i",
+     "time": "2026-10-22T17:07:26+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Live updates, 5:25pm: Waitrose opens at 1pm Friday",
+     "url": "https://www.channel103.com/local/stormausten/",
+     "time": "2026-10-22T17:25:00+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-red-warning-reissued",
+   "start": "2026-10-22T15:43:00+01:00",
+   "end": "2026-10-22T15:45:00+01:00",
+   "title": "Red warning re-issued: storm F10 with gusts to 70 knots later",
+   "summary": "Jersey Met re-issued the red Channel Islands wind warning at 3:43pm. Severe gale F9 is expected soon, veering west to north-west storm F10 with gusts to 70 knots later.",
+   "details": "The re-issued red warning for the Channel Islands Shipping Area forecasts south severe gale F9 with gusts to 60 knots expected soon, veering west to north-west storm F10 with gusts to 70 knots later [1][2]. People should avoid outside activity. Damage to moored boats is likely, and damage to infrastructure is possible [1].",
+   "category": "warning",
+   "severity": "major",
+   "area": "both",
+   "sources": [
+    {
+     "type": "gov",
+     "publisher": "Jersey Met",
+     "author": "",
+     "title": "RED Channel Islands Shipping Area Wind warning: S severe gale F9 with gusts to 60kt expected soon, veering W to NW storm F10 with gusts to 70kt later.",
+     "url": "https://www.gov.je/weather/#channel%20islands-wind",
+     "time": "2026-10-22T15:43:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Jersey Met (CI Weather Warnings)",
+     "author": "Jersey_MetCI",
+     "title": "A wind warning was issued at 14:43 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.",
+     "url": "https://x.com/Jersey_MetCI/status/2113280465507324118",
+     "time": "2026-10-22T15:45:00+01:00"
+    }
+   ]
+  },
   {
    "id": "2026-10-22-jersey-electricity-update",
    "start": "2026-10-22T14:34:26+01:00",
@@ -128,67 +456,6 @@
    ]
   },
   {
-   "id": "2026-10-22-businesses-heritage-closures",
-   "start": "2026-10-22T11:30:00+01:00",
-   "end": "2026-10-22T14:18:23+01:00",
-   "title": "Heritage sites, the zoo and many shops shut or open late on Friday",
-   "summary": "Jersey Heritage sites and Jersey Zoo are closed on Friday. Co-op and M&S stores open at 1pm, and Islanders are asked to shop for essentials on Thursday.",
-   "details": "All Jersey Heritage sites are closed on Friday, including Jersey Museum, Mont Orgueil and Elizabeth Castle [3][4]. Jersey Zoo is also closed [2]. M&S stores open from 1pm [1], and Co-op food and pharmacy stores in Jersey and Guernsey open at 1pm, so shoppers are asked to buy essentials on Thursday [5]. There are no Jersey Dairy deliveries on Friday [6]. Friday's Field of Remembrance ceremony is postponed, with a reduced service at the Cenotaph on Saturday at 10.30am [1].",
-   "category": "closures",
-   "severity": "notable",
-   "area": "jersey",
-   "sources": [
-    {
-     "type": "web",
-     "publisher": "Channel 103",
-     "author": "",
-     "title": "Live updates, 11:20–11:30am: Field of Remembrance postponed; M&S stores open from 1pm Friday",
-     "url": "https://www.channel103.com/local/stormausten/",
-     "time": "2026-10-22T11:30:00+01:00"
-    },
-    {
-     "type": "web",
-     "publisher": "Channel 103",
-     "author": "",
-     "title": "Live updates, 12:10pm: Jersey Zoo will be closed Friday 23 October",
-     "url": "https://www.channel103.com/local/stormausten/",
-     "time": "2026-10-22T12:10:00+01:00"
-    },
-    {
-     "type": "web",
-     "publisher": "Channel 103",
-     "author": "",
-     "title": "Live updates, 12:35pm: All Jersey Heritage sites will be closed to the public on Friday",
-     "url": "https://www.channel103.com/local/stormausten/",
-     "time": "2026-10-22T12:35:00+01:00"
-    },
-    {
-     "type": "x",
-     "publisher": "Visit Jersey",
-     "author": "VisitJerseyCI",
-     "title": "Storm Austen: Red Wind Warning issued for Jersey. Avoid outdoor activity and coastal areas. Jersey Heritage sites closed Friday (23rd)",
-     "url": "https://x.com/VisitJerseyCI/status/2113248762890215594",
-     "time": "2026-10-22T13:39:01+01:00"
-    },
-    {
-     "type": "bluesky",
-     "publisher": "today.je (relaying Channel Islands Co-op)",
-     "author": "today.je",
-     "title": "[Jersey Co-op] Storm Austen Update",
-     "url": "https://bsky.app/profile/today.je/post/3myhqtgbhdy2n",
-     "time": "2026-10-22T14:18:23+01:00"
-    },
-    {
-     "type": "bluesky",
-     "publisher": "today.je (relaying Jersey Dairy)",
-     "author": "today.je",
-     "title": "[Jersey Dairy] STORM AUSTEN - PLEASE READ",
-     "url": "https://bsky.app/profile/today.je/post/3myhnuny5y32m",
-     "time": "2026-10-22T13:25:23+01:00"
-    }
-   ]
-  },
-  {
    "id": "2026-10-22-health-advice-contacts",
    "start": "2026-10-22T11:00:00+01:00",
    "end": "2026-10-22T14:04:00+01:00",
@@ -304,43 +571,6 @@
      "title": "Storm Austen Update: A Channel Islands Red Wind Warning has been issued. Islanders should avoid outdoor activity on Friday morning where possible.",
      "url": "https://x.com/GovJersey/status/2113210136344879614",
      "time": "2026-10-22T11:05:32+01:00"
-    }
-   ]
-  },
-  {
-   "id": "2026-10-22-dfds-cancellations",
-   "start": "2026-10-22T10:19:00+01:00",
-   "end": "2026-10-22T10:32:00+01:00",
-   "title": "DFDS cancels Jersey sailings into the weekend",
-   "summary": "DFDS has cancelled its Jersey sailings up to and including Friday, and has also cancelled St Malo sailings on Saturday and Sunday mornings.",
-   "details": "DFDS has cancelled Jersey services up to and including Friday and is reviewing Saturday and Sunday sailings between Jersey and St Malo [1]. It has since cancelled Saturday's 07:30 St Malo–Jersey and 09:25 Jersey–St Malo sailings [2], and Sunday's 06:30 St Malo–Jersey and 08:25 Jersey–St Malo sailings [3]. Affected customers will be contacted directly [2][3].",
-   "category": "travel",
-   "severity": "major",
-   "area": "jersey",
-   "sources": [
-    {
-     "type": "jep",
-     "publisher": "Jersey Evening Post",
-     "author": "",
-     "title": "Winds ramp up as Storm Austen bears down on the Island",
-     "url": "https://jerseyeveningpost.com/news/2026/10/22/winds-ramp-up-as-storm-austen-bears-down-on-the-island/",
-     "time": "2026-10-22T10:19:00+01:00"
-    },
-    {
-     "type": "x",
-     "publisher": "DFDS Live Travel Updates",
-     "author": "DFDSLiveUpdates",
-     "title": "CHANNEL ISLANDS | Cancelled services 24/10/2026: ST MALO - JERSEY 07:30, JERSEY - ST MALO 09:25",
-     "url": "https://x.com/DFDSLiveUpdates/status/2113201693609619544",
-     "time": "2026-10-22T10:31:00+01:00"
-    },
-    {
-     "type": "x",
-     "publisher": "DFDS Live Travel Updates",
-     "author": "DFDSLiveUpdates",
-     "title": "CHANNEL ISLANDS | Cancelled services 25/10/2026: ST MALO - JERSEY 06:30, JERSEY - ST MALO 08:25",
-     "url": "https://x.com/DFDSLiveUpdates/status/2113201867195064429",
-     "time": "2026-10-22T10:32:00+01:00"
     }
    ]
   },
@@ -542,35 +772,6 @@
      "title": "With Storm Austen set to affect Jersey over the next few days, we urge everyone to take extra care around the coast…",
      "url": "https://bsky.app/profile/today.je/post/3myfq3zlla42m",
      "time": "2026-10-21T18:59:59+01:00"
-    }
-   ]
-  },
-  {
-   "id": "2026-10-21-reservoirs-close",
-   "start": "2026-10-21T18:01:48+01:00",
-   "end": "2026-10-21T18:14:00+01:00",
-   "title": "Queen's Valley and Val de la Mare reservoirs to close",
-   "summary": "Jersey Water is closing both reservoirs from Thursday afternoon until further notice as a precaution.",
-   "details": "Jersey Water said Queen's Valley and Val de la Mare reservoirs would close from Thursday afternoon (22 October) and stay closed until its teams have checked both sites for damage after the storm [1]. Islanders are asked not to visit either reservoir while they are closed [1].",
-   "category": "closures",
-   "severity": "info",
-   "area": "jersey",
-   "sources": [
-    {
-     "type": "web",
-     "publisher": "Jersey Water",
-     "author": "",
-     "title": "Reservoirs to close ahead of Storm Austen",
-     "url": "https://www.jerseywater.je/reservoirs-to-close-ahead-of-storm-austen/",
-     "time": "2026-10-21T18:01:48+01:00"
-    },
-    {
-     "type": "bluesky",
-     "publisher": "today.je",
-     "author": "today.je",
-     "title": "[Jersey Water] Reservoirs to close ahead of Storm Austen",
-     "url": "https://bsky.app/profile/today.je/post/3myfnjskgot2v",
-     "time": "2026-10-21T18:14:00+01:00"
     }
    ]
   },

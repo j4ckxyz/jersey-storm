@@ -1,52 +1,54 @@
 {
- "updatedAt": "2026-10-22T15:14:00+01:00",
+ "updatedAt": "2026-10-22T19:21:00+01:00",
  "note": "Edit this file to update the summary box. Links use [label](https://...) syntax. 'posts' lists X/Bluesky post URLs to show as cards (X posts must also be in x-posts.json).",
- "headline": "A **red wind warning** is in force for the Channel Islands as Storm Austen arrives tonight, with the worst expected early on Friday: severe gale F9 with **gusts to 75 mph, perhaps storm F10 with gusts to 85 mph** ([Jersey Met](https://www.gov.je/weather/), [BBC](https://www.bbc.co.uk/news/articles/cm62ye5nw5z5o)). Islanders are asked to avoid outdoor activity on Friday morning where possible ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)).",
+ "headline": "A **red wind warning** is in force for the Channel Islands as Storm Austen arrives tonight, with the worst expected on Friday morning: severe gale F9 with **gusts to 75 mph, perhaps storm F10 with gusts to 85 mph** ([Jersey Met](https://www.gov.je/weather/), [@Jersey_Met](https://x.com/Jersey_Met/status/2113321134452035970)). Since 5.30pm the government has advised islanders to **remain indoors during the worst of the weather and avoid unnecessary travel or outdoor activity until lunchtime on Friday** ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx), [@GovJersey](https://x.com/GovJersey/status/2113309137278820555)).",
  "sections": [
   {
    "title": "So far",
    "points": [
-    "This afternoon Jersey's wind is south-west F4–5, backing south strong F6 by dusk, before the storm builds overnight ([Jersey Met](https://www.gov.je/weather/)).",
-    "**Guernsey and Alderney airports closed** from this afternoon until noon Friday, with flights expected to resume around 2pm; all remaining inbound Guernsey flights today are cancelled, so inter-island flights are affected ([@GuernseyAirport](https://x.com/GuernseyAirport/status/2113265277316325838), [Bailiwick Express](https://www.bailiwickexpress.com/news-ge/storm-austen-grounds-flights-as-guernsey-airport-closes/)).",
-    "**Co-op food and pharmacy stores** in Jersey and Guernsey won't open until 1pm on Friday, so shop today for essentials ([Channel Islands Co-op](https://www.channelislands.coop/your-society/blog-and-news/storm-austen-update/)).",
-    "Jersey Met's **red warning** for the Channel Islands was updated at 09:45: severe gale F9 gusting 60 knots, veering W–NW **storm F10 with gusts to 70 knots** later. Disruption and damage to moored boats are expected ([Jersey Met](https://www.gov.je/weather/), [@Jersey_MetCI](https://x.com/Jersey_MetCI/status/2113194399966674952)).",
+    "The government's 5.30pm update says conditions could become **more severe** than forecast. The red warning was re-issued this afternoon and remains in place ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx), [@Jersey_MetCI](https://x.com/Jersey_MetCI/status/2113280465507324118)).",
+    "Jersey Met's re-issued **red warning** (3:43pm): south severe gale F9 with gusts to 60 knots expected soon, veering west to north-west **storm F10 with gusts to 70 knots** later. Damage to moored boats is likely, and damage to infrastructure is possible ([Jersey Met](https://www.gov.je/weather/), [@Jersey_MetCI](https://x.com/Jersey_MetCI/status/2113280465507324118)).",
+    "**All Jersey Airport flights on Friday morning are cancelled until the afternoon.** Only go to the airport if your airline confirms your flight is operating ([Jersey Airport](https://www.jerseyairport.com/flight/departures/), [Channel 103](https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/)).",
+    "**Guernsey and Alderney airports are closed** until noon Friday, so inter-island flights are affected ([@GuernseyAirport](https://x.com/GuernseyAirport/status/2113265277316325838), [Bailiwick Express](https://www.bailiwickexpress.com/news-ge/storm-austen-grounds-flights-as-guernsey-airport-closes/)).",
     "**All Jersey schools and colleges are closed on Friday**, including Highlands College and University College Jersey ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx), [Highlands](https://www.highlands.ac.uk/news/storm-austen-highlands-college-closure))."
    ]
   },
   {
    "title": "What's expected",
    "points": [
-    "Tonight: south F6–7, rising to **gale F8 by midnight with gusts to 65 mph**, then veering west to severe gale F9 by dawn with gusts to 75 mph. Rain turning persistent and heavy, perhaps thundery ([Jersey Met](https://www.gov.je/weather/)).",
-    "Friday morning: west to north-west severe gale F9, **gusts to 75 mph, perhaps storm F10 with gusts to 85 mph**. Afternoon: gale F8 easing to F7, gusts to 60 mph later ([Jersey Met](https://www.gov.je/weather/)).",
-    "Saturday stays windy, with south-west F6–7 and gusts to 50 mph ([Jersey Met](https://www.gov.je/weather/)).",
-    "Expect travel disruption, fallen trees or branches on roads and some localised flooding ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx))."
+    "Tonight: south F5–6, quickly rising to F6–7 and **gale F8 by midnight with gusts to 65 mph**, then veering west to severe gale F9 by dawn with gusts to 75 mph. Rain turning persistent and heavy, perhaps thundery ([Jersey Met](https://www.gov.je/weather/), [@Jersey_Met](https://x.com/Jersey_Met/status/2113321134452035970)).",
+    "Friday morning: west to north-west severe gale F9, **gusts to 75 mph, perhaps storm F10 with gusts to 85 mph**. Friday afternoon: gale F8, occasionally F9 with gusts to 70 mph at first, easing to F7 with gusts to 60 mph. Friday night: north-west F7 with gusts to 50 mph, then westerly F5–6 ([@Jersey_Met](https://x.com/Jersey_Met/status/2113321134452035970), [Jersey Met](https://www.gov.je/weather/)).",
+    "Expect travel disruption, fallen trees and localised flooding. The clean-up will start on Friday once the red warning has passed and it is safe, and a further government update is due on Friday morning ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx))."
    ]
   },
   {
    "title": "Travel & closures",
    "points": [
-    "**Flights:** Loganair has cancelled its Southampton–Jersey flight at 18:40 tonight and all its Friday Jersey flights to and from Southampton, Bristol, Exeter and East Midlands ([Loganair](https://www.loganair.co.uk/weather-updates/), [@FlyLoganair](https://x.com/FlyLoganair/status/2113214202286342538)). Check with your airline before travelling ([@VisitJerseyCI](https://x.com/VisitJerseyCI/status/2113248762890215594)).",
-    "**Ferries:** DFDS has cancelled Jersey sailings up to and including Friday and is reviewing Saturday and Sunday St Malo sailings ([JEP](https://jerseyeveningpost.com/news/2026/10/22/winds-ramp-up-as-storm-austen-bears-down-on-the-island/)). Sunday's 06:30 St Malo–Jersey and 08:25 Jersey–St Malo are already cancelled ([Ouest-France, quoting DFDS](https://www.ouest-france.fr/meteo/tempete/tempete-austen-les-traversees-entre-saint-malo-les-iles-anglo-normandes-et-langleterre-annulees-04efa7cc-ce08-11f1-bb5f-3dc5c0feacca)). An extra Jersey–St Malo fast ferry is planned for Monday 26 Oct ([BBC](https://www.bbc.com/news/articles/cq0k0zkn808lo)).",
-    "**Friday closures:** La Collette recycling and green waste site, Howard Davis, Coronation and Sir Winston Churchill parks, and the Jersey and Western libraries (morning). Sports centres stay shut until at least 3pm, and youth clubs are closed tonight ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)). Jersey Heritage sites are closed on Friday ([@VisitJerseyCI](https://x.com/VisitJerseyCI/status/2113248762890215594)).",
-    "Queen's Valley and Val de la Mare reservoirs are closed until further notice ([Jersey Water](https://www.jerseywater.je/reservoirs-to-close-ahead-of-storm-austen/)).",
-    "**Power:** no storm power cuts had been reported in the sources checked as of 15:15 Thursday."
+    "**Flights:** Loganair has cancelled tonight's Southampton–Jersey flight and its Friday Jersey flights ([Loganair](https://www.loganair.co.uk/weather-updates/)). Aurigny's Jersey–Guernsey flights tonight are cancelled ([Jersey Airport](https://www.jerseyairport.com/flight/departures/)). Check with your airline before travelling ([@VisitJerseyCI](https://x.com/VisitJerseyCI/status/2113248762890215594)).",
+    "**Ferries:** DFDS has cancelled Jersey–St Malo sailings for the rest of the week and the weekend. An extra fast ferry return is planned for Monday 26 Oct and an extra Stena Vinga Portsmouth sailing for Sunday 25 Oct, both weather permitting. DFDS's terminal offices are closed on Friday ([The Times Jersey](https://www.thetimesjersey.com/post/dfds-changes-ferry-schedules-as-storm-austen-approaches-jersey), [Channel 103](https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/)).",
+    "**Buses:** school bus services are cancelled, and double-decker buses won't run until the wind eases ([Channel 103](https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/)).",
+    "**Shops and fuel on Friday:** Co-op food and pharmacy stores, Waitrose and M&S open at 1pm ([Channel 103](https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/), [Channel Islands Co-op](https://www.channelislands.coop/your-society/blog-and-news/storm-austen-update/)). Rubis has paused fuel deliveries and forecourts until at least midday ([Channel 103](https://www.channel103.com/local/stormausten/)).",
+    "**Friday closures:** La Collette recycling and green waste site, Howard Davis, Coronation and Sir Winston Churchill parks, the Jersey and Western libraries (morning), and sports centres until at least 3pm ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)). All Jersey Heritage sites and the JEC Powerhouse store are closed, and the Arts Centre is closed until 10am ([Channel 103](https://www.channel103.com/local/stormausten/)). The government's Customer Hub stays open ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx)).",
+    "Queen's Valley and Val de la Mare reservoirs are closed until further notice. No disruption to water supply is expected ([Jersey Water](https://www.jerseywater.je/storm-austen-jersey-water-prepares-for-severe-weather/)).",
+    "**Power:** no storm power cuts had been reported in the sources checked as of 7:20pm Thursday. Jersey Electricity urges pay-as-you-go customers to top up today. Its emergency line is 01534 505050 ([JEP](https://jerseyeveningpost.com/news/2026/10/22/%e2%99%a6-jep-live-storm-austen-set-to-batter-jersey/))."
    ]
   },
   {
    "title": "Official advice",
    "points": [
-    "Avoid outdoor activity and coastal areas on Friday morning where possible ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx), [@VisitJerseyCI](https://x.com/VisitJerseyCI/status/2113248762890215594)).",
-    "Hospital emergency, urgent and maternity services are running as normal. Only call 999 for an ambulance in a life-threatening emergency, and go to ED only for serious illness or injury. Attend Friday outpatient appointments if it's safe to travel unless HCJ contacts you ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)).",
-    "Secure garden furniture and bins, and clear leaves from drains ([JEP](https://jerseyeveningpost.com/news/2026/10/22/winds-ramp-up-as-storm-austen-bears-down-on-the-island/)). Boat owners should check moorings ([JEP](https://jerseyeveningpost.com/news/2026/10/22/winds-ramp-up-as-storm-austen-bears-down-on-the-island/)).",
-    "Don't try to deal with damaged trees yourself; call a professional ([BBC](https://www.bbc.co.uk/news/articles/cm62ye5nw5z5o)). Take extra care around the coast ([St Helier Lifeboat via today.je](https://bsky.app/profile/today.je/post/3myfq3zlla42m))."
+    "**Stay indoors during the worst of the weather** and avoid unnecessary travel or outdoor activity until lunchtime on Friday ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx), [@GovJersey](https://x.com/GovJersey/status/2113309137278820555)).",
+    "**Report fallen trees, blocked roads or storm damage** by emailing dfi@gov.je with a photo, the road name or location, and the parish. A live map shows reported incidents ([@GovJersey](https://x.com/GovJersey/status/2113314559507235184), [gov.je on Bluesky](https://bsky.app/profile/gov.je/post/3myi5ak4dyv25)). Call the emergency services only if there is a risk to life ([JEP](https://jerseyeveningpost.com/news/2026/10/22/%e2%99%a6-jep-live-storm-austen-set-to-batter-jersey/)).",
+    "Hospital emergency, urgent and maternity services are running as normal. Only call 999 for an ambulance in a life-threatening emergency ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)). The Patient Transport Service will run for Friday outpatient appointments. If you no longer need it, cancel on 444750 ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx)).",
+    "Secure garden furniture and bins, clear leaves from drains, and check boat moorings ([JEP](https://jerseyeveningpost.com/news/2026/10/22/winds-ramp-up-as-storm-austen-bears-down-on-the-island/)). Don't try to deal with damaged trees yourself ([BBC](https://www.bbc.co.uk/news/articles/cm62ye5nw5z5o)). Take extra care around the coast ([St Helier Lifeboat via today.je](https://bsky.app/profile/today.je/post/3myfq3zlla42m))."
    ]
   }
  ],
  "posts": [
+  "https://x.com/Jersey_Met/status/2113321134452035970",
+  "https://x.com/GovJersey/status/2113314559507235184",
+  "https://x.com/GovJersey/status/2113309137278820555",
+  "https://x.com/Jersey_MetCI/status/2113280465507324118",
   "https://x.com/GuernseyAirport/status/2113265277316325838",
-  "https://bsky.app/profile/today.je/post/3myhqtgbhdy2n",
-  "https://www.bbc.co.uk/news/articles/cm62ye5nw5z5o?at_medium=RSS&at_campaign=rss",
-  "https://x.com/VisitJerseyCI/status/2113248762890215594",
-  "https://x.com/GovJersey/status/2113210136344879614"
+  "https://x.com/VisitJerseyCI/status/2113248762890215594"
  ]
 }
