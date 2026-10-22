@@ -240,7 +240,7 @@ Any new UI should rely only on these fields and treat `author`, `avatar` and `me
 
 ## Extending the data (modular options)
 
-This section describes **planned, optional** extension points. Nothing here exists in the code yet. It is the agreed shape, so the UI (or Claude Code) can add these features without breaking the automated refresh. Every field below is optional. When it is missing, the frontend must fall back to today's behaviour.
+This section describes **optional** extension points. The UI (`app.js`) already reads all of them and falls back to today's behaviour when they are missing. `app.js` also has built-in defaults for every source in `BUILTIN_SOURCES`, so `sources.json` only needs the keys you want to override. Neither `sources.json` nor `config.json` exists yet. If you create one, add it to `FILES` in `tools/prepare_deploy.py` or it won't be deployed. Every field below is optional. When it is missing, the frontend must fall back to today's behaviour.
 
 ### 1. Source registry: `sources.json` (static, served at `/sources.json`)
 

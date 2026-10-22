@@ -2,6 +2,6 @@
   "functions": { "api/*.js": { "maxDuration": 15 } },
   "headers": [
     { "source": "/(.*)", "headers": [ { "key": "X-Content-Type-Options", "value": "nosniff" } ] },
-    { "source": "/(index.html|app.js|style.css|summary.json|x-posts.json)?", "headers": [ { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" } ] }
+    { "source": "/(index.html|app.js|style.css|summary.json|x-posts.json|sources.json|config.json)?", "headers": [ { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" } ] }
   ]
 }
