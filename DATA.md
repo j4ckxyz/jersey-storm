@@ -71,7 +71,7 @@ Top level: `{ "generatedAt": string (ISO 8601), "posts": Post[] }`.
 | `source` | string | always `"X"` | |
 | `platform` | string | always `"x"` | |
 | `author` | string | optional (may be `""`) | Display name. The UI falls back to `handle`. |
-| `avatar` | string (URL) | optional (may be `""`) | Profile image. The UI falls back to an initial letter. |
+| `avatar` | string (URL) | optional (may be `""`) | Profile image. If it is missing or fails to load, the UI asks `/api/x-avatar?id=<id>` (tweet syndication lookup), then falls back to an initial letter. |
 | `media` | Media[] | optional (may be `[]`) | Up to 4 items. |
 
 `prepare_deploy.py` checks that `id`, `handle`, `text`, `time` and `url` are present.
