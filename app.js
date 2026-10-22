@@ -415,6 +415,8 @@
   const EV_SRC = { x: 'X', bluesky: 'Bluesky', bbc: 'BBC', jep: 'JEP', gov: 'gov.je', facebook: 'Facebook', web: 'Web', other: 'Web' };
   const EV_AREA = { guernsey: 'Guernsey', both: 'Jersey & Guernsey' };
   const EV_FILTERS = { all: 'All', major: 'Major', travel: 'Travel', power: 'Power', closures: 'Closures', weather: 'Weather' };
+  // own-property lookups, so values like "constructor" in the data fall back instead of hitting Object.prototype
+  const pick = (map, k) => (typeof k === 'string' && Object.hasOwn(map, k) ? map[k] : undefined);
   const evMatches = (ev, f) => f === 'all' || (f === 'major' ? ev.severity === 'major' : f === 'weather' ? ev.category === 'weather' || ev.category === 'warning' : ev.category === f);
   const okTime = (t) => typeof t === 'string' && !isNaN(new Date(t));
 
@@ -434,7 +436,7 @@
       .map((e) => ({
         ...e,
         end: okTime(e.end) ? e.end : e.start,
-        category: EV_CAT[e.category] ? e.category : 'other',
+        category: pick(EV_CAT, e.category) ? e.category : 'other',
         severity: EV_SEV.includes(e.severity) ? e.severity : 'info',
         sources: (Array.isArray(e.sources) ? e.sources : []).filter((s) => s && typeof s === 'object'),
       }));
@@ -448,7 +450,7 @@
       const p = (x ? xPosts : (apiFeed && apiFeed.items) || []).find((i) => i.url === s.url) || {};
       return avatarHTML({ platform: x ? 'x' : 'bsky', source: x ? 'X' : 'Bluesky', url: s.url, id: p.id, avatar: p.avatar, author: s.publisher, handle: s.author }, 'av av-xs');
     }
-    const known = { bbc: 'BBC Jersey', jep: 'Jersey Evening Post', gov: 'gov.je' }[s.type];
+    const known = pick({ bbc: 'BBC Jersey', jep: 'Jersey Evening Post', gov: 'gov.je' }, s.type);
     if (known) return faviconHTML(known);
     let host = '';
     try { host = new URL(s.url).hostname.replace(/^www\./, ''); } catch (e) { /* no icon */ }
@@ -461,7 +463,7 @@
     const social = s.type === 'x' || s.type === 'bluesky';
     return `<li><a class="evs" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer">
       <span class="evs-n">${n}</span><span class="evs-ic">${evSourceIcon(s)}</span>
-      <span class="evs-who"><b>${esc(s.publisher || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${EV_SRC[s.type] || 'Web'}</span></span>
+      <span class="evs-who"><b>${esc(s.publisher || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${pick(EV_SRC, s.type) || 'Web'}</span></span>
       ${okTime(s.time) ? `<time datetime="${esc(s.time)}">${esc(fmtTime(s.time))}</time>` : ''}
       ${s.title ? `<span class="evs-t">${esc(s.title)}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
     </a></li>`;
@@ -479,7 +481,7 @@
     const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
     return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}">
       <div class="ev-head">
-        <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${EV_AREA[ev.area] ? `<span class="ev-area">${EV_AREA[ev.area]}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
+        <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
         <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(ev.title)}</button></h3>
         ${ev.summary ? `<p class="ev-sum">${esc(ev.summary)}</p>` : ''}
         ${ICON.chev}
@@ -750,18 +752,19 @@
       await xp;
       renderFeed();
       lastOk = new Date();
-      setStatus(true, `<span class="gc-l">Live · </span>Updated ${hm(lastOk)}`);
+      setStatus(true, `<span class="gc-l">Live · </span>Updated ${clock(lastOk)}`);
     } catch (e) {
       await xp;
       if (xPosts.length) renderFeed();
       if (!feedData) $('#feed').innerHTML = '<div class="card empty err">Could not load updates. Retrying shortly…</div>';
-      setStatus(false, lastOk ? `Offline? Last update ${hm(lastOk)}` : 'Could not load updates');
+      setStatus(false, lastOk ? `Offline? Last update ${clock(lastOk)}` : 'Could not load updates');
     }
   }
-  // Network errors keep the events we have; a missing, invalid or empty file falls back to the post feed.
+  // Network and server errors keep the events we have; a missing (404/410), invalid or empty file falls back to the post feed.
   async function loadEvents() {
     let r;
     try { r = await fetch('/events.json', { cache: 'no-cache' }); } catch (e) { if (!eventsData) applyMode(); return; }
+    if (!r.ok && r.status !== 404 && r.status !== 410) { if (!eventsData) applyMode(); return; }
     const text = r.ok ? await r.text().catch(() => '') : '';
     try { eventsData = text ? normEvents(JSON.parse(text)) : null; } catch (e) { eventsData = null; }
     evRaw = text;
