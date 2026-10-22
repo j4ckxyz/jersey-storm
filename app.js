@@ -144,6 +144,21 @@
     ago: (d) => ago(d),
   };
   const timeHTML = (iso, fmt) => `<time datetime="${esc(iso)}" data-fmt="${fmt}">${esc(TIME_FMT[fmt](new Date(iso)))}</time>`;
+  // "as of 9:15pm" on each section, from the source's own timestamp. It turns amber once it's older than that source
+  // normally gets (maxMin), which says "this part may be behind" without alarming anyone.
+  function asOfHTML(iso, maxMin) {
+    if (!okTime(iso)) return '';
+    return `<time class="asof" datetime="${esc(iso)}" data-max="${maxMin}">as of ${esc(fmtTime(iso))}<span class="sr-only asof-note"></span></time>`;
+  }
+  function refreshAsOf() {
+    for (const t of $$('time.asof')) {
+      const old = Date.now() - new Date(t.getAttribute('datetime')) > Number(t.dataset.max) * 60e3;
+      t.classList.toggle('stale', old);
+      t.title = old ? 'Older than usual: this part may be behind' : '';
+      const note = t.querySelector('.asof-note');
+      if (note) note.textContent = old ? ' (may be out of date)' : '';
+    }
+  }
   function updateTimes() {
     for (const t of $$('time[data-fmt]')) {
       const d = new Date(t.getAttribute('datetime'));
@@ -361,9 +376,10 @@
   }
 
   function mergeFeed() {
-    if (!apiFeed && !xPosts.length) return;
-    const items = [...((apiFeed && apiFeed.items) || [])];
+    if (!apiFeed && !xPosts.length && !liveBsky) return;
     const cutoff = Date.now() - 5 * 864e5;
+    // the server's copy plus what the browser fetched from Bluesky itself; duplicates go by URL below
+    const items = [...((apiFeed && apiFeed.items) || []), ...(liveBsky ? liveBsky.items.filter((i) => new Date(i.time) >= cutoff) : [])];
     for (const p of xPosts) if (new Date(p.time) >= cutoff) items.push({ ...p, source: 'X', platform: 'x' });
     const seen = new Set();
     const merged = items
@@ -371,7 +387,7 @@
       .filter((i) => (seen.has(i.url) ? false : (seen.add(i.url), true)))
       .filter(visibleByConfig)
       .sort((a, b) => new Date(b.time) - new Date(a.time));
-    const sources = [...((apiFeed && apiFeed.sources) || [])];
+    const sources = [...((apiFeed && apiFeed.sources) || [])].map((x) => (x.name === 'Bluesky' && liveBsky ? { ...x, ok: true, live: true } : x));
     sources.push(xPosts.length ? { name: 'X', ok: true, count: xPosts.filter((p) => new Date(p.time) >= cutoff).length } : { name: 'X', ok: false, count: 0 });
     feedData = { items: merged, sources };
   }
@@ -430,6 +446,7 @@
     for (const it of feedData.items) seenUrls.add(it.url);
     firstLoad = false;
     renderSources();
+    refreshAsOf();
     renderSummaryPosts();
     renderNow();
     applyMode();
@@ -442,7 +459,9 @@
     const good = all.filter((s) => s.ok);
     const el = $('#feed-sources');
     const wasOpen = el.open;
-    el.innerHTML = `<summary>Sources: ${good.length} live${bad.length ? ` · <span class="err">unavailable: ${esc(bad.map((s) => s.name).join(', '))}</span>` : ''}${ICON.chev}</summary>
+    // as of: when the server last gathered the sources; Bluesky separately, as the browser fetches it every minute
+    const asOf = [apiFeed && asOfHTML(apiFeed.generatedAt, 6), liveBsky && `Bluesky ${asOfHTML(liveBsky.at, 3)}`].filter(Boolean).join(' · ');
+    el.innerHTML = `<summary>Sources: ${good.length} live${asOf ? ` · ${asOf}` : ''}${bad.length ? ` · <span class="err">unavailable: ${esc(bad.map((s) => s.name).join(', '))}</span>` : ''}${ICON.chev}</summary>
       <div class="src-list">${good.map((s) => `<span class="src-chip good"><span class="dot"></span>${esc(s.name)} (${esc(s.count)})</span>`).join('')}${bad.map((s) => `<span class="src-chip bad" title="${esc(s.error || '')}"><span class="dot"></span>${esc(s.name)}</span>`).join('')}</div>`;
     el.open = wasOpen;
   }
@@ -481,10 +500,8 @@
     const s = summaryData;
     const sec = $('#summary-sec');
     if (!s || !s.headline || !feature('summaryBox')) { sec.hidden = true; return; }
-    const d = new Date(s.updatedAt);
-    const valid = !isNaN(d);
-    const stale = valid && Date.now() - d > 6 * 3600e3;
-    const upd = valid ? `Updated ${fmtTime(s.updatedAt)}${stale ? ' · may be out of date' : ''}` : '';
+    const valid = okTime(s.updatedAt);
+
     const hls = (Array.isArray(s.highlights) ? s.highlights : []).filter((h) => h && (h.label || h.value)).slice(0, 8);
     const hlHTML = hls.length
       ? `<div class="highlights">${hls.map((h) => {
@@ -503,9 +520,7 @@
     const rest = more + secs.slice(1).map(secHTML).join('');
     const posts = Array.isArray(s.posts) ? s.posts : [];
     const wasOpen = box.querySelector('details') && box.querySelector('details').open;
-    const updEl = $('#sum-upd');
-    updEl.textContent = upd;
-    updEl.className = `small ${stale ? 'err' : 'muted'}`;
+    $('#sum-upd').innerHTML = valid ? asOfHTML(s.updatedAt, 30) : '';
     const wasBusy = box.hasAttribute('aria-busy');
     const fix = anchor();
     box.removeAttribute('aria-busy');
@@ -547,7 +562,7 @@
   const EV_AREA = { guernsey: 'Guernsey', both: 'Jersey & Guernsey' };
   const EV_FILTERS = { all: 'All', major: 'Major', travel: 'Travel', power: 'Power', closures: 'Closures', weather: 'Weather' };
   // own-property lookups, so values like "constructor" in the data fall back instead of hitting Object.prototype
-  const pick = (map, k) => (typeof k === 'string' && Object.hasOwn(map, k) ? map[k] : undefined);
+  const pick = (map, k) => (typeof k === 'string' && Object.prototype.hasOwnProperty.call(map, k) ? map[k] : undefined); // not Object.hasOwn: iOS 15.0–15.3 lacks it
   const evMatches = (ev, f) => f === 'all' || (f === 'major' ? ev.severity === 'major' : f === 'weather' ? ev.category === 'weather' || ev.category === 'warning' : ev.category === f);
   const okTime = (t) => typeof t === 'string' && !isNaN(new Date(t));
 
@@ -669,15 +684,14 @@
     if (!eventsMode()) { evKey = ''; applyMode(); return; }
     const now = new Date();
     const upd = okTime(eventsData.updated) ? new Date(eventsData.updated) : null;
-    const stale = !!upd && now - upd > 6 * 3600e3;
     // skip identical re-renders so polling doesn't reset focus or images; the day is in the key for "Today" labels
-    const key = [evRaw, evFilter, evGuernsey, stale, dayKey(now)].join('|');
+    const key = [evRaw, evFilter, evGuernsey, dayKey(now)].join('|');
     if (key === evKey) return;
     evKey = key;
 
     const cnt = $('#feed-count');
-    cnt.textContent = upd ? `Updated ${fmtTime(eventsData.updated, now)}${stale ? ' · may be out of date' : ''}` : '';
-    cnt.className = `small ${stale ? 'err' : 'muted'}`;
+    cnt.innerHTML = upd ? asOfHTML(eventsData.updated, 30) : '';
+    cnt.className = 'small muted';
 
     // keep keyboard focus on the same control across a re-render
     const a = document.activeElement;
@@ -782,13 +796,14 @@
     if (!ws.length) { el.hidden = true; fix(); return; }
     const w = ws[0];
     const c = WARN_COLOURS.includes(w.colour) ? w.colour : 'yellow';
-    const meta = [okTime(w.issuedAt) && `Issued ${fmtTime(w.issuedAt)}`, ws.length > 1 && `+${ws.length - 1} more`].filter(Boolean).join(' · ');
+    const meta = [okTime(w.issuedAt) && esc(`Issued ${fmtTime(w.issuedAt)}`), ws.length > 1 && `+${ws.length - 1} more`, asOfHTML(warnData.checkedAt, 45)].filter(Boolean).join(' · '); // Jersey Met re-checks every 15 min
     el.className = `warn-banner ${c}`;
     if (isUrl(warnData.source)) el.href = warnData.source;
     el.innerHTML = `<span class="badge ${c}">${esc(c)}</span>
       <span class="wb-main"><b class="wb-title">${esc(w.title)}</b>${w.summary ? `<span class="wb-sum">${esc(tidy(w.summary))}</span>` : ''}
-      <span class="wb-meta">${meta ? `${esc(meta)} · ` : ''}Jersey Met<span class="ext" aria-hidden="true"></span></span></span>`;
+      <span class="wb-meta">${meta ? `${meta} · ` : ''}Jersey Met<span class="ext" aria-hidden="true"></span></span></span>`;
     el.hidden = false;
+    refreshAsOf();
     fix();
   }
   async function loadWarnings() {
@@ -916,6 +931,7 @@
     }
     html += KEY_HTML;
     html += `<p class="issued">Jersey Met forecast issued ${esc(tidy(f.issued))} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
+    $('#wx-asof').innerHTML = okTime(f.issuedAt) ? `· ${asOfHTML(f.issuedAt, 8 * 60)}` : ''; // forecasts come out several times a day
     const firstPaint = !!$('#weather .skel');
     const keyOpen = !!$('#weather details.key[open]');
     $('#weather').innerHTML = html;
@@ -1120,7 +1136,7 @@
     if (fl) {
       // the next 24 hours (late at night, "today" would be nearly over)
       const soon = fl.filter((f) => new Date(f.at) > now - 3600e3 && new Date(f.at) < +now + 24 * 3600e3);
-      const off = soon.filter((f) => f.kind === 'cancelled' || f.kind === 'diverted').length;
+      const off = soon.filter((f) => f.kind === 'cancelled').length; // diverted flights still fly, so they aren't counted as cancelled
       if (soon.length) out.push(`<b>Flights, next 24 hours:</b> ${off ? `${off} of ${soon.length} cancelled` : 'none cancelled so far'}`);
     }
     const sl = travelData && travelData.harbour && travelData.harbour.sailings;
@@ -1239,6 +1255,31 @@
     upd.title = `Data last updated ${fmtTime(t.toISOString())}`;
   }
 
+  // --- Bluesky, straight from the browser: shared rules in /bsky.js, polled every minute while the tab is visible.
+  // The server's copy (inside /api/feed) stays as the fallback when Bluesky can't be reached from here.
+  let liveBsky = null; // { items, at }
+  let liveBskyKey = '';
+  let bskyMod = null;
+  const getBsky = (url) => fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); });
+  async function loadBsky() {
+    try {
+      bskyMod = bskyMod || await import('/bsky.js');
+      const res = await Promise.allSettled(bskyMod.BROWSER_QUERIES.map((q) => getBsky(bskyMod.searchUrl(q))));
+      let posts = res.flatMap((r) => (r.status === 'fulfilled' && Array.isArray(r.value.posts) ? r.value.posts : []));
+      if (res.every((r) => r.status === 'rejected')) {
+        // search down: recent posts from the key local accounts instead
+        const feeds = await Promise.allSettled(bskyMod.FALLBACK_AUTHORS.map((a) => getBsky(bskyMod.authorFeedUrl(a))));
+        if (feeds.every((r) => r.status === 'rejected')) throw new Error('Bluesky unreachable');
+        posts = feeds.flatMap((r) => (r.status === 'fulfilled' && Array.isArray(r.value.feed) ? r.value.feed.map((f) => f.post) : []));
+      }
+      const items = bskyMod.toItems(posts).filter(bskyMod.guernseyRule);
+      liveBsky = { items, at: new Date().toISOString() };
+      const key = items.map((i) => i.url).sort().join(' ');
+      if (key !== liveBskyKey) { liveBskyKey = key; if (feedData || apiFeed) renderFeed(); } // only re-render when posts changed
+      else if (feedData) { renderSources(); refreshAsOf(); }
+    } catch (e) { /* keep the last live copy and the server's */ }
+  }
+
   async function loadX() {
     try { xPosts = ((await getJSON(bust('/x-posts.json'))).posts || []).filter((p) => p && p.url && p.time); } catch (e) { /* keep previous */ }
   }
@@ -1292,12 +1333,13 @@
     }
   }
 
-  const lastPoll = { data: 0, wx: 0 };
+  const lastPoll = { data: 0, wx: 0, bsky: 0 };
   const refreshBtn = $('#refresh');
   async function refreshAll() {
     if (refreshBtn.classList.contains('spinning')) return; // one refresh at a time
     refreshBtn.classList.add('spinning');
-    lastPoll.data = lastPoll.wx = Date.now();
+    lastPoll.data = lastPoll.wx = lastPoll.bsky = Date.now();
+    loadBsky(); // not awaited: Bluesky shouldn't hold up the refresh spinner
     await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather(), loadWarnings(), loadObs(), loadTravel()]);
     const svg = refreshBtn.querySelector('svg');
     if (reduceMotion.matches || !svg) { refreshBtn.classList.remove('spinning'); return; }
@@ -1371,6 +1413,7 @@
       if (document.visibilityState !== 'visible') return;
       const now = Date.now();
       if (now - lastPoll.data >= dataEvery) { lastPoll.data = now; loadSummary(); loadEvents(); loadFeed(); loadTravel(); }
+      if (now - lastPoll.bsky >= 60e3) { lastPoll.bsky = now; loadBsky(); }
       if (now - lastPoll.wx >= wxEvery) { lastPoll.wx = now; loadWeather(); loadWarnings(); loadObs(); }
     };
     setInterval(poll, 15e3);
@@ -1429,5 +1472,5 @@
   })();
 
   // refresh relative times and the data's age every minute
-  setInterval(() => { updateTimes(); renderEvents(); renderStatus(); }, 60 * 1000);
+  setInterval(() => { updateTimes(); renderEvents(); renderStatus(); refreshAsOf(); }, 60 * 1000);
 })();
