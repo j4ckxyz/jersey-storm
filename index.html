@@ -2,70 +2,103 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Storm Austen · Jersey &amp; Guernsey live tracker</title>
 <meta name="description" content="Live Storm Austen updates for Jersey: news, gov.je, Jersey Met warnings, Bluesky posts and the official forecast.">
-<meta name="theme-color" content="#0f1720" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
 <meta property="og:title" content="Storm Austen · Jersey live tracker">
 <meta property="og:description" content="Live updates, warnings and forecast for Storm Austen in Jersey.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌀</text></svg>">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body data-active="updates">
+<a class="skip" href="#feed">Skip to updates</a>
+
 <header class="top">
   <div class="wrap top-inner">
-    <div>
-      <h1>🌀 Storm Austen <span class="where">· Jersey &amp; Guernsey</span></h1>
-      <p class="sub">Live tracker · Thu 22 – Fri 23 Oct · gusts up to ~75 mph · schools closed Friday</p>
+    <div class="brand">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></svg></span>
+      <div class="brand-text">
+        <h1 id="site-title">Storm Austen</h1>
+        <p class="status" aria-live="polite"><span id="live-dot" class="dot"></span><span id="updated">Loading…</span><span class="where"> · Jersey &amp; Guernsey</span></p>
+      </div>
     </div>
-    <div class="status">
-      <span id="gust-chip" class="badge red" hidden></span>
-      <span id="live-dot" class="dot"></span>
-      <span id="updated">Loading…</span>
-      <button id="refresh" type="button" title="Refresh now">↻ Refresh</button>
+    <div class="actions">
+      <button id="gust-chip" class="gust-chip" type="button" hidden></button>
+      <button id="refresh" class="icon-btn" type="button" aria-label="Refresh now" title="Refresh now"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Theme: auto" title="Theme: auto"></button>
     </div>
   </div>
 </header>
 
-<div class="wrap"><section id="summary" class="summary" hidden aria-live="polite"></section></div>
-
-<div id="warning-banner" class="wrap" hidden></div>
-
-<main class="wrap grid">
-  <section class="feed-col" aria-labelledby="feed-h">
-    <div class="col-head">
-      <h2 id="feed-h">Latest updates</h2>
-      <span id="feed-count" class="muted"></span>
-    </div>
-    <div id="filters" class="filters" role="group" aria-label="Filter by source"></div>
-    <div id="feed"><p class="muted pad">Loading updates…</p></div>
-    <p id="feed-sources" class="muted small"></p>
+<div class="wrap">
+  <p id="subtitle" class="intro" hidden></p>
+  <section id="now" class="now" data-view="updates forecast" aria-labelledby="now-h">
+    <div class="now-head"><h2 id="now-h">Right now</h2></div>
+    <div class="skel line"></div>
   </section>
+</div>
 
-  <aside class="wx-col" aria-labelledby="wx-h">
-    <div class="col-head"><h2 id="wx-h">Weather · Jersey Met</h2></div>
-    <div id="weather"><p class="muted pad">Loading forecast…</p></div>
-    <div class="card links">
-      <h3>Useful links</h3>
-      <ul>
-        <li><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met forecast &amp; warnings</a></li>
-        <li><a href="https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx" target="_blank" rel="noopener">gov.je Storm Austen updates</a></li>
-        <li><a href="https://www.bbc.co.uk/news/world/europe/jersey" target="_blank" rel="noopener">BBC Jersey</a> · <a href="https://www.bbc.co.uk/news/world/europe/guernsey" target="_blank" rel="noopener">BBC Guernsey</a></li>
-        <li><a href="https://www.gov.gg/" target="_blank" rel="noopener">States of Guernsey (gov.gg)</a></li>
-        <li><a href="https://www.gov.je/weather/guernsey-forecast/" target="_blank" rel="noopener">Jersey Met Guernsey forecast</a></li>
-        <li><a href="https://jerseyeveningpost.com/" target="_blank" rel="noopener">Jersey Evening Post</a></li>
-        <li><a href="https://www.jerseyairport.com/flight-information/arrivals" target="_blank" rel="noopener">Jersey Airport flights</a></li>
-        <li><a href="https://www.jec.co.uk/" target="_blank" rel="noopener">Jersey Electricity (power cuts)</a></li>
-      </ul>
-      <p class="muted small">Emergency: 999 / 112. Stay away from coastal paths and sea walls during the storm.</p>
-    </div>
+<main class="wrap layout">
+  <div class="col-main" data-view="updates">
+    <section id="summary" class="card summary" hidden aria-live="polite"></section>
+
+    <section class="feed-wrap" aria-labelledby="feed-h">
+      <div class="sec-head">
+        <h2 id="feed-h">Latest updates</h2>
+        <span id="feed-count" class="muted small"></span>
+      </div>
+      <div id="filters" class="filters" role="group" aria-label="Filter by source"></div>
+      <div id="feed" class="feed">
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+      </div>
+      <details id="feed-sources" class="sources"></details>
+    </section>
+  </div>
+
+  <aside class="col-side">
+    <section id="forecast" class="side-sec" data-view="forecast" aria-labelledby="wx-h">
+      <div class="sec-head"><h2 id="wx-h">Forecast</h2><span class="muted small">Jersey Met</span></div>
+      <div id="weather"><div class="skel tall"></div></div>
+    </section>
+
+    <section id="info" class="side-sec" data-view="info" aria-labelledby="links-h">
+      <div class="sec-head"><h2 id="links-h">Useful links</h2></div>
+      <div class="card links">
+        <ul>
+          <li><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met forecast &amp; warnings</a></li>
+          <li><a href="https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx" target="_blank" rel="noopener">gov.je Storm Austen updates</a></li>
+          <li><a href="https://www.bbc.co.uk/news/world/europe/jersey" target="_blank" rel="noopener">BBC Jersey</a></li>
+          <li><a href="https://www.bbc.co.uk/news/world/europe/guernsey" target="_blank" rel="noopener">BBC Guernsey</a></li>
+          <li><a href="https://www.gov.gg/" target="_blank" rel="noopener">States of Guernsey (gov.gg)</a></li>
+          <li><a href="https://www.gov.je/weather/guernsey-forecast/" target="_blank" rel="noopener">Jersey Met Guernsey forecast</a></li>
+          <li><a href="https://jerseyeveningpost.com/" target="_blank" rel="noopener">Jersey Evening Post</a></li>
+          <li><a href="https://www.jerseyairport.com/flight-information/arrivals" target="_blank" rel="noopener">Jersey Airport flights</a></li>
+          <li><a href="https://www.jec.co.uk/" target="_blank" rel="noopener">Jersey Electricity (power cuts)</a></li>
+        </ul>
+      </div>
+      <div class="card safety">
+        <p><strong>Emergency: 999 / 112.</strong></p>
+        <p class="muted small">Stay away from coastal paths and sea walls during the storm. Always follow official advice from <a href="https://www.gov.je/" target="_blank" rel="noopener">gov.je</a>.</p>
+      </div>
+    </section>
   </aside>
 </main>
 
-<footer class="wrap muted small foot">
+<footer class="wrap foot muted small">
   Unofficial tracker made in Jersey. Data: Jersey Met (gov.je), BBC Jersey &amp; Guernsey, Jersey Evening Post, Bailiwick Express, The Quarry, Bluesky, X. Always follow official advice from <a href="https://www.gov.je/" target="_blank" rel="noopener">gov.je</a>.
 </footer>
+
+<button id="new-pill" class="new-pill" type="button" hidden></button>
+
+<nav class="tabbar" aria-label="Sections">
+  <button type="button" data-go="updates" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg><span>Updates</span></button>
+  <button type="button" data-go="forecast" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M16 14v6M8 14v6M12 16v6"/></svg><span>Forecast</span></button>
+  <button type="button" data-go="info" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Info</span></button>
+</nav>
+
 <script src="/app.js" defer></script>
 </body>
 </html>
