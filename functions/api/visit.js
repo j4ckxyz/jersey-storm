@@ -2,7 +2,7 @@
 //   GET  -> { count }                       read only, used once a browser has been counted
 //   POST -> { count, counted }              body { id }: a random ID the browser keeps in localStorage + a cookie
 // Only a SHA-256 hash of the ID is stored. To limit inflation from private windows and cleared storage, a new ID
-// is also checked against a salted hash of IP + User-Agent + day; those rows are kept for the current UTC day only
+// is also checked against a salted hash of IP (IPv6: its /64) + User-Agent + day, kept for the current UTC day only
 // and raw IPs are never stored. Bots, preview and local hosts are not counted. Tables are created on first use.
 const SCHEMA = [
   'CREATE TABLE IF NOT EXISTS visitors (id_hash TEXT PRIMARY KEY, first_seen TEXT NOT NULL) WITHOUT ROWID',
@@ -21,6 +21,16 @@ const json = (body, status = 200, extra = {}) =>
 async function sha256(s) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// IPv6 devices rotate privacy addresses within their /64, so dedupe on that prefix (IPv4 stays whole)
+function netKey(ip) {
+  if (!ip.includes(':')) return ip;
+  const [head, tail = ''] = ip.toLowerCase().split('::');
+  const h = head ? head.split(':') : [];
+  const t = tail ? tail.split(':') : [];
+  const full = ip.includes('::') ? [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill('0'), ...t] : h;
+  return full.slice(0, 4).map((x) => x.replace(/^0+(?=.)/, '')).join(':') + '::/64';
 }
 
 async function withSchema(db, fn) {
@@ -43,7 +53,7 @@ async function record(ctx, id) {
 
   // New ID: is it the same device on the same day under a fresh ID (private window, cleared storage)?
   const salt = await db.prepare("SELECT v FROM meta WHERE k = 'salt'").first('v');
-  const ip = req.headers.get('CF-Connecting-IP') || '';
+  const ip = netKey(req.headers.get('CF-Connecting-IP') || '');
   const fp = await sha256(`${salt}|${day}|${ip}|${req.headers.get('User-Agent') || ''}`);
   const fresh = await db.prepare('INSERT OR IGNORE INTO daily (fp, day) VALUES (?, ?)').bind(fp, day).run();
   if (!fresh.meta.changes) return { count: await readCount(db), counted: false };
