@@ -355,7 +355,7 @@ It always returns HTTP 200 JSON, with the same caching as `/api/feed`. The data 
 }
 ```
 
-If the whole function fails: `{ forecast: null, sources: { error: "..." }, generatedAt }`.
+If the whole function fails: `{ forecast: null, sources: { error: "..." }, generatedAt }`. `forecast.issuedAt` is the issue time as ISO 8601, read from Jersey Met's `forecastTime` and `forecastDate` (or `null`).
 
 **Forecast:** `{ currentTemp: number|null (°C), issued: string (free text such as "06:00 22 October 2026"), days: Day[] }`. Day 0 is today.
 

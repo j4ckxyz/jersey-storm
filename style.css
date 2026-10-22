@@ -513,6 +513,9 @@ body.detailed .detail{display:grid}
 .tv-list li.cancelled .tv-what b{text-decoration:line-through;text-decoration-color:color-mix(in oklab,var(--red) 60%,transparent)}
 .board{max-height:none}
 #fl-list{max-height:420px;overflow:auto;overscroll-behavior:contain}
+/* "as of 9:15pm": quiet, amber once older than that source normally gets */
+.asof{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.asof.stale{color:color-mix(in oklab,var(--amber) 75%,var(--text));font-weight:600}
 /* "New since your last visit" */
 .since{padding:10px 0 2px;font-size:.84rem;font-weight:600;color:var(--accent)}
 .ev-new{display:inline-flex;align-items:center;padding:1px 7px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:.72rem;font-weight:700}

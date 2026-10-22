@@ -10,6 +10,8 @@
   Cache-Control: public, max-age=0, must-revalidate
 /style.css
   Cache-Control: public, max-age=0, must-revalidate
+/bsky.js
+  Cache-Control: public, max-age=0, must-revalidate
 /summary.json
   Cache-Control: public, max-age=0, must-revalidate
 /x-posts.json
