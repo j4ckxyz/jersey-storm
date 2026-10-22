@@ -139,6 +139,35 @@
     if (!document.startViewTransition || reduceMotion.matches) { update(); return; }
     document.startViewTransition(update);
   }
+  // --- haptics: a light tap under the finger on phones, like native controls ---
+  // Android (and any browser with navigator.vibrate) gets a short vibration. iOS Safari has no vibrate API, but
+  // toggling an <input type="checkbox" switch> (iOS 18+) plays the system selection haptic, so a hidden one is
+  // clicked during the tap. Both only work inside a user gesture, which is where these calls run.
+  const coarsePointer = window.matchMedia('(pointer: coarse)');
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  function haptic(strong) {
+    if (!coarsePointer.matches) return;
+    if (typeof navigator.vibrate === 'function') { try { navigator.vibrate(strong ? 18 : 10); } catch (e) { /* blocked */ } return; }
+    if (!isIOS) return;
+    const label = document.createElement('label');
+    label.setAttribute('aria-hidden', 'true');
+    label.style.display = 'none';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.setAttribute('switch', '');
+    label.append(input);
+    document.head.append(label);
+    label.click();
+    label.remove();
+  }
+  const HAPTIC_FIRM = '#refresh';
+  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, details > summary';
+  document.addEventListener('click', (e) => {
+    if (!(e.target instanceof Element)) return;
+    if (e.target.closest(HAPTIC_FIRM)) haptic(true);
+    else if (e.target.closest(HAPTIC_LIGHT)) haptic(false);
+  }, true);
+
   // FLIP: note where each keyed row ([data-k]) sits, re-render, then glide rows from their old place to the new one.
   const rowTops = (root) => new Map([...root.querySelectorAll('[data-k]')].map((el) => [el.dataset.k, el.getBoundingClientRect().top]));
   function glide(root, before) {
@@ -638,6 +667,7 @@
   const gsy = $('#ev-gsy');
   gsy.checked = evGuernsey;
   gsy.addEventListener('change', () => {
+    haptic(false); // on change rather than click, so tapping the label doesn't tap twice
     evGuernsey = gsy.checked;
     try { localStorage.setItem('events-guernsey', evGuernsey ? '1' : '0'); } catch (e) { /* private mode */ }
     evGlide = true;

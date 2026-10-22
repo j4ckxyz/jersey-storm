@@ -1,0 +1,45 @@
+<!doctype html>
+<!-- Source for og.png, the 1200×630 social card (saved at 2×). Regenerate from the repo root after editing,
+     e.g. for a new storm name (needs network for the font):
+       npx playwright screenshot --device="Desktop Chrome HiDPI" --viewport-size=1200,630 --wait-for-timeout=1500 "file://$PWD/tools/og.html" og.png
+     Uses Inter (SIL Open Font License) because the site's system fonts (SF Pro, Segoe UI) aren't licensed for images.
+     Keep it free of live data (gusts, warnings): social sites cache the card for days. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500;14..32,650;14..32,800&display=block" rel="stylesheet">
+<style>
+  :root{--bg:#f6f7f9;--paper:#fff;--ink:#0f1419;--slate:#5b6673;--line:#e3e7ec;--blue:#0a66c2;--green:#16a34a}
+  *{box-sizing:border-box;margin:0}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-optical-sizing:auto;-webkit-font-smoothing:antialiased;position:relative}
+  .card{position:absolute;inset:44px;border-radius:36px;background:var(--paper);border:2px solid var(--line);box-shadow:0 2px 4px rgba(15,20,25,.04),0 12px 32px rgba(15,20,25,.06);padding:64px 72px;display:flex;flex-direction:column;overflow:hidden}
+  /* the logo's wind strokes, drawn large and faint, running off the top-right corner, clear of the text */
+  .wind{position:absolute;right:-64px;top:-34px;width:400px;height:400px;color:#e6ebf0;stroke-width:1.5}
+  .brand{display:flex;align-items:center;gap:18px;position:relative}
+  .logo{width:68px;height:68px;border-radius:19px;background:var(--blue);color:#fff;display:grid;place-items:center}
+  .logo svg{width:40px;height:40px}
+  .where{font-size:28px;font-weight:650;color:var(--slate);letter-spacing:-.01em}
+  h1{position:relative;margin-top:46px;font-size:112px;line-height:.98;font-weight:800;letter-spacing:-.045em}
+  p{position:relative;margin-top:24px;max-width:700px;font-size:36px;line-height:1.3;font-weight:500;color:var(--slate);letter-spacing:-.015em}
+  .foot{position:relative;margin-top:auto;display:flex;align-items:center;gap:16px;font-size:26px;font-weight:650;color:var(--slate)}
+  .live{display:inline-flex;align-items:center;gap:10px;padding:9px 18px 9px 14px;border-radius:999px;background:#ecf7f0;color:#11713a}
+  .live i{width:13px;height:13px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(22,163,74,.18)}
+  .url{color:var(--ink)}
+  svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+  <div class="card">
+    <svg class="wind" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></svg>
+    <div class="brand">
+      <span class="logo"><svg viewBox="0 0 24 24" style="stroke-width:2.2"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></svg></span>
+      <span class="where">Jersey &amp; Guernsey</span>
+    </div>
+    <h1>Storm Austen</h1>
+    <p>Live warnings, the Jersey Met forecast and sourced local updates, in one calm place.</p>
+    <div class="foot"><span class="live"><i></i>Live tracker</span><span class="url">storm.jsylabs.uk</span></div>
+  </div>
+</body>
+</html>

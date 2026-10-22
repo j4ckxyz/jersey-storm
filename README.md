@@ -19,6 +19,7 @@ build.mjs                       Copies the public files into dist/ and checks th
 _headers                        Cloudflare Pages response headers for static files
 wrangler.toml                   Cloudflare Pages config (output dir, compatibility date)
 api/*.js, vercel.json           Legacy Vercel functions and config, kept until the switch
+og.png, tools/og.html           Social share card (2400×1260) and its HTML source; the regenerate command is in og.html
 tools/build_x_posts.py          Builds x-posts.json from saved X search results
 tools/prepare_deploy.py         Legacy: prepares a Vercel direct-upload deployment
 DATA.md                         Data contract: schemas for every JSON file and API
