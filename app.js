@@ -156,16 +156,23 @@
     const tags = Array.isArray(disp(it).tags) ? disp(it).tags.filter((t) => typeof t === 'string' && t).slice(0, 5) : [];
     return tags.length ? `<div class="tags">${tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : '';
   }
-  // X avatars: use the stored URL, then a fresh lookup via /api/x-avatar (tweet syndication), then the initial
-  function xAvatarApi(it) {
+  // X avatars load from our own origin (/api/x-avatar proxies pbs.twimg.com), because content
+  // blockers often block pbs.twimg.com on third-party sites. Order: stored URL via the proxy,
+  // fresh syndication lookup via the proxy, the stored URL direct, then the initial.
+  function xAvatarChain(it) {
     const m = String(it.id || '').match(/^\d+$/) || String(it.url || '').match(/\/status\/(\d+)/);
-    return m ? `/api/x-avatar?id=${m[1] || m[0]}` : '';
+    const stored = /^https:\/\/pbs\.twimg\.com\/profile_images\//.test(it.avatar || '') ? it.avatar : '';
+    return [
+      stored ? `/api/x-avatar?u=${encodeURIComponent(stored)}` : '',
+      m ? `/api/x-avatar?id=${m[1] || m[0]}` : '',
+      it.avatar ? safeUrl(it.avatar) : '',
+    ];
   }
   function avatarHTML(it, cls = 'av') {
     const x = it.platform === 'x' || it.source === 'X';
     const name = it.author || it.handle;
     const ff = `<span class="${cls} av-f">${initials(name)}</span>`;
-    const chain = [it.avatar ? safeUrl(it.avatar) : '', x ? xAvatarApi(it) : ''].filter((u) => u && u !== '#');
+    const chain = (x ? xAvatarChain(it) : [it.avatar ? safeUrl(it.avatar) : '']).filter((u) => u && u !== '#');
     if (!chain.length) return ff;
     const [first, ...rest] = chain;
     return `<img class="${cls}" src="${esc(first)}" data-fb="${esc(rest.join(' '))}" alt="" loading="lazy" referrerpolicy="no-referrer" data-ff="${esc(ff)}">`;
