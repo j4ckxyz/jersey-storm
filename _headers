@@ -1,0 +1,22 @@
+# Cloudflare Pages headers for static files (mirrors vercel.json). Functions set their own headers.
+/*
+  X-Content-Type-Options: nosniff
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/app.js
+  Cache-Control: public, max-age=0, must-revalidate
+/style.css
+  Cache-Control: public, max-age=0, must-revalidate
+/summary.json
+  Cache-Control: public, max-age=0, must-revalidate
+/x-posts.json
+  Cache-Control: public, max-age=0, must-revalidate
+/events.json
+  Cache-Control: public, max-age=0, must-revalidate
+/sources.json
+  Cache-Control: public, max-age=0, must-revalidate
+/config.json
+  Cache-Control: public, max-age=0, must-revalidate
