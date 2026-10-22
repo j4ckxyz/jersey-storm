@@ -131,6 +131,33 @@
   }
 
   const mobile = window.matchMedia('(max-width: 899px)');
+
+  // --- motion: short transitions that explain a change of state; all skipped under reduced motion ---
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  // Crossfade a whole-page change (theme, mobile tab) where View Transitions exist; otherwise apply it directly.
+  function withTransition(update) {
+    if (!document.startViewTransition || reduceMotion.matches) { update(); return; }
+    document.startViewTransition(update);
+  }
+  // FLIP: note where each keyed row ([data-k]) sits, re-render, then glide rows from their old place to the new one.
+  const rowTops = (root) => new Map([...root.querySelectorAll('[data-k]')].map((el) => [el.dataset.k, el.getBoundingClientRect().top]));
+  function glide(root, before) {
+    if (!before || reduceMotion.matches || !Element.prototype.animate) return;
+    const vh = window.innerHeight;
+    let entering = 0;
+    for (const el of root.querySelectorAll('[data-k]')) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) continue; // off screen: nothing to see
+      const was = before.get(el.dataset.k);
+      const dy = was == null ? null : was - r.top;
+      if (dy == null || Math.abs(dy) > vh) {
+        el.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 260, delay: Math.min(entering++, 6) * 28, easing: EASE_OUT, fill: 'backwards' });
+      } else if (Math.abs(dy) > 1) {
+        el.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 340, easing: EASE_OUT });
+      }
+    }
+  }
   let feedData = null; // merged: {items, sources}
   let apiFeed = null;
   let xPosts = [];
@@ -170,7 +197,7 @@
     }
     const imgs = media.filter((m) => m.type !== 'link').slice(0, 4);
     if (!imgs.length) return '';
-    return `<div class="pmedia n${imgs.length}">${imgs.map((m) => `<div class="pm"><img src="${esc(safeUrl(m.thumb || m.url))}" alt="${esc(m.alt || '')}" loading="lazy" referrerpolicy="no-referrer" data-gone="parent">${m.type === 'video' || m.type === 'animated_gif' ? '<span class="play" aria-hidden="true">▶</span>' : ''}</div>`).join('')}</div>`;
+    return `<div class="pmedia n${imgs.length}">${imgs.map((m) => `<div class="pm"><img src="${esc(safeUrl(m.thumb || m.url))}" alt="${esc(m.alt || '')}" loading="lazy" referrerpolicy="no-referrer" data-gone="parent">${m.type === 'video' || m.type === 'animated_gif' ? '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg></span>' : ''}</div>`).join('')}</div>`;
   }
   const disp = (it) => (it && it.display && typeof it.display === 'object' ? it.display : {});
   const importance = (it) => (['low', 'high', 'critical'].includes(disp(it).importance) ? disp(it).importance : 'normal');
@@ -211,7 +238,7 @@
       <div class="ptext">${esc(it.text)}</div>
       ${mediaHTML(it.media)}
       ${tagsHTML(it)}
-      <div class="pfoot">${timeHTML(it.time, 'post')}<span>View on ${x ? 'X' : 'Bluesky'} ↗</span></div>
+      <div class="pfoot">${timeHTML(it.time, 'post')}<span>View on ${x ? 'X' : 'Bluesky'}<span class="ext" aria-hidden="true"></span></span></div>
     </a>`;
   }
   function itemHTML(it, isNew) {
@@ -320,7 +347,7 @@
     const good = all.filter((s) => s.ok);
     const el = $('#feed-sources');
     const wasOpen = el.open;
-    el.innerHTML = `<summary>Sources: ${good.length} live${bad.length ? ` · <span class="err">unavailable: ${esc(bad.map((s) => s.name).join(', '))}</span>` : ''} ▾</summary>
+    el.innerHTML = `<summary>Sources: ${good.length} live${bad.length ? ` · <span class="err">unavailable: ${esc(bad.map((s) => s.name).join(', '))}</span>` : ''}${ICON.chev}</summary>
       <div class="src-list">${good.map((s) => `<span class="src-chip good"><span class="dot"></span>${esc(s.name)} (${esc(s.count)})</span>`).join('')}${bad.map((s) => `<span class="src-chip bad" title="${esc(s.error || '')}"><span class="dot"></span>${esc(s.name)}</span>`).join('')}</div>`;
     el.open = wasOpen;
   }
@@ -338,7 +365,7 @@
   function showNewPill(n, noun = 'update') {
     if (mobile.matches && document.body.dataset.active !== 'updates') return;
     if (listEl().getBoundingClientRect().top > 0) return; // top of the list already visible
-    pill.textContent = `↑ ${n} new ${noun}${n === 1 ? '' : 's'}`;
+    pill.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>${n} new ${noun}${n === 1 ? '' : 's'}`;
     pill.hidden = false;
   }
   pill.addEventListener('click', () => {
@@ -428,6 +455,7 @@
   const seenEvents = new Set();
   let evFirstLoad = true;
   let postsOpen = false;
+  let evGlide = false; // set by filter and area changes so the next render animates the list
 
   function normEvents(d) {
     if (!d || !Array.isArray(d.events)) return null;
@@ -479,7 +507,7 @@
       return s && s.url ? `<sup><a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(s.publisher || '')}">${n}</a></sup>` : m;
     });
     const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
-    return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}">
+    return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}" data-k="ev:${esc(ev.id)}">
       <div class="ev-head">
         <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
         <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(ev.title)}</button></h3>
@@ -536,12 +564,15 @@
     let day = '';
     list.forEach((ev, i) => {
       const d = dayLabel(new Date(ev.end)); // events arrive newest first by end, so group by end day
-      if (d !== day) { day = d; html += `<div class="hour"><b>${esc(d)}</b></div>`; }
+      if (d !== day) { day = d; html += `<div class="hour" data-k="day:${esc(d)}"><b>${esc(d)}</b></div>`; }
       const isNew = !evFirstLoad && !seenEvents.has(ev.id);
       if (isNew) newCount++;
       html += eventHTML(ev, i, isNew);
     });
+    const before = evGlide ? rowTops($('#ev-list')) : null;
+    evGlide = false;
     $('#ev-list').innerHTML = html || '<div class="card empty muted">No events match this filter.</div>';
+    glide($('#ev-list'), before);
     for (const e of eventsData.events) seenEvents.add(e.id);
     evFirstLoad = false;
 
@@ -568,6 +599,7 @@
     const b = e.target.closest('button[data-evf]');
     if (!b) return;
     evFilter = b.dataset.evf;
+    evGlide = true;
     renderEvents();
   });
   const gsy = $('#ev-gsy');
@@ -575,6 +607,7 @@
   gsy.addEventListener('change', () => {
     evGuernsey = gsy.checked;
     try { localStorage.setItem('events-guernsey', evGuernsey ? '1' : '0'); } catch (e) { /* private mode */ }
+    evGlide = true;
     renderEvents();
   });
   $('#posts-toggle').addEventListener('click', () => {
@@ -604,7 +637,7 @@
         ${w.validity ? `<p>${esc(w.validity)}</p>` : ''}
         ${Array.isArray(w.impacts) && w.impacts.length ? `<ul>${w.impacts.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
         ${w.extra ? `<p>${esc(w.extra)}</p>` : ''}
-        <p class="small muted">${w.issued ? `${esc(w.issued)} · ` : ''}<a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">Jersey Met ↗</a></p>
+        <p class="small muted">${w.issued ? `${esc(w.issued)} · ` : ''}<a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>
       </div>
     </details>`;
   }
@@ -636,7 +669,7 @@
         : `<p class="now-line">${esc(f.days[0].summary || 'No strong gusts in the forecast')}</p>`;
       if (pk && f.days[0].summary) line += `<p class="now-sub">Today: ${esc(f.days[0].summary)}</p>`;
     } else if (wxData) {
-      line = '<p class="now-line">Forecast unavailable</p><p class="now-sub"><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Check Jersey Met ↗</a></p>';
+      line = '<p class="now-line">Forecast unavailable</p><p class="now-sub"><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Check Jersey Met<span class="ext" aria-hidden="true"></span></a></p>';
     }
 
     let warn = '';
@@ -646,7 +679,7 @@
       const sea = all.filter(isSea).sort(byColour);
       const failed = wxData.sources && wxData.sources.warnings && wxData.sources.warnings.ok === false;
       const none = failed
-        ? '<p class="w-none">Couldn\'t check warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met ↗</a></p>'
+        ? '<p class="w-none">Couldn\'t check warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>'
         : '<p class="w-none">No warnings in force</p>';
       warn = `<div class="wgroup"><h3 class="wg-h">On land</h3>${land.length ? land.map(warnRowHTML).join('') : none}</div>`;
       if (sea.length) warn += `<div class="wgroup"><h3 class="wg-h">At sea <span>for boats and shipping</span></h3>${sea.map(warnRowHTML).join('')}</div>`;
@@ -728,7 +761,7 @@
       ${next && next.windDescription ? `<p class="wind-desc"><strong>${esc(next.day)}:</strong> ${esc(next.windDescription)}</p>` : ''}
       </div>`;
     }
-    html += `<p class="issued">Jersey Met forecast issued ${esc(f.issued)} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather ↗</a></p>`;
+    html += `<p class="issued">Jersey Met forecast issued ${esc(f.issued)} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
     $('#weather').innerHTML = html;
   }
 
@@ -805,7 +838,7 @@
     themeBtn.title = `Theme: ${t === 'auto' ? 'auto (follows system)' : t}`;
   }
   const currentTheme = () => document.documentElement.dataset.theme || 'auto';
-  themeBtn.addEventListener('click', () => applyTheme(THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length], true));
+  themeBtn.addEventListener('click', () => withTransition(() => applyTheme(THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length], true)));
   applyTheme(currentTheme(), false);
 
   // --- mobile views: Updates / Forecast / Info (desktop shows all) ---
@@ -822,7 +855,9 @@
   }
   $('.tabbar').addEventListener('click', (e) => {
     const b = e.target.closest('button[data-go]');
-    if (b) setView(b.dataset.go, true);
+    if (!b) return;
+    if (b.dataset.go === document.body.dataset.active) setView(b.dataset.go, true); // same tab: just back to the top
+    else withTransition(() => setView(b.dataset.go, true));
   });
   $('#gust-chip').addEventListener('click', () => setView('forecast', true));
   if (location.hash) setView(location.hash.slice(1), mobile.matches);
