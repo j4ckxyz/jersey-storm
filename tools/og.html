@@ -26,7 +26,9 @@
   .foot{position:relative;margin-top:auto;display:flex;align-items:center;gap:16px;font-size:26px;font-weight:650;color:var(--slate)}
   .live{display:inline-flex;align-items:center;gap:10px;padding:9px 18px 9px 14px;border-radius:999px;background:#ecf7f0;color:#11713a}
   .live i{width:13px;height:13px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(22,163,74,.18)}
-  .url{color:var(--ink)}
+  .cta{display:inline-flex;align-items:center;gap:10px;color:var(--slate)}
+  .cta b{color:var(--blue);font-weight:650}
+  .cta svg{width:28px;height:28px;color:var(--blue);stroke-width:2.4}
   svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
@@ -39,7 +41,7 @@
     </div>
     <h1>Storm Austen</h1>
     <p>Live warnings, the Jersey Met forecast and sourced local updates, in one calm place.</p>
-    <div class="foot"><span class="live"><i></i>Live tracker</span><span class="url">storm.jsylabs.uk</span></div>
+    <div class="foot"><span class="live"><i></i>Live</span><span class="cta">See the latest at <b>storm.jsylabs.uk</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
   </div>
 </body>
 </html>
