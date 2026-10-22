@@ -7,7 +7,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 const OUT = 'dist';
 const FILES = [
   'index.html', '404.html', 'app.js', 'style.css', '_headers',
-  'favicon.ico', 'favicon-32.png', 'apple-touch-icon.png', 'icon-512.png',
+  'favicon.ico', 'favicon-32.png', 'apple-touch-icon.png', 'icon-512.png', 'og.png',
   'summary.json', 'x-posts.json', 'events.json',
 ];
 const OPTIONAL = ['sources.json', 'config.json']; // see DATA.md, "Extending the data"

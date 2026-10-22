@@ -622,6 +622,8 @@
    "Do keep motion between 120 and 340ms, using `cubic-bezier(.16,1,.3,1)`: press feedback about 120ms; colour changes 150–200ms; crossfades about 240ms; glides and expands 260–340ms.",
    "Do signal a live refresh once, never in a loop: the Live dot pings once per successful refresh; a number that changed rolls up into place (420ms); a warning that appeared or changed colour gets two soft rings in its own colour (1.3s each); new events rise in.",
    "Do fade content in where it replaces a skeleton (opacity only, 260ms), so nothing moves.",
+   "Do give phone taps a light haptic: selections, toggles, expanding, tabs and the theme switch. Refresh gets a firmer one. Android uses `navigator.vibrate` (10ms, or 18ms for refresh). iOS uses a hidden `<input type=\"checkbox\" switch>` toggle. Only fire on coarse pointers, only inside the tap, and once per action.",
+   "Do keep the social card (`og.png`, from `tools/og.html`) free of live data, because social sites cache it for days.",
    "Do give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.",
    "Do use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.",
    "Do use tabular figures for times and measurements, and balanced wrapping for headings.",
