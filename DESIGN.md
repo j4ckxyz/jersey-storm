@@ -180,10 +180,10 @@ A cool sea-mist neutral base, one Channel Blue accent for interaction and live s
 - **Channel Blue** (`channel-blue`, night: `channel-blue-night`): links, focus rings, the selected mobile tab, the "new updates" pill, the "New" tag on events added since the reader's last visit, source reference chips and the text-selection tint. It means "this is interactive" or "this is live", and never "this is dangerous".
 
 ### Secondary
-- **Warning Red, Amber and Yellow** (`warning-red`, `warning-amber`, `warning-yellow`, plus their `-night` and `-tint` variants): only for Jersey Met warning colours and gust severity. Their uses are the badge, the warning row's tinted fill and border, the header gust chip, the gust numerals, the forecast bars, and the dot beside "Major" or "Notable" on events. In light mode, badges and chips are solid with white or dark ink. In dark mode they become a 20% tint with coloured text, and the hues are softened (for example `warning-red-night`).
+- **Warning Red, Amber and Yellow** (`warning-red`, `warning-amber`, `warning-yellow`, plus their `-night` and `-tint` variants): only for Jersey Met warning colours and gust severity. Their uses are the badge, the warning row's tinted fill and border, the header gust chip, the gust numerals, the forecast bars, and the dot beside "Major" or "Notable" on events. In light mode, badges and chips are solid with white or dark ink. In dark mode they stay solid, with Graphite Night ink on the softened hues (for example `warning-red-night`), so a red warning still reads as red after dark. Only the warning row's fill is a tint.
 
 ### Tertiary
-- **Live Green** (`live-green`, night: `live-green-night`): the pulsing "Live" dot, healthy-source indicators, and the brief tick that confirms a manual refresh reached the feed. It means "connected and current", and isn't used for anything else.
+- **Live Green** (`live-green`, night: `live-green-night`): the pulsing "Live" dot, healthy-source indicators, and the brief tick that confirms a manual refresh reached the feed. It means "connected and current", and isn't used for anything else. When the summary and timeline are over 3 hours old, the dot turns Warning Amber: the one non-warning use of a warning hue, because stale storm information is itself a hazard.
 
 ### Neutral
 - **Sea Mist** (`sea-mist`): the page background in light mode.
@@ -229,12 +229,12 @@ The layout is a centred column with a maximum width of 1200px and side gutters o
 
 **Spacing** follows a 4px-based scale (4, 8, 12, 16, 24, 32, 48). Related items sit 8–12px apart, sections 32px apart, and there's more space above a heading than below it.
 
-**Up to 899px** the layout becomes a single column, with a fixed bottom tab bar (Updates, Forecast, Info) that shows one view at a time. At this width the header is 56px tall and sections are 20px apart.
+**Up to 899px** the layout becomes a single column, with a fixed bottom tab bar (Updates, Forecast, Help & links) that shows one view at a time. Help & links opens with the 999/112 row. At this width the header is 56px tall and sections are 20px apart.
 - **Up to 600px**, the timeline's Guernsey switch moves below the filter chips.
 - **Up to 480px**, secondary header text is hidden, and the gust chip shows only "85 mph".
 - **Up to 420px**, cards use 14px of padding.
 
-Day headings stick to the top under the header as you scroll. Filter chips scroll sideways, fading out at the right edge rather than wrapping.
+Day headings stick to the top under the header as you scroll. On desktop, filter chips scroll sideways and fade at the right edge; up to 899px they wrap onto a second row, so none is ever cut off.
 
 Every tap target is at least 44px tall on phones (38px buttons sit inside larger hit areas), and the page never scrolls sideways.
 
@@ -255,7 +255,7 @@ The shapes are soft rounded rectangles in a few nested steps:
 - 16px for cards and panels;
 - 12px for rows and tiles inside them (warning rows, stat tiles, the "Show all posts" button, link previews);
 - 10px for source rows and media;
-- 6px for badges and 5px for reference chips;
+- 6px for badges and reference chips;
 - fully round for anything you tap to choose (filter chips, the gust chip, icon buttons, the "new updates" pill, the active-tab highlight, the Guernsey switch).
 
 Avatars are circles. Borders are always 1px. Severity is never shown as a thick coloured edge.
@@ -263,14 +263,14 @@ Avatars are circles. Borders are always 1px. Severity is never shown as a thick 
 ## Components
 
 ### Buttons
-- **Icon button:** a 38px circle in Paper with a hairline border and an 18px drawn icon. On hover it gets a stronger hairline and a Deeper Sea Mist fill, and it scales to 0.95 when pressed. Refresh spins while loading; when a manual refresh reaches the feed, its icon becomes a Live Green tick (drawn on in 320ms) for about 1.4 seconds, then returns. The theme toggle cycles auto → light → dark, with a crossfade between themes.
+- **Icon button:** a 38px circle in Paper with a hairline border and an 18px drawn icon. On hover it gets a stronger hairline and a Deeper Sea Mist fill, and it scales to 0.95 when pressed. Refresh spins while loading; when a manual refresh reaches the feed, its icon becomes a Live Green tick (drawn on in 320ms) for about 1.4 seconds, then returns. The theme toggle is a pill with the mode's icon and its name (Auto, Light, Dark); it cycles auto → light → dark, with a crossfade between themes.
 - **"Show all posts":** a full-width 44px row with a hairline border, a 12px radius, Slate text and a count. The text turns ink on hover, and the chevron flips when the list is open.
 - **"New updates" pill:** a floating Channel Blue pill with an up arrow and a count, which slides down into place.
 
 ### Chips
 - **Filter chips:** 34px tall (38px on phones), fully round, Paper with a hairline border, label weight and a Slate count. When selected, they invert to a Harbour Ink fill with Sea Mist text.
-- **Gust chip (header):** fully round and 32px tall, filled with the severity colour in light mode and tinted in dark mode.
-- **Warning badge:** a 6px-radius block in capitals (RED, AMBER, YELLOW), solid in light mode and tinted in dark mode.
+- **Gust chip (header):** fully round and 32px tall, filled with the severity colour in both themes. On mobile it opens the Forecast tab; on desktop it scrolls to the forecast and briefly lights up its card.
+- **Warning badge:** a 6px-radius block in capitals (RED, AMBER, YELLOW), solid in both themes.
 - **Source type badge:** a small Deeper Sea Mist block with Slate text (X, Bluesky, BBC, JEP, gov.je, Facebook, Web).
 
 ### Cards / Containers
@@ -289,14 +289,21 @@ Avatars are circles. Borders are always 1px. Severity is never shown as a thick 
 
 ### Event card (signature component)
 The timeline's unit, one per storm event, grouped under sticky day headings.
-- **Collapsed:** a meta row (severity dot and label, category icon and name, area, time range on the right), the title, and a summary of one or two sentences.
+- **Collapsed:** a meta row (severity dot and label, category icon and name, area, and the latest time on the right), the title, and a summary of one or two sentences. Every card names its area (Jersey, Guernsey, or Jersey & Guernsey). When an event spans time, a meta-size line under the summary reads "First reported 10:46am · updated 2:41pm".
+- **Order:** within each day, Major events come first, then Notable, then the rest, each group newest first.
 - **Severity:** Major events have a Warning Red dot, a red-tinted border and a heavier title. Notable events have an amber dot. Info events have no label and a slightly sunken background.
-- **Expand:** the whole header is the button, and the chevron flips. The body grows smoothly (grid rows from 0fr to 1fr) and its contents fade in. It shows the details, with `[n]` turned into small Channel Blue reference chips, then a light list of sources (number, avatar or favicon, publisher, @handle, type badge, time, title).
+- **Expand:** the whole header is the button, and the chevron flips. The body grows smoothly (grid rows from 0fr to 1fr) and its contents fade in. It shows the details, with `[n]` turned into small Channel Blue reference chips (22px tall, inline, with an invisible 44px tap area), then a light list of sources (number, avatar or favicon, publisher, @handle, type badge, time, title).
 - **Filter changes:** cards glide to their new places, and newly shown cards fade in.
 - **New since last visit:** events this device hadn't seen on its previous visit (within the last week) lead the meta row with a small "New" tag: a fully round 14% Channel Blue tint with Channel Blue text. Nothing is tagged on a first visit. Where tagged events give way to already-seen ones, a quiet divider reads "Already seen when you looked at 2:58pm": meta-size Slate text centred between two hairlines, not sticky. The section count adds "· 2 new". The baseline holds for the tab session, so a reload doesn't clear the tags.
 
+### Warning banner (top of "Right now")
+One banner states the most serious warning first, spanning the panel's full width: a larger warning row with the badge, a plain name ("Red wind warning at sea"), where and until when ("Channel Islands shipping area · until 3:00pm Fri"). Any other warnings follow as normal rows. A marine-only warning gets a muted line saying it covers the sea, that there's no separate land warning, and what gusts the land forecast expects, so the page never says "no warnings" beside a red one. With no warnings, a single muted line says so. A "What F9, knots and veering mean" disclosure follows: one paragraph with the Beaufort speeds in mph.
+
 ### Warning row
-A `<details>` element tinted in its warning colour, with a 12px radius and a 32% colour border. It shows the colour badge, the name and a one-line summary, with a chevron. It opens smoothly to show validity, impacts and the issue time.
+A `<details>` element tinted in its warning colour, with a 12px radius and a 32% colour border. It shows the colour badge, the name and a one-line summary, with a chevron. It opens smoothly to show the message, validity, impacts and the issue time, all in Jersey time and mph first (knots in brackets).
+
+### What to do now
+A Paper card directly under "Right now": a title (from the data, e.g. "What to do tonight"), 3–4 sourced bullet actions, and a column of 44px Deeper Sea Mist rows for 999/112 (largest), power cuts and reporting fallen trees. On phones it stacks into one column.
 
 ## Do's and Don'ts
 
@@ -310,6 +317,7 @@ A `<details>` element tinted in its warning colour, with a 12px radius and a 32%
 - **Do** give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.
 - **Do** use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.
 - **Do** use tabular figures for times and measurements, and balanced wrapping for headings.
+- **Do** show every time as Jersey time in one format (`3:10pm`, or `Thu 22 Oct, 3:10pm` on other days), and every wind speed in mph first with knots in brackets.
 - **Do** keep tap targets at least 44px on phones, text contrast at least 4.5:1, and the page free of horizontal scrolling at 390px.
 
 ### Don't:

@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-10-22T17:00:34+00:00",
+ "generatedAt": "2026-10-22T18:38:51+00:00",
  "title": "Design System: Jersey Storm Tracker",
  "extensions": {
   "colorMeta": {
@@ -629,6 +629,7 @@
    "**Do** give every animation a reduce-motion path (skip it, or make it instant), and keep content visible if a script fails.",
    "**Do** use drawn SVG icons with a 2px stroke and round caps, or the masked external-link arrow (`.ext`), for every icon.",
    "**Do** use tabular figures for times and measurements, and balanced wrapping for headings.",
+   "**Do** show every time as Jersey time in one format (`3:10pm`, or `Thu 22 Oct, 3:10pm` on other days), and every wind speed in mph first with knots in brackets.",
    "**Do** keep tap targets at least 44px on phones, text contrast at least 4.5:1, and the page free of horizontal scrolling at 390px."
   ],
   "donts": [

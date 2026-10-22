@@ -77,7 +77,6 @@
   // --- time helpers (always Europe/Jersey) ---
   const dayKey = (d) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
   const hourOf = (d) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', hourCycle: 'h23' }).format(d);
-  const hm = (d) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(d);
   function dayLabel(d) {
     const now = new Date();
     const k = dayKey(d);
@@ -105,23 +104,34 @@
     const d = new Date(iso);
     return dayKey(d) === dayKey(now) ? clock(d) : `${dateLabel(d)}, ${clock(d)}`;
   }
-  // "10:19–10:32am", "11:30am–2:18pm", "Wed 21 Oct, 6:15–8:00pm", "Tue 20 Oct, 4:05pm – Wed 21 Oct, 9:37pm"
-  function fmtRange(a, b, now = new Date()) {
-    const s = new Date(a);
-    const e = new Date(b);
-    if (isNaN(e) || dayKey(s) === dayKey(e) && clock(s) === clock(e)) return fmtTime(a, now);
-    if (dayKey(s) !== dayKey(e)) return `${dateLabel(s)}, ${clock(s)} – ${dateLabel(e)}, ${clock(e)}`;
-    const cs = clock(s);
-    const ce = clock(e);
-    const r = `${cs.slice(-2) === ce.slice(-2) ? cs.slice(0, -2) : cs}–${ce}`;
-    return dayKey(s) === dayKey(now) ? r : `${dateLabel(s)}, ${r}`;
-  }
   const TIME_FMT = {
-    item: (d) => `${hm(d)} · ${ago(d)}`,
+    item: (d) => `${clock(d)} · ${ago(d)}`,
     date: (d) => dayLabel(d),
-    post: (d) => `${hm(d)} · ${dayLabel(d)} · ${ago(d)}`,
+    post: (d) => `${clock(d)} · ${dayLabel(d)} · ${ago(d)}`,
     ago: (d) => ago(d),
   };
+
+  // --- plain-language text from sources: one clock format, mph first, short links ---
+  const clock12 = (h, m) => `${h % 12 || 12}:${String(m).padStart(2, '0')}${h < 12 ? 'am' : 'pm'}`;
+  function jerseyOffsetHours(d = new Date()) {
+    const p = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, timeZoneName: 'shortOffset' }).formatToParts(d).find((x) => x.type === 'timeZoneName');
+    const m = p && p.value.match(/GMT([+-]\d+)/);
+    return m ? +m[1] : 0;
+  }
+  // "09:45" → "9:45am"; "14:43 UTC" → "3:43pm" (Jersey time)
+  const localTimes = (s) => String(s ?? '').replace(/\b([01]?\d|2[0-3]):([0-5]\d)(?:\s*(UTC|GMT|BST)\b)?(?!\s*[ap]\.?m\b)/gi, (all, h, m, zone) => {
+    let hh = +h;
+    if (zone && zone.toUpperCase() === 'UTC') hh = (hh + jerseyOffsetHours() + 24) % 24;
+    return clock12(hh, +m);
+  });
+  // "60 knots" → "69 mph (60 knots)"; "50–60 kt" → "58–69 mph (50–60 knots)"
+  const mph = (kt) => Math.round(kt * 1.15078);
+  const knotsToMph = (s) => String(s ?? '').replace(/\b(\d{1,3})(?:\s*(?:–|-|to)\s*(\d{1,3}))?\s*(?:knots?|kts?|kt)\b/gi, (all, a, b) =>
+    (b ? `${mph(+a)}–${mph(+b)} mph (${a}–${b} knots)` : `${mph(+a)} mph (${a} knots)`));
+  const units = (s) => knotsToMph(localTimes(s));
+  // raw links in post text become "bit.ly/…" (the whole card already links to the post)
+  const shortUrls = (s) => String(s ?? '').replace(/https?:\/\/(?:www\.)?([^\s/)]+)(\/[^\s)]*)?/g, (all, host, path) => host + (path && path.length > 1 ? '/…' : ''));
+  const plain = (s) => shortUrls(units(s));
   const timeHTML = (iso, fmt) => `<time datetime="${esc(iso)}" data-fmt="${fmt}">${esc(TIME_FMT[fmt](new Date(iso)))}</time>`;
   function updateTimes() {
     for (const t of $$('time[data-fmt]')) {
@@ -235,7 +245,7 @@
     const av = avatarHTML(it);
     return `<a class="pcard ${x ? 'is-x' : 'is-bsky'} ${extraCls}" href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="phead">${av}<div class="pwho"><span class="pname">${esc(name)}</span><span class="phandle">@${esc(it.handle)}</span></div>${x ? ICON_X : ICON_BSKY}</div>
-      <div class="ptext">${esc(it.text)}</div>
+      <div class="ptext">${esc(plain(it.text))}</div>
       ${mediaHTML(it.media)}
       ${tagsHTML(it)}
       <div class="pfoot">${timeHTML(it.time, 'post')}<span>View on ${x ? 'X' : 'Bluesky'}<span class="ext" aria-hidden="true"></span></span></div>
@@ -250,8 +260,8 @@
     return `<a class="item ${itemClasses(it, isNew)}" href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="meta">${faviconHTML(it.source, it.favicon)}<span class="src">${esc(s.label)}</span>${s.official ? ICON.check : ''}${warn}${d.pinned ? '<span class="pin">Pinned</span>' : ''}${timeHTML(it.time, it.dateOnly ? 'date' : 'item')}</div>
       <div class="item-body"><div>
-        ${title ? `<h3 class="title">${esc(title)}</h3>` : ''}
-        ${it.text ? `<p class="text">${esc(it.text)}</p>` : ''}
+        ${title ? `<h3 class="title">${esc(units(title))}</h3>` : ''}
+        ${it.text ? `<p class="text">${esc(plain(it.text))}</p>` : ''}
         ${tagsHTML(it)}
       </div>${img}</div>
     </a>`;
@@ -268,9 +278,17 @@
     return false;
   }
 
+  // today.je reposts "[Channel Seaways] …": credit the original, e.g. "Channel Seaways (via today.je)"
+  const RELAY = /^\[([^\]]{2,40})\]\s*/;
+  function viaRelay(it) {
+    const m = it && it.handle === 'today.je' && RELAY.exec(it.text || '');
+    return m ? { ...it, author: `${m[1]} (via today.je)`, text: it.text.slice(m[0].length) } : it;
+  }
+  const relayName = (s) => String(s || '').replace(/^today\.je \((?:relaying|via) (.+?)\)$/i, '$1 (via today.je)');
+
   function mergeFeed() {
     if (!apiFeed && !xPosts.length) return;
-    const items = [...((apiFeed && apiFeed.items) || [])];
+    const items = ((apiFeed && apiFeed.items) || []).map(viaRelay);
     const cutoff = Date.now() - 5 * 864e5;
     for (const p of xPosts) if (new Date(p.time) >= cutoff) items.push({ ...p, source: 'X', platform: 'x' });
     const seen = new Set();
@@ -323,7 +341,7 @@
       let html = '';
       for (const g of groupItems(items)) {
         const [day, hour] = g.key.split('|');
-        html += `<div class="hour"><b>${esc(day)}</b>${hour ? esc(hour) : ''}</div>`;
+        html += `<div class="hour"><b>${esc(day)}</b>${hour ? esc(localTimes(hour)) : ''}</div>`;
         for (const it of g.items) {
           const isNew = !firstLoad && !seenUrls.has(it.url);
           if (isNew) newCount++;
@@ -376,7 +394,7 @@
 
   // --- summary box (static /summary.json) ---
   function md(s) {
-    return esc(s)
+    return esc(units(s))
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (m, label, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`);
   }
@@ -389,7 +407,7 @@
     const d = new Date(s.updatedAt);
     const valid = !isNaN(d);
     const stale = valid && Date.now() - d > 6 * 3600e3;
-    const upd = valid ? `Updated ${hm(d)}, ${new Intl.DateTimeFormat('en-GB', { timeZone: TZ, weekday: 'long' }).format(d)}${stale ? ' · may be out of date' : ''}` : '';
+    const upd = valid ? `Updated ${fmtTime(s.updatedAt)}${stale ? ' · may be out of date' : ''}` : '';
     const hls = (Array.isArray(s.highlights) ? s.highlights : []).filter((h) => h && (h.label || h.value)).slice(0, 8);
     const hlHTML = hls.length
       ? `<div class="highlights">${hls.map((h) => {
@@ -397,11 +415,15 @@
           return isUrl(h.source) ? `<a class="hl" href="${esc(h.source)}" target="_blank" rel="noopener noreferrer">${inner}</a>` : `<div class="hl">${inner}</div>`;
         }).join('')}</div>`
       : '';
-    const secs = Array.isArray(s.sections) ? s.sections : [];
+    const secs = (Array.isArray(s.sections) ? s.sections : []).filter((x) => x !== todoSource());
     const secIcon = (ic) => (typeof ic === 'string' && ic.length <= 8 && /[^\x00-\x7F]/.test(ic) ? `<span aria-hidden="true">${esc(ic)}</span>` : '');
     const secHTML = (sec) => `<h3>${secIcon(sec.icon)}${esc(sec.title)}</h3><ul>${(sec.points || []).map((p) => `<li>${md(p)}</li>`).join('')}</ul>`;
-    const first = secs.slice(0, 1).map(secHTML).join('');
-    const rest = secs.slice(1).map(secHTML).join('');
+    // the first section shows its first 3 points; the rest wait behind "Show full summary"
+    const SHOWN = 3;
+    const lead = secs[0] && Array.isArray(secs[0].points) ? secs[0] : null;
+    const first = lead ? secHTML({ ...lead, points: lead.points.slice(0, SHOWN) }) : '';
+    const more = lead && lead.points.length > SHOWN ? `<ul>${lead.points.slice(SHOWN).map((p) => `<li>${md(p)}</li>`).join('')}</ul>` : '';
+    const rest = more + secs.slice(1).map(secHTML).join('');
     const posts = Array.isArray(s.posts) ? s.posts : [];
     const wasOpen = box.querySelector('details') && box.querySelector('details').open;
     const updEl = $('#sum-upd');
@@ -414,15 +436,41 @@
     sec.hidden = false;
     renderSummaryPosts();
   }
+  // --- "What to do now": summary.actions if the refresh wrote them, else the first official-advice points ---
+  const todoActions = () => (summaryData && Array.isArray(summaryData.actions) ? summaryData.actions.filter((a) => typeof a === 'string' && a) : []);
+  // the summary section the box borrows from when there are no explicit actions (it then isn't repeated in the summary)
+  function todoSource() {
+    if (!summaryData || todoActions().length || !Array.isArray(summaryData.sections)) return null;
+    return summaryData.sections.find((x) => x && /advice/i.test(x.title || '') && Array.isArray(x.points) && x.points.length <= 4) || null;
+  }
+  function renderTodo() {
+    const s = summaryData || {};
+    const adv = todoSource();
+    const acts = todoActions().length ? todoActions().slice(0, 4) : adv ? adv.points : [];
+    $('#todo-h').textContent = typeof s.actionsTitle === 'string' && s.actionsTitle ? s.actionsTitle : 'What to do now';
+    $('#todo-list').innerHTML = acts.map((a) => `<li>${md(a)}</li>`).join('');
+    $('#todo-list').hidden = !acts.length;
+  }
+
   function renderSummaryPosts() {
     const el = document.getElementById('sum-posts');
     if (!el || !summaryData) return;
     // any linked item (tweet, Bluesky post, article, gov.je notice...), newest first
-    const pool = [...xPosts.map((p) => ({ ...p, source: 'X', platform: 'x' })), ...((apiFeed && apiFeed.items) || []), ...((feedData && feedData.items) || [])];
+    const pool = [...((feedData && feedData.items) || []), ...xPosts.map((p) => ({ ...p, source: 'X', platform: 'x' })), ...((apiFeed && apiFeed.items) || []).map(viaRelay)];
     const urls = [...new Set(Array.isArray(summaryData.posts) ? summaryData.posts : [])];
     const cards = urls.map((u) => pool.find((p) => p.url === u)).filter((c) => c && c.time && !isNaN(new Date(c.time)))
       .sort((a, b) => new Date(b.time) - new Date(a.time));
-    el.innerHTML = cards.length ? `<h3>Key updates</h3>${cards.map((c) => (isPost(c) && feature('postCards') ? postCardHTML(c) : itemHTML(c, false))).join('')}` : '';
+    el.innerHTML = cards.length ? `<h3>Key updates</h3>${cards.slice(0, 3).map(keyUpdateHTML).join('')}` : '';
+  }
+  // one compact row per key update: who, when and two lines of text, no embeds
+  function keyUpdateHTML(c) {
+    const who = isPost(c)
+      ? `${avatarHTML(c, 'av av-s')}<b>${esc(c.author || c.handle)}</b>`
+      : `${faviconHTML(c.source, c.favicon)}<b>${esc(src(c.source).label)}</b>`;
+    return `<a class="kup" href="${esc(safeUrl(c.url))}" target="_blank" rel="noopener noreferrer">
+      <span class="l-meta">${who} · ${timeHTML(c.time, 'ago')}</span>
+      <span class="l-title">${esc(plain(c.title || c.text))}</span>
+    </a>`;
   }
 
   // --- grouped storm events (/events.json); the post feed is the fallback and sits behind "Show all posts" ---
@@ -440,7 +488,8 @@
   };
   const EV_SEV = ['info', 'notable', 'major'];
   const EV_SRC = { x: 'X', bluesky: 'Bluesky', bbc: 'BBC', jep: 'JEP', gov: 'gov.je', facebook: 'Facebook', web: 'Web', other: 'Web' };
-  const EV_AREA = { guernsey: 'Guernsey', both: 'Jersey & Guernsey' };
+  const EV_AREA = { jersey: 'Jersey', guernsey: 'Guernsey', both: 'Jersey & Guernsey' };
+  const SEV_RANK = { major: 0, notable: 1, info: 2 };
   const EV_FILTERS = { all: 'All', major: 'Major', travel: 'Travel', power: 'Power', closures: 'Closures', weather: 'Weather' };
   // own-property lookups, so values like "constructor" in the data fall back instead of hitting Object.prototype
   const pick = (map, k) => (typeof k === 'string' && Object.hasOwn(map, k) ? map[k] : undefined);
@@ -507,27 +556,30 @@
     const social = s.type === 'x' || s.type === 'bluesky';
     return `<li><a class="evs" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer">
       <span class="evs-n">${n}</span><span class="evs-ic">${evSourceIcon(s)}</span>
-      <span class="evs-who"><b>${esc(s.publisher || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${pick(EV_SRC, s.type) || 'Web'}</span></span>
+      <span class="evs-who"><b>${esc(relayName(s.publisher) || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${pick(EV_SRC, s.type) || 'Web'}</span></span>
       ${okTime(s.time) ? `<time datetime="${esc(s.time)}">${esc(fmtTime(s.time))}</time>` : ''}
-      ${s.title ? `<span class="evs-t">${esc(s.title)}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
+      ${s.title ? `<span class="evs-t">${esc(plain(s.title))}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
     </a></li>`;
   }
 
   function eventHTML(ev, i, isNew) {
     const [catLabel, catIcon] = EV_CAT[ev.category];
     const open = openEvents.has(ev.id);
-    const sev = ev.severity === 'info' ? '<span class="sr-only">Info:</span>' : `<span class="ev-sev">${ev.severity === 'major' ? 'Major' : 'Notable'}</span>`;
-    // [n] refs become superscript links to sources[n-1]; out-of-range refs stay as text
-    const details = esc(ev.details).replace(/\[(\d+)\]/g, (m, n) => {
+    const sev = ev.severity === 'info' ? '' : `<span class="ev-sev">${ev.severity === 'major' ? 'Major' : 'Notable'}</span>`;
+    // [n] refs become small tappable links to sources[n-1]; out-of-range refs stay as text
+    const details = esc(units(ev.details)).replace(/\[(\d+)\]/g, (m, n) => {
       const s = ev.sources[n - 1];
-      return s && s.url ? `<sup><a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(s.publisher || '')}">${n}</a></sup>` : m;
+      return s && s.url ? `<a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(relayName(s.publisher))}">${n}</a>` : m;
     });
+    const ranged = fmtTime(ev.start) !== fmtTime(ev.end);
+    const when = ranged ? `<p class="ev-when">First reported ${esc(fmtTime(ev.start))} · updated ${esc(fmtTime(ev.end))}</p>` : '';
     const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
     return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}" data-k="ev:${esc(ev.id)}">
       <div class="ev-head">
-        <div class="ev-meta">${unseen(ev) ? '<span class="ev-new">New</span>' : ''}${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
-        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(ev.title)}</button></h3>
-        ${ev.summary ? `<p class="ev-sum">${esc(ev.summary)}</p>` : ''}
+        <div class="ev-meta">${unseen(ev) ? '<span class="ev-new">New</span>' : ''}${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.end)}">${esc(clock(new Date(ev.end)))}</time></div>
+        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(units(ev.title))}</button></h3>
+        ${ev.summary ? `<p class="ev-sum">${esc(units(ev.summary))}</p>` : ''}
+        ${when}
         ${ICON.chev}
       </div>
       <div class="ev-body" id="evb-${i}"><div class="ev-inner"><div class="ev-content">
@@ -575,11 +627,21 @@
     $('#ev-filters').innerHTML = Object.entries(EV_FILTERS).map(([k, label]) =>
       `<button type="button" data-evf="${k}" aria-pressed="${k === evFilter}">${label} <span class="cnt">${inArea.filter((e) => evMatches(e, k)).length}</span></button>`).join('');
 
-    const list = inArea.filter((e) => evMatches(e, evFilter));
+    // within each day (events arrive newest first by end), Major comes first, then Notable, then the rest
+    const byDay = [];
+    for (const e of inArea.filter((x) => evMatches(x, evFilter))) {
+      const k = dayKey(new Date(e.end));
+      if (!byDay.length || byDay[byDay.length - 1].k !== k) byDay.push({ k, items: [] });
+      byDay[byDay.length - 1].items.push(e);
+    }
+    const list = byDay.flatMap((g) => g.items.sort((a, b) => SEV_RANK[a.severity] - SEV_RANK[b.severity]));
     let newCount = 0;
     let html = '';
     let day = '';
-    let since = list.length && unseen(list[0]) ? 'due' : 'none'; // mark where already-seen events start, once
+    // mark where already-seen events start, but only when every new one sits above it
+    const lastNew = list.map(unseen).lastIndexOf(true);
+    const firstSeen = list.findIndex((e) => !unseen(e));
+    let since = lastNew >= 0 && firstSeen > lastNew ? 'due' : 'none';
     list.forEach((ev, i) => {
       if (since === 'due' && !unseen(ev)) {
         since = 'done';
@@ -646,24 +708,38 @@
   const byColour = (a, b) => (RANK[a.colour] ?? 3) - (RANK[b.colour] ?? 3);
   // Marine warnings (e.g. "Channel Islands Shipping Area Wind") must not read as a warning for the island itself.
   const isSea = (w) => /shipping|sea area|marine|inshore|waters|small craft/i.test(`${w.type || ''} ${w.island || ''}`);
-  function warnRowHTML(w) {
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  // "Red wind warning at sea" / "Amber wind warning"
+  const warnName = (w) => `${cap(String(w.colour || 'yellow').toLowerCase())} ${String(w.kind || 'wind').toLowerCase()} warning${isSea(w) ? ' at sea' : ''}`;
+  const warnWhere = (w) => (isSea(w) ? (/shipping area/i.test(w.type || '') ? 'Channel Islands shipping area' : 'Channel Islands waters') : w.island || 'Jersey');
+  // "From 21:00 Thu to 15:00 Fri" → "until 3:00pm Fri"
+  function warnUntil(w) {
+    const v = localTimes(w.validity || '');
+    const m = v.match(/\b(?:to|until)\s+(.+)$/i);
+    return m ? `until ${m[1]}` : v;
+  }
+  function warnRowHTML(w, lead) {
     const c = String(w.colour || 'yellow').toLowerCase();
-    const name = isSea(w) ? `${w.kind || 'Wind'} warning` : w.type || `${w.kind || ''} warning`;
-    const where = !isSea(w) && w.island && !String(name).includes(w.island) ? ` · ${w.island}` : '';
-    return `<details class="wrow ${esc(c)}" data-k="${esc(`${w.type}|${w.island}`)}">
+    const sub = [warnWhere(w), warnUntil(w)].filter(Boolean).join(' · ');
+    const issued = okTime(w.issuedAt) ? `Issued ${fmtTime(w.issuedAt)}` : localTimes(w.issued);
+    return `<details class="wrow ${esc(c)}${lead ? ' lead' : ''}" data-k="${esc(`${w.type}|${w.island}`)}">
       <summary>
         <span class="badge ${esc(c)}">${esc(c)}</span>
-        <span class="w-main"><span class="w-name">${esc(name)}${esc(where)}</span>${w.text ? `<span class="w-text">${esc(w.text)}</span>` : ''}</span>
+        <span class="w-main"><span class="w-name">${esc(warnName(w))}</span><span class="w-text">${esc(sub)}</span></span>
         ${ICON.chev}
       </summary>
       <div class="w-body">
-        ${w.validity ? `<p>${esc(w.validity)}</p>` : ''}
-        ${Array.isArray(w.impacts) && w.impacts.length ? `<ul>${w.impacts.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
-        ${w.extra ? `<p>${esc(w.extra)}</p>` : ''}
-        <p class="small muted">${w.issued ? `${esc(w.issued)} · ` : ''}<a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>
+        ${w.text ? `<p><b>${esc(units(w.text))}</b></p>` : ''}
+        ${w.validity ? `<p>${esc(cap(localTimes(w.validity)))}</p>` : ''}
+        ${Array.isArray(w.impacts) && w.impacts.length ? `<ul>${w.impacts.map((x) => `<li>${esc(units(x))}</li>`).join('')}</ul>` : ''}
+        ${w.extra ? `<p>${esc(units(w.extra))}</p>` : ''}
+        <p class="small muted">${issued ? `${esc(issued)} · ` : ''}<a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>
       </div>
     </details>`;
   }
+  // a one-line key for the jargon in Jersey Met's wording (standard Beaufort mean speeds)
+  const KEY_HTML = `<details class="key"><summary>What F9, knots and veering mean ${ICON.chev}</summary>
+    <p>Wind force uses the Beaufort scale of average speeds: F7 near gale 32–38 mph, F8 gale 39–46 mph, F9 severe gale 47–54 mph, F10 storm 55–63 mph. Gusts are stronger than the average. 1 knot is about 1.15 mph. A wind that is veering turns clockwise (south to west); backing turns anticlockwise.</p></details>`;
 
   // Highest period gust over today and tomorrow, with a plain-language "when".
   function peakGust(f) {
@@ -685,8 +761,8 @@
     const pill = summaryData && feature('statusPill') && STATUS[summaryData.status] ? `<span class="pill st-${esc(summaryData.status)}">${STATUS[summaryData.status]}</span>` : '';
 
     let line = '<div class="skel line"></div>';
+    const pk = f && Array.isArray(f.days) && f.days.length ? peakGust(f) : null;
     if (f && Array.isArray(f.days) && f.days.length) {
-      const pk = peakGust(f);
       line = pk
         ? `<p class="now-line ${sev(pk.mph)}">Gusts up to <b>${pk.mph}&nbsp;mph</b> ${esc(pk.when)}</p>`
         : `<p class="now-line">${esc(f.days[0].summary || 'No strong gusts in the forecast')}</p>`;
@@ -695,17 +771,22 @@
       line = '<p class="now-line">Forecast unavailable</p><p class="now-sub"><a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Check Jersey Met<span class="ext" aria-hidden="true"></span></a></p>';
     }
 
+    // one banner: the most serious warning leads, the rest follow, and the land/sea split is said in words
     let warn = '';
     if (wxData) {
-      const all = Array.isArray(wxData.warnings) ? wxData.warnings : [];
-      const land = all.filter((w) => !isSea(w)).sort(byColour);
-      const sea = all.filter(isSea).sort(byColour);
+      const all = (Array.isArray(wxData.warnings) ? wxData.warnings : []).slice().sort(byColour);
       const failed = wxData.sources && wxData.sources.warnings && wxData.sources.warnings.ok === false;
-      const none = failed
-        ? '<p class="w-none">Couldn\'t check warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Jersey Met<span class="ext" aria-hidden="true"></span></a></p>'
-        : '<p class="w-none">No warnings in force</p>';
-      warn = `<div class="wgroup"><h3 class="wg-h">On land</h3>${land.length ? land.map(warnRowHTML).join('') : none}</div>`;
-      if (sea.length) warn += `<div class="wgroup"><h3 class="wg-h">At sea <span>for boats and shipping</span></h3>${sea.map(warnRowHTML).join('')}</div>`;
+      if (all.length) {
+        const landless = !all.some((w) => !isSea(w));
+        const note = landless
+          ? `<p class="w-note">This warning is for the sea around the islands. There's no separate land warning${pk ? `, but gusts up to ${pk.mph}&nbsp;mph are forecast ${esc(pk.when)}` : ''}.</p>`
+          : '';
+        warn = all.map((w, i) => warnRowHTML(w, i === 0)).join('') + note + KEY_HTML;
+      } else {
+        warn = failed
+          ? '<p class="w-none">Couldn\'t check Jersey Met warnings. <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">Check gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>'
+          : '<p class="w-none">No Jersey Met warnings in force</p>';
+      }
     }
 
     const latest = feedData && feedData.items.find((i) => !i.dateOnly);
@@ -714,17 +795,19 @@
           <span class="l-meta"><b>Latest</b>${isPost(latest)
             ? `${avatarHTML(latest, 'av av-s')}${esc(latest.author || latest.handle)}`
             : `${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)}`} · ${timeHTML(latest.time, 'ago')}</span>
-          <span class="l-title">${esc(latest.title || latest.text)}</span>
+          <span class="l-title">${esc(plain(latest.title || latest.text))}</span>
         </a>`
       : '';
 
     // keep whatever the reader opened or closed across refreshes
     const prev = new Map($$('#now details[data-k]').map((d) => [d.dataset.k, d.open]));
+    const keyOpen = !!$('#now details.key[open]');
     el.innerHTML = `<div class="now-head"><h2 id="now-h">Right now</h2>${pill}</div>
-      <div class="now-main">${line}</div>
       ${warn ? `<div class="now-warn">${warn}</div>` : ''}
+      <div class="now-main">${line}</div>
       ${latestHTML}`;
     $$('#now details[data-k]').forEach((d) => { if (prev.has(d.dataset.k)) d.open = prev.get(d.dataset.k); });
+    if (keyOpen && $('#now details.key')) $('#now details.key').open = true;
   }
 
   function renderWeather(wx) {
@@ -745,7 +828,7 @@
     if (gust) { chip.innerHTML = `<span class="gc-l">Gusts </span>${gust} mph`; chip.className = `gust-chip ${sev(gust)}`; chip.hidden = false; } else chip.hidden = true;
 
     const periods = Array.isArray(today.periods) ? today.periods : [];
-    const sunBits = [today.sunrise && `Sunrise ${esc(today.sunrise)}`, today.sunset && `Sunset ${esc(today.sunset)}`, today.uv && `UV ${esc(today.uv)}`].filter(Boolean);
+    const sunBits = [today.sunrise && `Sunrise ${esc(localTimes(today.sunrise))}`, today.sunset && `Sunset ${esc(localTimes(today.sunset))}`, today.uv && `UV ${esc(today.uv)}`].filter(Boolean);
     let html = `<div class="card cond ${sev(gust || 0)}">
       <div class="cond-top"><div>
         <div class="cond-big">${gust ? `${gust}<small>mph</small>` : '—'}</div>
@@ -761,7 +844,7 @@
     if (periods.length) {
       html += `<div class="card"><h3>${esc(today.day)}</h3>
         <div class="periods">${periods.map((p) => `<div class="period">
-          <div><div class="pn">${esc(p.name)}</div><div class="pd">${esc(p.desc)}</div>${p.wind ? `<div class="pd ${p.gustMph >= 50 ? 'hi' : ''}">${esc(p.wind)}</div>` : ''}</div>
+          <div><div class="pn">${esc(p.name)}</div><div class="pd">${esc(p.desc)}</div>${p.wind ? `<div class="pd ${p.gustMph >= 50 ? 'hi' : ''}">${esc(units(p.wind))}</div>` : ''}</div>
           <div class="pw"><b>${val(p.mph, ' mph')} ${esc(p.dir || '')}</b>${p.gustMph ? `<span class="${p.gustMph >= 50 ? 'hi' : ''}">gusts ${p.gustMph}</span><br>` : ''}<span class="muted">${val(p.rain, '%')} rain</span></div>
         </div>`).join('')}</div>
         ${sunBits.length ? `<div class="sun">${sunBits.map((b) => `<span>${b}</span>`).join('')}</div>` : ''}
@@ -781,25 +864,45 @@
           </div>`;
         }).join('')}
       </div>
-      ${next && next.windDescription ? `<p class="wind-desc"><strong>${esc(next.day)}:</strong> ${esc(next.windDescription)}</p>` : ''}
+      ${next && next.windDescription ? `<p class="wind-desc"><strong>${esc(next.day)}:</strong> ${esc(units(next.windDescription))}</p>` : ''}
       </div>`;
     }
-    html += `<p class="issued">Jersey Met forecast issued ${esc(f.issued)} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
+    html += `<div class="card key-card">${KEY_HTML}</div>`;
+    html += `<p class="issued">Jersey Met forecast issued ${esc(localTimes(f.issued))} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
     $('#weather').innerHTML = html;
   }
 
   // --- status + loading ---
+  // The header says when the data last changed (not when the page fetched it). The dot is green while
+  // live, amber when the summary and timeline are over 3 hours old, and red when updates can't be reached.
   let lastOk = null;
-  function setStatus(ok, msg) {
-    $('#live-dot').className = 'dot ' + (ok ? 'ok' : 'err');
-    $('#updated').innerHTML = msg; // msg is built from our own strings and times only
+  let netOk = null; // null until the first feed load finishes
+  function renderStatus() {
+    if (netOk === null) return;
+    const dot = $('#live-dot');
+    const out = $('#updated');
+    if (!netOk) {
+      dot.className = 'dot err';
+      const why = navigator.onLine === false ? 'No signal' : "Can't reach updates";
+      out.textContent = lastOk ? `${why} · showing ${clock(lastOk)}` : why;
+      return;
+    }
+    const curated = [eventsData && eventsData.updated, summaryData && summaryData.updatedAt].filter(okTime).map((t) => +new Date(t));
+    const latest = feedData && feedData.items.find((i) => !i.dateOnly);
+    const changed = Math.max(0, ...curated, latest ? +new Date(latest.time) : 0);
+    const stale = curated.length && Date.now() - Math.max(...curated) > 3 * 3600e3;
+    dot.className = `dot ${stale ? 'stale' : 'ok'}`;
+    out.innerHTML = changed
+      ? `${stale ? '' : '<span class="gc-l">Live · </span>'}Updated ${esc(fmtTime(new Date(changed)))}${stale ? '<span class="gc-l"> · summary may be behind</span>' : ''}`
+      : 'Live';
+    out.title = `Page checked ${clock(lastOk)}`;
   }
 
   async function loadX() {
     try { xPosts = ((await getJSON('/x-posts.json')).posts || []).filter((p) => p && p.url && p.time); } catch (e) { /* keep previous */ }
   }
   async function loadSummary() {
-    try { summaryData = await getJSON('/summary.json'); renderSummary(); renderNow(); } catch (e) { /* keep previous */ }
+    try { summaryData = await getJSON('/summary.json'); renderSummary(); renderTodo(); renderNow(); renderStatus(); } catch (e) { /* keep previous */ }
   }
   async function loadFeed() {
     const xp = loadX();
@@ -808,13 +911,14 @@
       await xp;
       renderFeed();
       lastOk = new Date();
-      setStatus(true, `<span class="gc-l">Live · </span>Updated ${clock(lastOk)}`);
+      netOk = true;
     } catch (e) {
       await xp;
       if (xPosts.length) renderFeed();
       if (!feedData) $('#feed').innerHTML = '<div class="card empty err">Could not load updates. Retrying shortly…</div>';
-      setStatus(false, lastOk ? `Offline? Last update ${clock(lastOk)}` : 'Could not load updates');
+      netOk = false;
     }
+    renderStatus();
   }
   // Network and server errors keep the events we have; a missing (404/410), invalid or empty file falls back to the post feed.
   async function loadEvents() {
@@ -825,6 +929,7 @@
     try { eventsData = text ? normEvents(JSON.parse(text)) : null; } catch (e) { eventsData = null; }
     evRaw = text;
     renderEvents();
+    renderStatus();
   }
   async function loadWeather() {
     try {
@@ -852,7 +957,7 @@
     tickTimer = setTimeout(() => { refreshBtn.innerHTML = REFRESH_ICON; }, 1400);
   });
   // signal drops are normal in a storm: say so, and catch up as soon as it's back
-  window.addEventListener('offline', () => setStatus(false, lastOk ? `No signal · last update ${clock(lastOk)}` : 'No signal'));
+  window.addEventListener('offline', () => { netOk = false; renderStatus(); });
   window.addEventListener('online', refreshAll);
 
   // --- theme: auto (follows OS) / light / dark, persisted ---
@@ -869,7 +974,7 @@
       if (!m.dataset.orig) m.dataset.orig = m.content;
       m.content = t === 'auto' ? m.dataset.orig : t === 'dark' ? '#15171b' : '#f6f7f9';
     });
-    themeBtn.innerHTML = THEME_ICON[t];
+    themeBtn.innerHTML = `${THEME_ICON[t]}<span class="tt-l" aria-hidden="true">${cap(t)}</span>`;
     themeBtn.setAttribute('aria-label', `Theme: ${t}. Click to change`);
     themeBtn.title = `Theme: ${t === 'auto' ? 'auto (follows system)' : t}`;
   }
@@ -895,7 +1000,15 @@
     if (b.dataset.go === document.body.dataset.active) setView(b.dataset.go, true); // same tab: just back to the top
     else withTransition(() => setView(b.dataset.go, true));
   });
-  $('#gust-chip').addEventListener('click', () => setView('forecast', true));
+  // the gust chip opens the forecast; on desktop the forecast is already beside you, so it scrolls there and briefly lights up
+  $('#gust-chip').addEventListener('click', () => {
+    setView('forecast', true);
+    const card = $('#weather .cond');
+    if (mobile.matches || !card) return;
+    card.classList.remove('flash');
+    void card.offsetWidth; // restart the animation on repeat taps
+    card.classList.add('flash');
+  });
   if (location.hash) setView(location.hash.slice(1), mobile.matches);
 
   // --- optional extension files, then first load ---
@@ -922,7 +1035,7 @@
   });
 
   // refresh relative times every minute, and refresh on return to the tab
-  setInterval(() => { updateTimes(); renderEvents(); }, 60 * 1000);
+  setInterval(() => { updateTimes(); renderEvents(); renderStatus(); }, 60 * 1000);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') saveSeen();
     if (document.visibilityState === 'visible' && (!lastOk || Date.now() - lastOk > 60 * 1000)) refreshAll();

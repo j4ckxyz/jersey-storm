@@ -111,14 +111,18 @@ The format (keep these keys):
   {"title": "Travel & closures", "points": ["..."]},
   {"title": "Official advice", "points": ["..."]}
  ],
+ "actionsTitle": "What to do tonight",
+ "actions": ["**Stay indoors** until lunchtime Friday if you can ([gov.je](https://...)).", "..."],
  "posts": ["https://x.com/<handle>/status/<id>", "https://bsky.app/profile/<handle>/post/<rkey>"]
 }
 ```
 - `updatedAt`: the **current** time as ISO 8601 with the Jersey offset (`+01:00` until 25 Oct 2026, then `+00:00`). The page shows "Updated HH:MM, Day" and flags the summary as possibly out of date after 6 hours.
 - Text supports only `**bold**` and `[label](https://url)` links. Everything else is escaped.
 - **Every** claim ends with at least one inline source link. Cover both Jersey and Guernsey. Put the newest facts first, keep each point short, and say "as of <time/date>" for things that may have changed. Remove anything that's no longer true, such as expired warnings or reopened services.
-- The first section is always shown. The rest sit behind "Show full summary". Aim for 3 to 5 points per section.
-- `posts`: 1 to 3 key official posts to show as native cards. X URLs must exist in `x-posts.json`. Bluesky URLs only show if that post is currently in `/api/feed`.
+- The first 3 points of the first section are always shown. The rest sit behind "Show full summary". Aim for 3 to 5 points per section.
+- `actions`: 3 or 4 **short** things to do now, newest official advice first (e.g. the government's latest "remain indoors" line), each with a source link. They show in the "What to do now" box near the top of the page, beside fixed links for 999/112, power cuts and reporting fallen trees. Set `actionsTitle` to match the moment ("What to do tonight", "What to do this morning"). Once the storm has passed, switch to recovery advice or drop both fields.
+- Write wind speeds in **mph**. If a source gives knots, the page adds the mph figure itself, but mph-first copy reads better. Times can be written either way; the page shows them as `3:10pm`.
+- `posts`: 1 to 3 key official posts, shown as compact rows (the page shows at most 3). X URLs must exist in `x-posts.json`. Bluesky URLs only show if that post is currently in `/api/feed`.
 - Validate: `python3 -c "import json;json.load(open('/workspace/storm/summary.json'))"`
 
 ## Step 4: Validate

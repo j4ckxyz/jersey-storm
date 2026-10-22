@@ -31,8 +31,10 @@ This file feeds the "What's happening" box. It is rewritten by the refresh.
 |---|---|---|---|
 | `updatedAt` | string (ISO 8601) | required | When the summary was written. The UI shows "Updated HH:MM, Weekday" and adds "may be out of date" after 6 h. |
 | `headline` | string (mini-markdown) | required | Lead paragraph. If it is missing or empty, the box is hidden. |
-| `sections` | array of `{ title: string, points: string[] }` | required (may be empty) | The first section is always shown. The rest sit inside "Show full summary". Each `points` entry is mini-markdown. |
-| `posts` | string[] | optional | **URLs** of any feed item (tweets, Bluesky posts, BBC/JEP/gov.je articles, etc.) shown under "Key updates", sorted newest first regardless of type. |
+| `sections` | array of `{ title: string, points: string[] }` | required (may be empty) | The first 3 points of the first section are always shown. Everything else sits inside "Show full summary". Each `points` entry is mini-markdown. |
+| `posts` | string[] | optional | **URLs** of any feed item (tweets, Bluesky posts, BBC/JEP/gov.je articles, etc.) shown under "Key updates", sorted newest first regardless of type. The UI shows at most 3, as compact rows. |
+| `actions` | string[] (mini-markdown) | optional | 3 or 4 short, sourced things to do now, shown in the "What to do now" box near the top. Without it, the box shows the summary section whose title contains "advice" (when it has 4 points or fewer, that section then isn't repeated in the summary). |
+| `actionsTitle` | string | optional | Heading for that box, e.g. `"What to do tonight"`. Defaults to "What to do now". |
 | `note` | string | optional | A comment for editors. The UI never shows it. |
 
 **Mini-markdown (the only syntax supported, in `headline` and `points`):**
@@ -403,6 +405,7 @@ Any feed item, X post or summary post may carry an optional `display` object. Th
 - `"status"`: `"calm" | "watch" | "warning" | "severe" | "easing" | "over"`. A UI hint for a coloured status pill.
 - `"highlights"`: `[{ "label": "Max gust", "value": "75 mph", "source": "https://…" }]`. Small stat chips.
 - `"sections[].icon"`: an emoji or icon name for each section heading.
+- `"actions"` / `"actionsTitle"`: see the `summary.json` table above.
 
 ### 4. UI config: `config.json` (optional, static)
 
