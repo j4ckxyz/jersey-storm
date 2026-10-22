@@ -12,7 +12,8 @@ import base64, hashlib, json, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FILES = ['index.html', 'style.css', 'app.js', 'summary.json', 'x-posts.json',
          'api/feed.js', 'api/weather.js', 'lib/util.js', 'lib/feed.js', 'lib/weather.js',
-         'vercel.json', 'package.json']
+         'vercel.json', 'package.json',
+         'favicon.ico', 'favicon-32.png', 'apple-touch-icon.png', 'icon-512.png']
 
 def check():
     s = json.load(open(os.path.join(ROOT, 'summary.json'), encoding='utf-8'))
