@@ -1,15 +1,14 @@
-# Storm Austen tracker: refresh the summary and X posts, then redeploy
+# Storm Austen tracker: refresh the summary, X posts and events, then push
 
 This file is self-contained. A scheduled run should follow it from top to bottom with no other context.
 
-- **Live site:** https://jersey-storm-tracker.vercel.app
-- **Source on the box:** `/workspace/storm`
-- **Vercel team id:** `team_4Zwj8htiiiDOxCcGuNkAULWj`
-- **Vercel project:** `jersey-storm-tracker`, id `prj_1QryeYNBSUyMxaOjrvRoUtjDRKFd`. There is no Git repo; deploy straight from files.
+- **Live site:** https://storm.jsylabs.uk (Cloudflare Pages, free plan)
+- **Repo:** https://github.com/j4ckxyz/jersey-storm. `/workspace/storm` is a clone of it with push access to `main`.
+- **How deploys work:** Cloudflare Pages is connected to the GitHub repo. **Every push to `main` builds and deploys production** automatically, usually within 1–2 minutes. There is no deploy step to run; pushing the data commit is the deploy.
 
 ## Hard rules (never break these)
-1. **Nothing that costs money.** No paid add-ons, plan or team changes, domains, Pro features, build-machine upgrades (`buildMachine`), Observability Plus, and so on. Only `upload_file`, `create_deployment` and read-only Vercel tools are needed.
-2. **Touch only the `jersey-storm-tracker` project.** Never deploy to, edit, pause or delete any other Vercel project. Don't change project settings beyond what `create_deployment` below sends.
+1. **Nothing that costs money.** Don't change any Cloudflare, GitHub or Vercel settings or plans. A run only needs `git` and read-only web access.
+2. **Push data commits only.** A refresh commit may change only `summary.json`, `x-posts.json` and `events.json`. Never commit code, config or other files, never force-push and never rewrite history.
 3. **X and Bluesky: reads only.** Never post, reply, like, repost, follow or DM.
 4. **Facts must come from real sources, and every claim needs an inline link.** If something can't be verified, leave it out. Never invent numbers, times or closures.
 5. All times shown to people are **Europe/Jersey** time (BST, UTC+1, until 25 Oct 2026; GMT, UTC+0, afterwards).
@@ -21,20 +20,26 @@ This file is self-contained. A scheduled run should follow it from top to bottom
 | `x-posts.json` | X posts merged into the feed (the site has no X API key) | **Yes** (regenerate with the script) |
 | `events.json` | Grouped storm events shown as the timeline under "Latest updates" (format in `DATA.md`) | **Yes** (the assistant's scheduled runs rewrite it) |
 | `tools/build_x_posts.py` | Builds `x-posts.json` from saved X search results | No |
-| `tools/prepare_deploy.py` | Validates the JSON files and computes sha1 and size for upload | No |
-| `index.html`, `app.js`, `style.css` | Frontend | No |
-| `api/feed.js`, `api/weather.js`, `lib/*.js` | Serverless functions (live news, Bluesky, Jersey Met) | No |
-| `vercel.json`, `package.json` | Config | No |
+| `index.html`, `app.js`, `style.css`, `404.html` | Frontend | No |
+| `functions/api/*.js`, `lib/*.js` | Cloudflare Pages Functions (live news, Bluesky, Jersey Met) | No |
+| `build.mjs`, `_headers`, `wrangler.toml`, `package.json` | Cloudflare Pages build and config | No |
+| `api/*.js`, `vercel.json`, `tools/prepare_deploy.py` | **Legacy** Vercel deployment, kept until the switch. Don't use them. | No |
 
-The live news feed (BBC Jersey and Guernsey, gov.je, JEP, Bailiwick Express, The Quarry, Jersey Met warnings, Bluesky) and the weather update themselves. Only `summary.json`, `x-posts.json` and `events.json` need refreshing. The scheduled runs also rewrite `events.json`; the page polls it every 2 minutes and falls back to the plain post feed if it is missing or empty.
+The live news feed (BBC Jersey and Guernsey, gov.je, JEP, Bailiwick Express, The Quarry, Jersey Met warnings, Bluesky) and the weather update themselves. Only `summary.json`, `x-posts.json` and `events.json` need refreshing, and the scheduled runs rewrite all three. The page polls `events.json` every 2 minutes and falls back to the plain post feed if it is missing or empty.
 
 ---
+
+## Step 0: Sync the repo
+```bash
+cd /workspace/storm && git checkout main && git pull --rebase origin main
+```
+Do this first, so the run starts from the latest code and data.
 
 ## Step 1: Research the current situation (read only)
 Collect facts for **Jersey and Guernsey** (and Alderney or Sark where relevant): what has happened, what's expected next, closures and disruption (schools, flights, ferries, roads, power, emergency services), and official advice.
 
 Check these sources. Read the article pages, not just headlines:
-- `curl -s https://jersey-storm-tracker.vercel.app/api/feed` lists the latest items with links from every feed source, so start here.
+- `curl -s https://storm.jsylabs.uk/api/feed` lists the latest items with links from every feed source, so start here.
 - `curl -s https://prodgojweatherstorage.blob.core.windows.net/data/JerseyWarningStatusXML.json` and `.../GuernseyWarningStatusXML.json` give the official warnings (colour, issued time, text).
 - `curl -s https://prodgojweatherstorage.blob.core.windows.net/data/jerseyForecast.json` and `.../guernseyForecast.json` give the forecast text with gusts.
 - gov.je: https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx, plus the news listing at https://www.gov.je/News/Pages/default.aspx
@@ -116,66 +121,36 @@ The format (keep these keys):
 - `posts`: 1 to 3 key official posts to show as native cards. X URLs must exist in `x-posts.json`. Bluesky URLs only show if that post is currently in `/api/feed`.
 - Validate: `python3 -c "import json;json.load(open('/workspace/storm/summary.json'))"`
 
-## Step 4: Prepare the deployment files
+## Step 4: Validate
 ```bash
-cd /workspace/storm && python3 tools/prepare_deploy.py
+cd /workspace/storm && python3 -c "import json;[json.load(open(f)) for f in ('summary.json','x-posts.json','events.json')];print('ok')"
 ```
-This validates both JSON files. For each deployable file it prints `<path> <sha1> <size> <b64 path>`, then the JSON `files` array, which is also saved to `/workspace/storm/.deploy/files.json`. Fix any assertion error before continuing.
+Fix any error before continuing. Cloudflare's build (`node build.mjs`) runs the same checks plus the required keys. If `summary.json` or `x-posts.json` is broken there, the build fails and the site keeps serving the previous version, so nothing breaks, but the update won't go live either. If `node` is available, run `node build.mjs` to run exactly that check locally. It writes `dist/`, which git ignores.
 
-## Step 5: Upload with the user-Vercel MCP
-Read the schema once: `GetDynamicTools {"namespace":"user-Vercel","toolName":"upload_file"}`.
-
-Make one call for **every** line printed in Step 4. Run them in parallel. Re-uploading unchanged files is harmless.
-```json
-CallDynamicTool {
- "namespace": "user-Vercel", "toolName": "upload_file",
- "mcpDetails": {"description": "Upload <path> for the storm tracker deployment"},
- "arguments": {
-   "teamId": "team_4Zwj8htiiiDOxCcGuNkAULWj",
-   "contentLength": <size>,
-   "xVercelDigest": "<sha1>",
-   "requestBody": "$file:/workspace/storm/.deploy/<sha1>.b64"
- }
-}
-```
-(`$file:` makes the tool send the base64 file contents. A success returns `{"urls":[...]}`.)
-
-## Step 6: Create the production deployment
-```json
-CallDynamicTool {
- "namespace": "user-Vercel", "toolName": "create_deployment",
- "mcpDetails": {"description": "Create a production deployment of the storm tracker in the jersey-storm-tracker project"},
- "arguments": {
-   "teamId": "team_4Zwj8htiiiDOxCcGuNkAULWj",
-   "skipAutoDetectionConfirmation": "1",
-   "forceNew": "1",
-   "requestBody": {
-     "name": "jersey-storm-tracker",
-     "project": "prj_1QryeYNBSUyMxaOjrvRoUtjDRKFd",
-     "target": "production",
-     "projectSettings": {"framework": null, "buildCommand": null, "installCommand": null, "outputDirectory": null, "devCommand": null, "rootDirectory": null},
-     "files": <paste the JSON array from /workspace/storm/.deploy/files.json>
-   }
- }
-}
-```
-- The deployment must include **all 18 files** (everything listed in `FILES` in `tools/prepare_deploy.py`) every time, because each deployment is a full snapshot.
-- A `missing_files` error means an upload was skipped. Upload the listed sha(s) and retry.
-- Don't add `buildMachine`, `customEnvironmentSlugOrId` or anything else.
-
-## Step 7: Verify (logged out)
-Production usually updates within 10–60 seconds. Poll until the new summary shows:
+## Step 5: Commit and push (this deploys)
 ```bash
-B=https://jersey-storm-tracker.vercel.app
-for i in $(seq 1 20); do curl -s "$B/summary.json?v=$RANDOM" | grep -q '"updatedAt": "<the value you set>"' && echo LIVE && break; sleep 10; done
-for p in / /summary.json /x-posts.json /api/feed /api/weather; do curl -s -o /dev/null -w "$p %{http_code}\n" "$B$p"; done
+cd /workspace/storm
+git add summary.json x-posts.json events.json
+git commit -m "Storm update $(TZ=Europe/Jersey date +%H:%M)"
+git pull --rebase origin main && git push origin main
+```
+- Stage only those three files. If `git status` shows other changed files, leave them alone and don't commit them.
+- If the push is rejected because `main` moved, run `git pull --rebase origin main` again and push again. Never use `--force`.
+- If nothing changed, skip the commit. Each push uses one of the 500 free builds a month.
+
+## Step 6: Verify (logged out)
+Cloudflare Pages usually goes live within 1–2 minutes of the push. Poll until the new summary shows:
+```bash
+B=https://storm.jsylabs.uk
+for i in $(seq 1 30); do curl -s "$B/summary.json?v=$RANDOM" | grep -q '"updatedAt": "<the value you set>"' && echo LIVE && break; sleep 10; done
+for p in / /summary.json /x-posts.json /events.json /api/feed /api/weather; do curl -s -o /dev/null -w "$p %{http_code}\n" "$B$p"; done
 curl -s $B/api/feed | python3 -c "import json,sys;d=json.load(sys.stdin);print(len(d['items']),'items');print([(s['name'],s['ok']) for s in d['sources']])"
 curl -s $B/x-posts.json | python3 -c "import json,sys;print(len(json.load(sys.stdin)['posts']),'X posts')"
 ```
-All five paths must return 200. Optionally take a headless screenshot to check the box:
+All six paths must return 200. If the new `updatedAt` hasn't appeared after 5 minutes, the build probably failed, most likely because of invalid JSON. Fix the file, commit and push again. To undo a bad data commit, run `git revert <sha>` and push. That deploys the previous data. Never rewrite history.
+
+Optionally, take a headless screenshot to check the box:
 `google-chrome --headless=new --no-sandbox --virtual-time-budget=10000 --window-size=1280,1600 --screenshot=/tmp/live.png $B/`
 
-If production is broken, roll back by redeploying the previous good file set: run Step 6 again with the previous `files.json`, or use `create_deployment` with `deploymentId` set to the last good deployment id and `target: "production"`. Don't change any project settings.
-
 ## Report
-Report the live URL check (status codes), the summary text you published, the number of X posts and feed items, and any source that failed.
+Report the commit sha you pushed, the live URL check (status codes), the summary text you published, the number of X posts and feed items, and any source that failed.

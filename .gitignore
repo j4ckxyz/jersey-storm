@@ -1,3 +1,6 @@
 .deploy/
 node_modules/
 .vercel/
+dist/
+.wrangler/
+.dev.vars

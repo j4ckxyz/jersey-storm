@@ -1,0 +1,6 @@
+# Cloudflare Pages project config (free plan). Deploys come from the GitHub integration:
+# every push to main builds with `node build.mjs` and serves dist/ plus the Functions in functions/.
+# Local dev: `npm run dev` (builds dist/, then runs `wrangler pages dev` with the Functions).
+name = "jersey-storm"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-10-01"

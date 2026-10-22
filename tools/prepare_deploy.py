@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Prepare a Vercel deployment of /workspace/storm.
+"""LEGACY: prepare a Vercel direct-upload deployment of /workspace/storm.
+
+The site now deploys on Cloudflare Pages from GitHub (see README.md and UPDATE.md); this script is
+only kept so the old Vercel project can still be redeployed until it is retired.
 
 For every deployable file this writes /workspace/storm/.deploy/<sha1>.b64 (the base64 body
 for the user-Vercel `upload_file` tool) and prints:
@@ -11,7 +14,8 @@ import base64, hashlib, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FILES = ['index.html', 'style.css', 'app.js', 'summary.json', 'x-posts.json', 'events.json',
-         'api/feed.js', 'api/weather.js', 'api/x-avatar.js', 'lib/util.js', 'lib/feed.js', 'lib/weather.js',
+         'api/feed.js', 'api/weather.js', 'api/x-avatar.js', 'api/_send.js',
+         'lib/util.js', 'lib/feed.js', 'lib/weather.js', 'lib/x-avatar.js', 'lib/handlers.js',
          'vercel.json', 'package.json',
          'favicon.ico', 'favicon-32.png', 'apple-touch-icon.png', 'icon-512.png']
 
