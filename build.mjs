@@ -2,7 +2,11 @@
 // repo root) keeps lib/, tools/, api/, *.md and other internal files off the public site.
 // No dependencies: `node build.mjs`. It also checks the data files, so a broken summary.json or
 // x-posts.json fails the build and Pages keeps serving the previous deployment.
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+// It then content-hashes app.js, style.css and bsky.js (app.<hash>.js, ...) and points the HTML at those, so a
+// browser can never pair a fresh page with yesterday's script: the Cloudflare zone's Browser Cache TTL keeps
+// unversioned JS and CSS for up to 4 hours whatever _headers says. See "Asset caching" in README.md.
+import { createHash } from 'node:crypto';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
 const OUT = 'dist';
 const FILES = [
@@ -27,3 +31,37 @@ rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT);
 for (const f of [...FILES, ...OPTIONAL.filter((f) => existsSync(f))]) cpSync(f, `${OUT}/${f}`);
 console.log(`build: copied ${FILES.length} files to ${OUT}/`);
+
+// --- content-hashed assets ---
+const hash = (text, n = 10) => createHash('sha256').update(text).digest('hex').slice(0, n);
+const read = (f) => readFileSync(`${OUT}/${f}`, 'utf8');
+function swap(text, from, to, what) {
+  check(text.includes(from), `${what} has no ${from} to rewrite`);
+  return text.split(from).join(to);
+}
+
+// bsky.js first: app.js imports it by name, so its hashed name goes into app.js before app.js is hashed
+const bsky = read('bsky.js');
+const bskyName = `bsky.${hash(bsky)}.js`;
+const css = read('style.css');
+const cssName = `style.${hash(css)}.css`;
+let app = swap(read('app.js'), "import('/bsky.js')", `import('/${bskyName}')`, 'app.js');
+// one id for the whole set (from app.js before the id goes in, so it isn't circular); app.js compares it with the
+// page's <meta name="build-id"> and reloads once if they differ
+const buildId = hash([hash(bsky), hash(css), hash(app)].join(' '), 12);
+app = swap(app, "const BUILD_ID = '__BUILD_ID__';", `const BUILD_ID = '${buildId}';`, 'app.js');
+const appName = `app.${hash(app)}.js`;
+
+// hashed copies, plus the unhashed names with the same content, so HTML cached before this deploy still loads
+for (const [name, text] of [[bskyName, bsky], [cssName, css], [appName, app], ['app.js', app]]) writeFileSync(`${OUT}/${name}`, text);
+
+const html = (f) => {
+  let t = read(f);
+  if (t.includes('href="/style.css"')) t = swap(t, 'href="/style.css"', `href="/${cssName}"`, f);
+  if (t.includes('src="/app.js"')) t = swap(t, 'src="/app.js"', `src="/${appName}"`, f);
+  if (f === 'index.html') t = swap(t, '<meta charset="utf-8">', `<meta charset="utf-8">\n<meta name="build-id" content="${buildId}">`, f);
+  writeFileSync(`${OUT}/${f}`, t);
+};
+html('index.html');
+html('404.html');
+console.log(`build: ${appName}, ${cssName}, ${bskyName} · build ${buildId}`);

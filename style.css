@@ -325,6 +325,8 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
 .evs-t{grid-column:3/-1;font-size:.84rem;line-height:1.4;color:var(--muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .posts-toggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:44px;margin-top:4px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--muted);font-size:.88rem;font-weight:600}
 .posts-toggle[hidden]{display:none}
+/* detailed-only parts stay hidden unless app.js has switched the detailed view on, so a script failure can't expose them */
+body:not(.detailed) .posts-toggle{display:none}
 .posts-toggle:hover{color:var(--text);border-color:var(--line-2)}
 .posts-toggle .cnt{font-variant-numeric:tabular-nums}
 .posts-toggle svg{width:16px;height:16px;transition:transform .2s}
@@ -513,6 +515,9 @@ body.detailed .detail{display:grid}
 .tv-list li.cancelled .tv-what b{text-decoration:line-through;text-decoration-color:color-mix(in oklab,var(--red) 60%,transparent)}
 .board{max-height:none}
 #fl-list{max-height:420px;overflow:auto;overscroll-behavior:contain}
+/* shown in place of a stuck skeleton (app.js offerReload) */
+.broken-btn{display:block;width:100%;min-height:44px;padding:10px 14px;border:1px dashed var(--line-2);border-radius:12px;background:var(--surface);color:var(--accent);font-weight:650;font-size:.92rem}
+#obs-time .broken-btn{display:inline;width:auto;min-height:0;padding:0;border:0;background:none;font-size:inherit}
 /* "as of 9:15pm": quiet, amber once older than that source normally gets */
 .asof{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .asof.stale{color:color-mix(in oklab,var(--amber) 75%,var(--text));font-weight:600}

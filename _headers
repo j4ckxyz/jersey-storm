@@ -1,11 +1,23 @@
-# Cloudflare Pages headers for static files (mirrors vercel.json). Functions set their own headers.
+# Cloudflare Pages headers for static files. Functions set their own headers.
 /*
   X-Content-Type-Options: nosniff
 
+# Pages: always revalidated. They name the content-hashed assets below (build.mjs), so a fresh page always gets
+# matching JS and CSS, whatever the Cloudflare zone's Browser Cache TTL does to other files.
 /
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
 /index.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, must-revalidate
+/404.html
+  Cache-Control: no-cache, must-revalidate
+# Content-hashed assets never change under the same name.
+/app.*.js
+  Cache-Control: public, max-age=31536000, immutable
+/style.*.css
+  Cache-Control: public, max-age=31536000, immutable
+/bsky.*.js
+  Cache-Control: public, max-age=31536000, immutable
+# Unhashed copies, only for HTML cached before hashing started.
 /app.js
   Cache-Control: public, max-age=0, must-revalidate
 /style.css
