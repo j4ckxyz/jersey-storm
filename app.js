@@ -342,9 +342,12 @@
   function renderSummaryPosts() {
     const el = document.getElementById('sum-posts');
     if (!el || !summaryData) return;
-    const pool = [...xPosts.map((p) => ({ ...p, source: 'X', platform: 'x' })), ...((apiFeed && apiFeed.items) || []).filter(isPost)];
-    const cards = (Array.isArray(summaryData.posts) ? summaryData.posts : []).map((u) => pool.find((p) => p.url === u)).filter(Boolean);
-    el.innerHTML = cards.length ? `<h3>Key posts</h3>${cards.map((c) => postCardHTML(c)).join('')}` : '';
+    // any linked item (tweet, Bluesky post, article, gov.je notice...), newest first
+    const pool = [...xPosts.map((p) => ({ ...p, source: 'X', platform: 'x' })), ...((apiFeed && apiFeed.items) || []), ...((feedData && feedData.items) || [])];
+    const urls = [...new Set(Array.isArray(summaryData.posts) ? summaryData.posts : [])];
+    const cards = urls.map((u) => pool.find((p) => p.url === u)).filter((c) => c && c.time && !isNaN(new Date(c.time)))
+      .sort((a, b) => new Date(b.time) - new Date(a.time));
+    el.innerHTML = cards.length ? `<h3>Key updates</h3>${cards.map((c) => (isPost(c) && feature('postCards') ? postCardHTML(c) : itemHTML(c, false))).join('')}` : '';
   }
 
   // --- weather (/api/weather) ---

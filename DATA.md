@@ -31,7 +31,7 @@ This file feeds the "What's happening" box. It is rewritten by the refresh.
 | `updatedAt` | string (ISO 8601) | required | When the summary was written. The UI shows "Updated HH:MM, Weekday" and adds "may be out of date" after 6 h. |
 | `headline` | string (mini-markdown) | required | Lead paragraph. If it is missing or empty, the box is hidden. |
 | `sections` | array of `{ title: string, points: string[] }` | required (may be empty) | The first section is always shown. The rest sit inside "Show full summary". Each `points` entry is mini-markdown. |
-| `posts` | string[] | optional | Post **URLs** shown as cards under "Key posts". |
+| `posts` | string[] | optional | **URLs** of any feed item (tweets, Bluesky posts, BBC/JEP/gov.je articles, etc.) shown under "Key updates", sorted newest first regardless of type. |
 | `note` | string | optional | A comment for editors. The UI never shows it. |
 
 **Mini-markdown (the only syntax supported, in `headline` and `points`):**
@@ -39,7 +39,7 @@ This file feeds the "What's happening" box. It is rewritten by the refresh.
 - `[label](https://url)` becomes a link that opens in a new tab. Only `http(s)` URLs work, with no spaces or `)` in the URL.
 - Everything else is HTML-escaped, so raw HTML shows up as plain text. Every factual claim carries an inline link.
 
-**How `posts` are resolved:** each URL is matched *exactly* against `url` in the post pool. The pool is all of `x-posts.json` plus the Bluesky items from `/api/feed`. Unmatched URLs are skipped silently. X post URLs must therefore also appear in `x-posts.json`, in the form `https://x.com/<handle>/status/<id>`. Bluesky URLs use the form `https://bsky.app/profile/<handle>/post/<rkey>`.
+**How `posts` are resolved:** each URL is matched *exactly* against `url` in the post pool. The pool is all of `x-posts.json` plus every item from `/api/feed` (posts and articles alike). Posts render as post cards, everything else as normal feed items. Unmatched URLs are skipped silently. X post URLs must therefore also appear in `x-posts.json`, in the form `https://x.com/<handle>/status/<id>`. Bluesky URLs use the form `https://bsky.app/profile/<handle>/post/<rkey>`.
 
 ```json
 {
