@@ -93,6 +93,29 @@
     if (s < 86400) return `${Math.floor(s / 3600)} h ago`;
     return `${Math.floor(s / 86400)} d ago`;
   }
+  // events.json display format (DATA.md): "3:10pm" today, "Thu 22 Oct, 3:10pm" otherwise
+  const yearOf = (d) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, year: 'numeric' }).format(d);
+  const clock = (d) => new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit', hour12: true }) // en-US: en-GB gives "0:00pm" at noon
+    .format(d).replace(/\s/g, '').toLowerCase();
+  function dateLabel(d) {
+    const s = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, weekday: 'short', day: 'numeric', month: 'short' }).format(d).replace(',', '');
+    return yearOf(d) === yearOf(new Date()) ? s : `${s} ${yearOf(d)}`;
+  }
+  function fmtTime(iso, now = new Date()) {
+    const d = new Date(iso);
+    return dayKey(d) === dayKey(now) ? clock(d) : `${dateLabel(d)}, ${clock(d)}`;
+  }
+  // "10:19–10:32am", "11:30am–2:18pm", "Wed 21 Oct, 6:15–8:00pm", "Tue 20 Oct, 4:05pm – Wed 21 Oct, 9:37pm"
+  function fmtRange(a, b, now = new Date()) {
+    const s = new Date(a);
+    const e = new Date(b);
+    if (isNaN(e) || dayKey(s) === dayKey(e) && clock(s) === clock(e)) return fmtTime(a, now);
+    if (dayKey(s) !== dayKey(e)) return `${dateLabel(s)}, ${clock(s)} – ${dateLabel(e)}, ${clock(e)}`;
+    const cs = clock(s);
+    const ce = clock(e);
+    const r = `${cs.slice(-2) === ce.slice(-2) ? cs.slice(0, -2) : cs}–${ce}`;
+    return dayKey(s) === dayKey(now) ? r : `${dateLabel(s)}, ${r}`;
+  }
   const TIME_FMT = {
     item: (d) => `${hm(d)} · ${ago(d)}`,
     date: (d) => dayLabel(d),
@@ -113,6 +136,8 @@
   let xPosts = [];
   let summaryData = null;
   let wxData = null;
+  let eventsData = null; // normalised /events.json, or null to show the post feed instead
+  const eventsMode = () => !!(eventsData && eventsData.events.length);
   let activeSource = 'All';
   const seenUrls = new Set();
   let firstLoad = true;
@@ -264,7 +289,6 @@
     if (!feedData) return;
     renderFilters();
     const items = feedData.items.filter((i) => activeSource === 'All' || i.source === activeSource);
-    $('#feed-count').textContent = `${feedData.items.length} updates`;
     let newCount = 0;
     if (!items.length) {
       $('#feed').innerHTML = '<div class="card empty muted">No storm updates found right now. Check back soon.</div>';
@@ -286,7 +310,8 @@
     renderSources();
     renderSummaryPosts();
     renderNow();
-    if (newCount) showNewPill(newCount);
+    applyMode();
+    if (newCount && !eventsMode()) showNewPill(newCount);
   }
 
   function renderSources() {
@@ -309,17 +334,18 @@
 
   // --- "N new updates" pill when new items arrive while scrolled down ---
   const pill = $('#new-pill');
-  function showNewPill(n) {
+  const listEl = () => (eventsMode() ? $('#ev-list') : $('#feed'));
+  function showNewPill(n, noun = 'update') {
     if (mobile.matches && document.body.dataset.active !== 'updates') return;
-    if ($('#feed').getBoundingClientRect().top > 0) return; // top of feed already visible
-    pill.textContent = `↑ ${n} new update${n === 1 ? '' : 's'}`;
+    if (listEl().getBoundingClientRect().top > 0) return; // top of the list already visible
+    pill.textContent = `↑ ${n} new ${noun}${n === 1 ? '' : 's'}`;
     pill.hidden = false;
   }
   pill.addEventListener('click', () => {
     pill.hidden = true;
     $('#feed-h').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-  window.addEventListener('scroll', () => { if (!pill.hidden && $('#feed').getBoundingClientRect().top > 0) pill.hidden = true; }, { passive: true });
+  window.addEventListener('scroll', () => { if (!pill.hidden && listEl().getBoundingClientRect().top > 0) pill.hidden = true; }, { passive: true });
 
   // --- summary box (static /summary.json) ---
   function md(s) {
@@ -371,6 +397,188 @@
       .sort((a, b) => new Date(b.time) - new Date(a.time));
     el.innerHTML = cards.length ? `<h3>Key updates</h3>${cards.map((c) => (isPost(c) && feature('postCards') ? postCardHTML(c) : itemHTML(c, false))).join('')}` : '';
   }
+
+  // --- grouped storm events (/events.json); the post feed is the fallback and sits behind "Show all posts" ---
+  const svg = (paths) => `<svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg>`;
+  const EV_CAT = {
+    warning: ['Warning', svg('<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>')],
+    weather: ['Weather', svg('<path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/>')],
+    travel: ['Travel', svg('<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>')],
+    power: ['Power', svg('<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>')],
+    closures: ['Closures', svg('<path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20M14 12v.01"/>')],
+    damage: ['Damage', svg('<path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/>')],
+    emergency: ['Emergency', svg('<path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21h14v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2zM12 2v1M21 12h1M2 12h1M4.9 4.9l.7.7M19.1 4.9l-.7.7"/>')],
+    advice: ['Advice', svg('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>')],
+    other: ['Update', svg('<circle cx="12" cy="12" r="3"/>')],
+  };
+  const EV_SEV = ['info', 'notable', 'major'];
+  const EV_SRC = { x: 'X', bluesky: 'Bluesky', bbc: 'BBC', jep: 'JEP', gov: 'gov.je', facebook: 'Facebook', web: 'Web', other: 'Web' };
+  const EV_AREA = { guernsey: 'Guernsey', both: 'Jersey & Guernsey' };
+  const EV_FILTERS = { all: 'All', major: 'Major', travel: 'Travel', power: 'Power', closures: 'Closures', weather: 'Weather' };
+  const evMatches = (ev, f) => f === 'all' || (f === 'major' ? ev.severity === 'major' : f === 'weather' ? ev.category === 'weather' || ev.category === 'warning' : ev.category === f);
+  const okTime = (t) => typeof t === 'string' && !isNaN(new Date(t));
+
+  let evRaw = '';
+  let evKey = '';
+  let evFilter = 'all';
+  let evGuernsey = (() => { try { return localStorage.getItem('events-guernsey') !== '0'; } catch (e) { return true; } })();
+  const openEvents = new Set((() => { try { return JSON.parse(sessionStorage.getItem('open-events')) || []; } catch (e) { return []; } })());
+  const seenEvents = new Set();
+  let evFirstLoad = true;
+  let postsOpen = false;
+
+  function normEvents(d) {
+    if (!d || !Array.isArray(d.events)) return null;
+    const events = d.events
+      .filter((e) => e && typeof e.id === 'string' && e.id && e.title && okTime(e.start))
+      .map((e) => ({
+        ...e,
+        end: okTime(e.end) ? e.end : e.start,
+        category: EV_CAT[e.category] ? e.category : 'other',
+        severity: EV_SEV.includes(e.severity) ? e.severity : 'info',
+        sources: (Array.isArray(e.sources) ? e.sources : []).filter((s) => s && typeof s === 'object'),
+      }));
+    return { updated: d.updated, events };
+  }
+
+  // X/Bluesky: the author's avatar (from the post pool when we have it); articles: the site's favicon
+  function evSourceIcon(s) {
+    if (s.type === 'x' || s.type === 'bluesky') {
+      const x = s.type === 'x';
+      const p = (x ? xPosts : (apiFeed && apiFeed.items) || []).find((i) => i.url === s.url) || {};
+      return avatarHTML({ platform: x ? 'x' : 'bsky', source: x ? 'X' : 'Bluesky', url: s.url, id: p.id, avatar: p.avatar, author: s.publisher, handle: s.author }, 'av av-xs');
+    }
+    const known = { bbc: 'BBC Jersey', jep: 'Jersey Evening Post', gov: 'gov.je' }[s.type];
+    if (known) return faviconHTML(known);
+    let host = '';
+    try { host = new URL(s.url).hostname.replace(/^www\./, ''); } catch (e) { /* no icon */ }
+    const ff = letterHTML({ label: s.publisher || host, color: '' });
+    if (!host || !feature('favicons')) return ff;
+    return `<img class="fav" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64" data-ff="${esc(ff)}" width="16" height="16" alt="" loading="lazy" referrerpolicy="no-referrer">`;
+  }
+
+  function evSourceHTML(s, n) {
+    const social = s.type === 'x' || s.type === 'bluesky';
+    return `<li><a class="evs" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer">
+      <span class="evs-n">${n}</span><span class="evs-ic">${evSourceIcon(s)}</span>
+      <span class="evs-who"><b>${esc(s.publisher || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${EV_SRC[s.type] || 'Web'}</span></span>
+      ${okTime(s.time) ? `<time datetime="${esc(s.time)}">${esc(fmtTime(s.time))}</time>` : ''}
+      ${s.title ? `<span class="evs-t">${esc(s.title)}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
+    </a></li>`;
+  }
+
+  function eventHTML(ev, i, isNew) {
+    const [catLabel, catIcon] = EV_CAT[ev.category];
+    const open = openEvents.has(ev.id);
+    const sev = ev.severity === 'info' ? '<span class="sr-only">Info:</span>' : `<span class="ev-sev">${ev.severity === 'major' ? 'Major' : 'Notable'}</span>`;
+    // [n] refs become superscript links to sources[n-1]; out-of-range refs stay as text
+    const details = esc(ev.details).replace(/\[(\d+)\]/g, (m, n) => {
+      const s = ev.sources[n - 1];
+      return s && s.url ? `<sup><a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(s.publisher || '')}">${n}</a></sup>` : m;
+    });
+    const srcs = ev.sources.map((s, j) => evSourceHTML(s, j + 1)).join('');
+    return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}">
+      <div class="ev-head">
+        <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${EV_AREA[ev.area] ? `<span class="ev-area">${EV_AREA[ev.area]}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
+        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(ev.title)}</button></h3>
+        ${ev.summary ? `<p class="ev-sum">${esc(ev.summary)}</p>` : ''}
+        ${ICON.chev}
+      </div>
+      <div class="ev-body" id="evb-${i}"><div class="ev-inner"><div class="ev-content">
+        ${ev.details ? `<p class="ev-details">${details}</p>` : ''}
+        ${srcs ? `<h4 class="evs-h">Sources</h4><ol class="evs-list">${srcs}</ol>` : ''}
+      </div></div></div>
+    </article>`;
+  }
+
+  // Which mode the updates column is in: events timeline (posts collapsed) or the post feed as before.
+  function applyMode() {
+    const on = eventsMode();
+    $('#events').hidden = !on;
+    $('#all-posts').hidden = on && !postsOpen;
+    const n = feedData ? feedData.items.length : 0;
+    const t = $('#posts-toggle');
+    t.setAttribute('aria-expanded', String(postsOpen));
+    t.innerHTML = `${postsOpen ? 'Hide all posts' : `Show all posts${n ? ` <span class="cnt">${n}</span>` : ''}`} ${ICON.chev}`;
+    if (!on && feedData) {
+      $('#feed-count').textContent = `${feedData.items.length} updates`;
+      $('#feed-count').className = 'muted small';
+    }
+  }
+
+  function renderEvents() {
+    if (!eventsMode()) { evKey = ''; applyMode(); return; }
+    const now = new Date();
+    const upd = okTime(eventsData.updated) ? new Date(eventsData.updated) : null;
+    const stale = !!upd && now - upd > 6 * 3600e3;
+    // skip identical re-renders so polling doesn't reset focus or images; the day is in the key for "Today" labels
+    const key = [evRaw, evFilter, evGuernsey, stale, dayKey(now)].join('|');
+    if (key === evKey) return;
+    evKey = key;
+
+    const cnt = $('#feed-count');
+    cnt.textContent = upd ? `Updated ${fmtTime(eventsData.updated, now)}${stale ? ' · may be out of date' : ''}` : '';
+    cnt.className = `small ${stale ? 'err' : 'muted'}`;
+
+    // keep keyboard focus on the same control across a re-render
+    const a = document.activeElement;
+    const focusSel = a && a.closest && (a.dataset.evf ? `[data-evf="${a.dataset.evf}"]` : a.classList.contains('ev-btn') ? a.closest('.ev').dataset.id : null);
+
+    const inArea = eventsData.events.filter((e) => evGuernsey || e.area !== 'guernsey');
+    $('#ev-filters').innerHTML = Object.entries(EV_FILTERS).map(([k, label]) =>
+      `<button type="button" data-evf="${k}" aria-pressed="${k === evFilter}">${label} <span class="cnt">${inArea.filter((e) => evMatches(e, k)).length}</span></button>`).join('');
+
+    const list = inArea.filter((e) => evMatches(e, evFilter));
+    let newCount = 0;
+    let html = '';
+    let day = '';
+    list.forEach((ev, i) => {
+      const d = dayLabel(new Date(ev.end)); // events arrive newest first by end, so group by end day
+      if (d !== day) { day = d; html += `<div class="hour"><b>${esc(d)}</b></div>`; }
+      const isNew = !evFirstLoad && !seenEvents.has(ev.id);
+      if (isNew) newCount++;
+      html += eventHTML(ev, i, isNew);
+    });
+    $('#ev-list').innerHTML = html || '<div class="card empty muted">No events match this filter.</div>';
+    for (const e of eventsData.events) seenEvents.add(e.id);
+    evFirstLoad = false;
+
+    if (focusSel) {
+      const el = focusSel.startsWith('[') ? $(focusSel) : $$('#ev-list .ev').find((c) => c.dataset.id === focusSel)?.querySelector('.ev-btn');
+      if (el) el.focus({ preventScroll: true });
+    }
+    applyMode();
+    if (newCount) showNewPill(newCount, 'event');
+  }
+
+  $('#ev-list').addEventListener('click', (e) => {
+    const b = e.target.closest('.ev-btn');
+    if (!b) return;
+    const card = b.closest('.ev');
+    const open = !card.classList.contains('open');
+    card.classList.toggle('open', open);
+    card.classList.remove('new');
+    b.setAttribute('aria-expanded', String(open));
+    if (open) openEvents.add(card.dataset.id); else openEvents.delete(card.dataset.id);
+    try { sessionStorage.setItem('open-events', JSON.stringify([...openEvents])); } catch (err) { /* private mode */ }
+  });
+  $('#ev-filters').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-evf]');
+    if (!b) return;
+    evFilter = b.dataset.evf;
+    renderEvents();
+  });
+  const gsy = $('#ev-gsy');
+  gsy.checked = evGuernsey;
+  gsy.addEventListener('change', () => {
+    evGuernsey = gsy.checked;
+    try { localStorage.setItem('events-guernsey', evGuernsey ? '1' : '0'); } catch (e) { /* private mode */ }
+    renderEvents();
+  });
+  $('#posts-toggle').addEventListener('click', () => {
+    postsOpen = !postsOpen;
+    applyMode();
+  });
 
   // --- weather (/api/weather) ---
   const sev = (mph) => (mph >= 70 ? 'sev-red' : mph >= 50 ? 'sev-amber' : mph >= 40 ? 'sev-yellow' : '');
@@ -550,6 +758,15 @@
       setStatus(false, lastOk ? `Offline? Last update ${hm(lastOk)}` : 'Could not load updates');
     }
   }
+  // Network errors keep the events we have; a missing, invalid or empty file falls back to the post feed.
+  async function loadEvents() {
+    let r;
+    try { r = await fetch('/events.json', { cache: 'no-cache' }); } catch (e) { if (!eventsData) applyMode(); return; }
+    const text = r.ok ? await r.text().catch(() => '') : '';
+    try { eventsData = text ? normEvents(JSON.parse(text)) : null; } catch (e) { eventsData = null; }
+    evRaw = text;
+    renderEvents();
+  }
   async function loadWeather() {
     try {
       renderWeather(await getJSON('/api/weather'));
@@ -561,7 +778,7 @@
   const refreshBtn = $('#refresh');
   async function refreshAll() {
     refreshBtn.classList.add('spinning');
-    await Promise.allSettled([loadSummary(), loadFeed(), loadWeather()]);
+    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather()]);
     refreshBtn.classList.remove('spinning');
   }
   refreshBtn.addEventListener('click', refreshAll);
@@ -621,14 +838,16 @@
     const secs = (v, d) => (typeof v === 'number' && v >= 30 ? v : d) * 1000;
     const feedEvery = secs(config.refresh.feedSeconds, 180);
     const wxEvery = secs(config.refresh.weatherSeconds, 300);
+    const eventsEvery = secs(config.refresh.eventsSeconds, 120);
     refreshAll();
+    setInterval(loadEvents, eventsEvery);
     setInterval(loadFeed, feedEvery);
     setInterval(loadWeather, wxEvery);
     setInterval(loadSummary, wxEvery);
   });
 
   // refresh relative times every minute, and refresh on return to the tab
-  setInterval(updateTimes, 60 * 1000);
+  setInterval(() => { updateTimes(); renderEvents(); }, 60 * 1000);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && (!lastOk || Date.now() - lastOk > 60 * 1000)) refreshAll();
   });
