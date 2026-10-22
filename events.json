@@ -1,8 +1,143 @@
 {
  "version": 1,
- "updated": "2026-10-22T19:21:00+01:00",
+ "updated": "2026-10-22T23:15:00+01:00",
  "timezone": "Europe/Jersey",
  "events": [
+  {
+   "id": "2026-10-22-thunderstorm-warning",
+   "start": "2026-10-22T21:06:00+01:00",
+   "end": "2026-10-22T22:25:00+01:00",
+   "title": "Yellow thunderstorm warning for Jersey, Guernsey and Alderney",
+   "summary": "Jersey Met has issued a yellow thunderstorm warning for the islands, re-issued at 10:22pm and valid for 15 hours.",
+   "details": "Jersey Met first announced a thunderstorm warning for Jersey, Guernsey and Alderney at about 9:05pm [1][2]. It was re-issued at 10:22pm, valid from 10:25pm for 15 hours: isolated thunderstorms are likely very near or over the islands at times [3][4]. Possible impacts include localised flooding of roads or property, standing water on low-lying land and roads, damage to infrastructure from lightning, and localised damage from hail [3].",
+   "category": "warning",
+   "severity": "notable",
+   "area": "both",
+   "sources": [
+    {
+     "type": "x",
+     "publisher": "Jersey Met",
+     "author": "Jersey_Met",
+     "title": "A Thunderstorm Warning has been issued for Jersey.",
+     "url": "https://x.com/Jersey_Met/status/2113361431194227180",
+     "time": "2026-10-22T21:06:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Jersey Met (CI Weather Warnings)",
+     "author": "Jersey_MetCI",
+     "title": "A Thunderstorm Warning has been issued for Jersey. A Thunderstorm Warning has been issued for Guernsey.",
+     "url": "https://x.com/Jersey_MetCI/status/2113361067862855957",
+     "time": "2026-10-22T21:05:00+01:00"
+    },
+    {
+     "type": "gov",
+     "publisher": "Jersey Met",
+     "author": "",
+     "title": "YELLOW Thunderstorm warning – Jersey: isolated thunderstorms likely during the next 15 hours",
+     "url": "https://www.gov.je/weather/#jersey-thunderstorm",
+     "time": "2026-10-22T22:22:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Jersey Met (CI Weather Warnings)",
+     "author": "Jersey_MetCI",
+     "title": "A Thunderstorm Warning has been issued for Jersey.",
+     "url": "https://x.com/Jersey_MetCI/status/2113381342972960861",
+     "time": "2026-10-22T22:25:00+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-red-warning-reissued-evening",
+   "start": "2026-10-22T21:35:00+01:00",
+   "end": "2026-10-22T21:37:56+01:00",
+   "title": "Red warning re-issued at 9:35pm: severe gale F9 imminent, storm F10 soon",
+   "summary": "Jersey Met re-issued the red Channel Islands wind warning at 9:35pm. Severe gale F9 with gusts to 60 knots is imminent, with storm F10 and gusts to 70 knots expected within 6 to 12 hours.",
+   "details": "The 9:35pm red warning for the Channel Islands Shipping Area says south severe gale F9 with gusts to 60 knots is imminent (0 to 6 hours), veering west to north-west storm F10 with gusts to 70 knots soon (6 to 12 hours) [1][2]. Disruption is expected and people should avoid outside activity. Damage to moored boats is likely in exposed locations, and damage to infrastructure is possible [1].",
+   "category": "warning",
+   "severity": "major",
+   "area": "both",
+   "sources": [
+    {
+     "type": "gov",
+     "publisher": "Jersey Met",
+     "author": "",
+     "title": "RED Channel Islands Shipping Area Wind warning: S severe gale F9 with gusts to 60kt imminent veering W to NW storm F10 with gusts to 70kt soon.",
+     "url": "https://www.gov.je/weather/#channel%20islands-wind",
+     "time": "2026-10-22T21:35:00+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Guernsey Met",
+     "author": "GuernseyMet",
+     "title": "A wind warning was issued at 20:35 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.",
+     "url": "https://x.com/GuernseyMet/status/2113369285783388415",
+     "time": "2026-10-22T21:37:56+01:00"
+    }
+   ]
+  },
+  {
+   "id": "2026-10-22-friday-public-closures",
+   "start": "2026-10-22T10:46:00+01:00",
+   "end": "2026-10-22T20:57:04+01:00",
+   "title": "Colleges, parks, sports centres, recycling and the Customer Hub shut on Friday",
+   "summary": "The government's 11am update lists the public services closing on Friday, including all schools and colleges, three parks, La Collette and the sports centres. The Union Street Customer Hub, first due to stay open, will now close on Friday morning and reopen at 1pm.",
+   "details": "On Friday, La Collette recycling centre and green waste site will be closed, along with Howard Davis, Coronation (Millbrook) and Sir Winston Churchill parks. Sports centres will stay shut until at least 3pm, and the Jersey and Western libraries will close in the morning [1][2]. All youth clubs are closed on Thursday night, and CAMHS at Bermuda House will be closed on Friday [1]. Highlands College and University College Jersey are also closed on Friday [3]. St Helier's Friday refuse collections move to Saturday 24 October [4]. At 8:57pm the government said the Union Street Customer Hub will now be closed on Friday morning and expects to reopen at 1pm unless otherwise advised [5][6].",
+   "category": "closures",
+   "severity": "major",
+   "area": "jersey",
+   "sources": [
+    {
+     "type": "gov",
+     "publisher": "Government of Jersey",
+     "author": "",
+     "title": "Storm Austen: Updates and advice (Update: 11am Thursday 22 October)",
+     "url": "https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx",
+     "time": "2026-10-22T11:00:00+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Channel 103",
+     "author": "",
+     "title": "Live updates, 10:46am: all Active facilities will remain closed on Friday until 3:00pm",
+     "url": "https://www.channel103.com/local/stormausten/",
+     "time": "2026-10-22T10:46:00+01:00"
+    },
+    {
+     "type": "web",
+     "publisher": "Highlands College",
+     "author": "",
+     "title": "Storm Austen: Highlands College Closure",
+     "url": "https://www.highlands.ac.uk/news/storm-austen-highlands-college-closure",
+     "time": "2026-10-22T11:53:16+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "today.je (relaying Parish of St Helier)",
+     "author": "today.je",
+     "title": "[St Helier Parish] Storm Austen: Refuse collections rescheduled",
+     "url": "https://bsky.app/profile/today.je/post/3myhs4pmi252c",
+     "time": "2026-10-22T14:41:29+01:00"
+    },
+    {
+     "type": "x",
+     "publisher": "Government of Jersey",
+     "author": "GovJersey",
+     "title": "The Government's Union Street Customer Hub will now be closed on Friday morning. We expect to reopen at 1pm, unless otherwise advised.",
+     "url": "https://x.com/GovJersey/status/2113359001207316556",
+     "time": "2026-10-22T20:57:00+01:00"
+    },
+    {
+     "type": "bluesky",
+     "publisher": "Government of Jersey",
+     "author": "gov.je",
+     "title": "The Government's Union Street Customer Hub will now be closed on Friday morning.",
+     "url": "https://bsky.app/profile/gov.je/post/3myih4cnjz72w",
+     "time": "2026-10-22T20:57:04+01:00"
+    }
+   ]
+  },
   {
    "id": "2026-10-22-forecast-525pm",
    "start": "2026-10-22T17:25:00+01:00",
@@ -407,51 +542,6 @@
      "title": "We regret flights are disrupted this evening and tomorrow… We expect to open noon Friday with flights resuming around 2pm.",
      "url": "https://x.com/GuernseyAirport/status/2113265277316325838",
      "time": "2026-10-22T14:44:39+01:00"
-    }
-   ]
-  },
-  {
-   "id": "2026-10-22-friday-public-closures",
-   "start": "2026-10-22T10:46:00+01:00",
-   "end": "2026-10-22T14:41:29+01:00",
-   "title": "Colleges, parks, sports centres and recycling sites shut on Friday",
-   "summary": "The government's 11am update lists the public services closing on Friday, including all schools and colleges, three parks, La Collette and the sports centres.",
-   "details": "On Friday, La Collette recycling centre and green waste site will be closed, along with Howard Davis, Coronation (Millbrook) and Sir Winston Churchill parks. Sports centres will stay shut until at least 3pm, and the Jersey and Western libraries will close in the morning [1][2]. All youth clubs are closed on Thursday night, and CAMHS at Bermuda House will be closed on Friday [1]. Highlands College and University College Jersey are also closed on Friday [3]. St Helier's Friday refuse collections move to Saturday 24 October [4].",
-   "category": "closures",
-   "severity": "major",
-   "area": "jersey",
-   "sources": [
-    {
-     "type": "gov",
-     "publisher": "Government of Jersey",
-     "author": "",
-     "title": "Storm Austen: Updates and advice (Update: 11am Thursday 22 October)",
-     "url": "https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx",
-     "time": "2026-10-22T11:00:00+01:00"
-    },
-    {
-     "type": "web",
-     "publisher": "Channel 103",
-     "author": "",
-     "title": "Live updates, 10:46am: all Active facilities will remain closed on Friday until 3:00pm",
-     "url": "https://www.channel103.com/local/stormausten/",
-     "time": "2026-10-22T10:46:00+01:00"
-    },
-    {
-     "type": "web",
-     "publisher": "Highlands College",
-     "author": "",
-     "title": "Storm Austen: Highlands College Closure",
-     "url": "https://www.highlands.ac.uk/news/storm-austen-highlands-college-closure",
-     "time": "2026-10-22T11:53:16+01:00"
-    },
-    {
-     "type": "bluesky",
-     "publisher": "today.je (relaying Parish of St Helier)",
-     "author": "today.je",
-     "title": "[St Helier Parish] Storm Austen: Refuse collections rescheduled",
-     "url": "https://bsky.app/profile/today.je/post/3myhs4pmi252c",
-     "time": "2026-10-22T14:41:29+01:00"
     }
    ]
   },

@@ -1,6 +1,142 @@
 {
- "generatedAt": "2026-10-22T18:19:45Z",
+ "generatedAt": "2026-10-22T22:10:50Z",
  "posts": [
+  {
+   "id": "2113381403073057255",
+   "source": "X",
+   "platform": "x",
+   "author": "CI Weather Warnings",
+   "handle": "Jersey_MetCI",
+   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
+   "media": [],
+   "time": "2026-10-22T21:26:05.000Z",
+   "url": "https://x.com/Jersey_MetCI/status/2113381403073057255"
+  },
+  {
+   "id": "2113381375558701355",
+   "source": "X",
+   "platform": "x",
+   "author": "CI Weather Warnings",
+   "handle": "Jersey_MetCI",
+   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.",
+   "media": [],
+   "time": "2026-10-22T21:25:59.000Z",
+   "url": "https://x.com/Jersey_MetCI/status/2113381375558701355"
+  },
+  {
+   "id": "2113381342972960861",
+   "source": "X",
+   "platform": "x",
+   "author": "CI Weather Warnings",
+   "handle": "Jersey_MetCI",
+   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
+   "media": [],
+   "time": "2026-10-22T21:25:51.000Z",
+   "url": "https://x.com/Jersey_MetCI/status/2113381342972960861"
+  },
+  {
+   "id": "2113369285783388415",
+   "source": "X",
+   "platform": "x",
+   "author": "Guernsey Met",
+   "handle": "GuernseyMet",
+   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+   "text": "A wind warning was issued at 20:35 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+   "media": [],
+   "time": "2026-10-22T20:37:56.000Z",
+   "url": "https://x.com/GuernseyMet/status/2113369285783388415"
+  },
+  {
+   "id": "2113361488517763108",
+   "source": "X",
+   "platform": "x",
+   "author": "Guernsey Met",
+   "handle": "GuernseyMet",
+   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.\n\nA Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
+   "media": [],
+   "time": "2026-10-22T20:06:57.000Z",
+   "url": "https://x.com/GuernseyMet/status/2113361488517763108"
+  },
+  {
+   "id": "2113361431194227180",
+   "source": "X",
+   "platform": "x",
+   "author": "Jersey Met",
+   "handle": "Jersey_Met",
+   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
+   "media": [],
+   "time": "2026-10-22T20:06:44.000Z",
+   "url": "https://x.com/Jersey_Met/status/2113361431194227180"
+  },
+  {
+   "id": "2113361104575570222",
+   "source": "X",
+   "platform": "x",
+   "author": "CI Weather Warnings",
+   "handle": "Jersey_MetCI",
+   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
+   "media": [],
+   "time": "2026-10-22T20:05:26.000Z",
+   "url": "https://x.com/Jersey_MetCI/status/2113361104575570222"
+  },
+  {
+   "id": "2113361067862855957",
+   "source": "X",
+   "platform": "x",
+   "author": "CI Weather Warnings",
+   "handle": "Jersey_MetCI",
+   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.\n\nA Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.",
+   "media": [],
+   "time": "2026-10-22T20:05:17.000Z",
+   "url": "https://x.com/Jersey_MetCI/status/2113361067862855957"
+  },
+  {
+   "id": "2113359001207316556",
+   "source": "X",
+   "platform": "x",
+   "author": "Government of Jersey",
+   "handle": "GovJersey",
+   "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
+   "text": "To help keep customers and colleagues safe during the expected severe weather, the Government’s Union Street Customer Hub will now be closed on Friday morning.\n\nWe expect to reopen at 1pm, unless otherwise advised.\n\nFor the latest updates: https://bit.ly/3UBHNOC",
+   "media": [
+    {
+     "type": "photo",
+     "url": "https://pbs.twimg.com/media/HVQoz8fXQAAJ91W.jpg",
+     "thumb": "https://pbs.twimg.com/media/HVQoz8fXQAAJ91W.jpg",
+     "alt": ""
+    }
+   ],
+   "time": "2026-10-22T19:57:04.000Z",
+   "url": "https://x.com/GovJersey/status/2113359001207316556"
+  },
+  {
+   "id": "2113357969265946763",
+   "source": "X",
+   "platform": "x",
+   "author": "ITV Channel News",
+   "handle": "ITVChannelTV",
+   "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
+   "text": "Channel Islands brace for Storm Austen. Catch up on how to prepare and the advice in tonight's programme: https://www.itv.com/watch/news/catch-up-on-itv-news-channels-main-programme-from-thursday-22nd-october/4b1d46n",
+   "media": [
+    {
+     "type": "link",
+     "url": "https://pbs.twimg.com/news_img/2113357972164280320/vlP2XadW?format=jpg&name=orig",
+     "thumb": "https://pbs.twimg.com/news_img/2113357972164280320/vlP2XadW?format=jpg&name=orig",
+     "alt": "Catch up on ITV News Channel's main programme from Thursday 22nd October - Latest From ITV News",
+     "link": "https://www.itv.com/watch/news/catch-up-on-itv-news-channels-main-programme-from-thursday-22nd-october/4b1d46n",
+     "title": "Catch up on ITV News Channel's main programme from Thursday 22nd October - Latest From ITV News"
+    }
+   ],
+   "time": "2026-10-22T19:52:58.000Z",
+   "url": "https://x.com/ITVChannelTV/status/2113357969265946763"
+  },
   {
    "id": "2113324098835419618",
    "source": "X",
@@ -308,6 +444,18 @@
    "media": [],
    "time": "2026-10-22T09:03:00.000Z",
    "url": "https://x.com/Jersey_MetCI/status/2113194399966674952"
+  },
+  {
+   "id": "2113193408982286632",
+   "source": "X",
+   "platform": "x",
+   "author": "Cheesy Left",
+   "handle": "CheesyLeft",
+   "avatar": "https://pbs.twimg.com/profile_images/2094419859186552832/svW3Ppug_bigger.jpg",
+   "text": "So apparently #Guernsey 🇬🇬 is going to be getting the worst of #StormAusten as we have been given a RED warning.",
+   "media": [],
+   "time": "2026-10-22T08:59:04.000Z",
+   "url": "https://x.com/CheesyLeft/status/2113193408982286632"
   },
   {
    "id": "2113189284459004089",
