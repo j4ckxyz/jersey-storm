@@ -287,6 +287,7 @@ Feeds the warning banner at the top of the page. It reads Jersey Met's `JerseyWa
 {
   warnings: [{ colour: "red"|"amber"|"yellow", title: "Red wind warning · Channel Islands Shipping Area",
                issuedAt: string|null (ISO 8601), summary: string, sea: boolean }],  // most serious first; [] if none
+  // issuedAt: when the issued text has a time but no date, the date of the file's lastChecked is used; with neither, null
   checkedAt: string | null,   // Jersey Met's "lastChecked"
   source: "https://www.gov.je/weather/jerseywarnings/",
   generatedAt: string
@@ -295,21 +296,39 @@ Feeds the warning banner at the top of the page. It reads Jersey Met's `JerseyWa
 
 If Jersey Met can't be reached, the function returns HTTP 502 with `no-store`. The page keeps the last warning for up to 30 minutes and then hides the banner.
 
+## `GET /api/obs` (Pages Function, `lib/obs.js`)
+
+Feeds the "Right now" tiles and the detailed view. Each part can fail on its own (it's then `null`, and the page hides that tile or card). The response is cached for 5 minutes per data centre, or 1 minute when a part failed. The tide table is cached for an hour.
+
+```
+{
+  metar: {                       // latest Jersey Airport (EGJJ) METAR from aviationweather.gov
+    time, windDir (° true, null if variable), windKt, gustKt, visibilityM (9999 = 10 km or more),
+    tempC, dewC, pressureHpa, pressureChange: { hpa, hours } | null,   // vs the report about 3 hours earlier
+    weather ("-RA"), clouds: [{ cover: "BKN", baseFt }], raw
+  } | null,
+  tides: [{ at (ISO), high: boolean, heightM }] | null,   // St Helier, from the gov.je tide table, from early today
+  images: { radar|satellite|waves: { url, updatedAt (the file's Last-Modified) } } | null,
+  sources: { metar, tides, images: {ok, error?} },
+  generatedAt
+}
+```
+
+The tide numbers come from the function behind https://www.gov.je/weather/tidetimes/. The access code in `lib/obs.js` is the public one in that page's own script. If gov.je changes it, the tide tile hides until the code is updated.
+
 ## `GET /api/weather` (Pages Function, `lib/weather.js`)
 
-It always returns HTTP 200 JSON, with the same caching as `/api/feed`. The data comes from Jersey Met.
+It always returns HTTP 200 JSON, with the same caching as `/api/feed`. The data comes from Jersey Met. Warnings come from `/api/warnings`, not from here.
 
 ```
 {
   forecast: Forecast | null,          // null if the forecast couldn't be fetched or parsed
-  warnings: Warning[],                // Jersey warnings only; [] if none or on error
-  warningsChecked: string | null,     // Jersey Met's own "lastChecked" value, passed through unchanged
-  sources: { forecast: {ok, error?}, warnings: {ok, error?} },
+  sources: { forecast: {ok, error?} },
   generatedAt: string (ISO 8601)
 }
 ```
 
-If the whole function fails: `{ forecast: null, warnings: [], sources: { error: "..." }, generatedAt }`.
+If the whole function fails: `{ forecast: null, sources: { error: "..." }, generatedAt }`.
 
 **Forecast:** `{ currentTemp: number|null (°C), issued: string (free text such as "06:00 22 October 2026"), days: Day[] }`. Day 0 is today.
 
@@ -329,18 +348,13 @@ If the whole function fails: `{ forecast: null, warnings: [], sources: { error: 
 
 **Period:** `{ name: "Morning"|"Afternoon"|"Night", desc: string, wind: string, dir: string, force: string, mph: number|null, rain: number|null (%), gustMph: number|null }`.
 
-**Warning:** `{ type: string, island: string, kind: "Wind"|"Thunderstorm"|"Tide"|"Snow"|"Ice", colour: "yellow"|"amber"|"red" (lowercase), issued: string (free text), issuedAt: string (ISO 8601)|null, validity: string, text: string, impacts: string[], extra: string }`.
-
 ```json
 { "forecast": { "currentTemp": 14, "issued": "06:00 22 October 2026",
     "days": [{ "day": "Thursday", "summary": "Showers, gales later", "icon": "Showers", "max": 16, "min": 12,
       "windDescription": "…gusts to 75 mph", "windDir": "S", "windForce": "6-8", "windMph": 35, "maxGustMph": 75, "maxRain": 80,
       "sunrise": "07:58", "sunset": "18:22", "uv": "1",
       "periods": [{ "name": "Morning", "desc": "Sunny spells", "wind": "W F6", "dir": "W", "force": "6", "mph": 28, "rain": 40, "gustMph": null }] }] },
-  "warnings": [{ "type": "Wind warning", "island": "Jersey", "kind": "Wind", "colour": "amber", "issued": "Issued at 02:44 UTC Thursday 22 October 2026",
-    "issuedAt": "2026-10-22T02:44:00.000Z", "validity": "From 21:00 Thu to 15:00 Fri", "text": "Severe gale F9", "impacts": ["Fallen trees"], "extra": "" }],
-  "warningsChecked": "2026-10-22T06:30:00",
-  "sources": { "forecast": { "ok": true }, "warnings": { "ok": true } },
+  "sources": { "forecast": { "ok": true } },
   "generatedAt": "2026-10-22T06:40:00.000Z" }
 ```
 

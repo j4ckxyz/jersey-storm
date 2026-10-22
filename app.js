@@ -130,6 +130,11 @@
       .replace(/\b(\d{1,2})[.:](\d{2})\s?([ap])\.?m\b\.?/gi, (m, h, mi, ap) => `${+h}:${mi}${ap.toLowerCase()}m`)
       .replace(/\b(\d{1,3})(?:\s*(?:–|-|to)\s*(\d{1,3}))?\s?(knots|kts|kt)\b(?!\s*\(\d)/gi, (m, a, b) => `${m} (${b ? `${mph(a)}–${mph(b)}` : mph(a)} mph)`);
   }
+  // Raw links in source text become just the site ("bit.ly/…"); markdown links "[label](url)" are left alone.
+  // (No regex look-behind: Safari before 16.4 can't parse one, which would stop the whole script.)
+  const shortUrls = (s) => String(s ?? '').replace(/https?:\/\/(?:www\.)?([^\s/)]+)(\/[^\s)]*)?/g, (m, host, path, at, str) =>
+    (str.slice(at - 2, at) === '](' ? m : host + (path && path.length > 1 ? '/…' : '')));
+  const plain = (s) => shortUrls(tidy(s));
   // "07:12" (24-hour) → "7:12am"; anything else is left as it is
   const clock24 = (s) => String(s ?? '').replace(/^(\d{1,2}):(\d{2})$/, (m, h, mi) => `${+h % 12 || 12}:${mi}${+h < 12 ? 'am' : 'pm'}`);
   const TIME_FMT = {
@@ -178,7 +183,7 @@
     label.remove();
   }
   const HAPTIC_FIRM = '#refresh';
-  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, details > summary';
+  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, #detail-btn, #mode-toggle, .img-tabs button, details > summary';
   document.addEventListener('click', (e) => {
     if (!(e.target instanceof Element)) return;
     if (e.target.closest(HAPTIC_FIRM)) haptic(true);
@@ -230,6 +235,7 @@
   let activeSource = 'All';
   const seenUrls = new Set();
   let firstLoad = true;
+  let detailed = (() => { try { return localStorage.getItem('view-mode') === 'detailed'; } catch (e) { return false; } })();
 
   // Keep what the reader is looking at in place while content above it re-renders (an innerHTML swap
   // defeats the browser's own scroll anchoring). Call before the change; call the returned function after.
@@ -321,7 +327,7 @@
     const av = avatarHTML(it);
     return `<a class="pcard ${x ? 'is-x' : 'is-bsky'} ${extraCls}"${k ? ` data-k="${esc(k)}"` : ''} href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="phead">${av}<div class="pwho"><span class="pname">${esc(name)}</span><span class="phandle">@${esc(it.handle)}</span></div>${x ? ICON_X : ICON_BSKY}</div>
-      <div class="ptext">${esc(it.text)}</div>
+      <div class="ptext">${esc(shortUrls(it.text))}</div>
       ${mediaHTML(it.media)}
       ${tagsHTML(it)}
       <div class="pfoot">${timeHTML(it.time, 'post')}<span>View on ${x ? 'X' : 'Bluesky'}<span class="ext" aria-hidden="true"></span></span></div>
@@ -336,8 +342,8 @@
     return `<a class="item ${itemClasses(it, isNew)}"${k ? ` data-k="${esc(k)}"` : ''} href="${esc(safeUrl(it.url))}" target="_blank" rel="noopener noreferrer">
       <div class="meta">${faviconHTML(it.source, it.favicon)}<span class="src">${esc(s.label)}</span>${s.official ? ICON.check : ''}${warn}${d.pinned ? '<span class="pin">Pinned</span>' : ''}${timeHTML(it.time, it.dateOnly ? 'date' : 'item')}</div>
       <div class="item-body"><div>
-        ${title ? `<h3 class="title">${esc(tidy(title))}</h3>` : ''}
-        ${it.text ? `<p class="text">${esc(tidy(it.text))}</p>` : ''}
+        ${title ? `<h3 class="title">${esc(plain(title))}</h3>` : ''}
+        ${it.text ? `<p class="text">${esc(plain(it.text))}</p>` : ''}
         ${tagsHTML(it)}
       </div>${img}</div>
     </a>`;
@@ -489,8 +495,12 @@
     const secs = Array.isArray(s.sections) ? s.sections : [];
     const secIcon = (ic) => (typeof ic === 'string' && ic.length <= 8 && /[^\x00-\x7F]/.test(ic) ? `<span aria-hidden="true">${esc(ic)}</span>` : '');
     const secHTML = (sec) => `<h3>${secIcon(sec.icon)}${esc(sec.title)}</h3><ul>${(sec.points || []).map((p) => `<li>${md(p)}</li>`).join('')}</ul>`;
-    const first = secs.slice(0, 1).map(secHTML).join('');
-    const rest = secs.slice(1).map(secHTML).join('');
+    // the first 3 points of the first section stay visible; the rest of it and the other sections sit behind "Show more"
+    const lead = secs[0] || { points: [] };
+    const leadPts = Array.isArray(lead.points) ? lead.points : [];
+    const first = secs.length ? secHTML({ ...lead, points: leadPts.slice(0, 3) }) : '';
+    const more = leadPts.length > 3 ? `<ul class="sum-cont">${leadPts.slice(3).map((pt) => `<li>${md(pt)}</li>`).join('')}</ul>` : '';
+    const rest = more + secs.slice(1).map(secHTML).join('');
     const posts = Array.isArray(s.posts) ? s.posts : [];
     const wasOpen = box.querySelector('details') && box.querySelector('details').open;
     const updEl = $('#sum-upd');
@@ -502,7 +512,7 @@
     box.innerHTML = `<p class="sum-lead">${md(s.headline)}</p>
       ${hlHTML}
       ${first}
-      ${rest || posts.length ? `<details${wasOpen ? ' open' : ''}><summary>Show full summary ${ICON.chev}</summary>${rest}<div id="sum-posts" class="sum-posts"></div></details>` : ''}`;
+      ${rest || posts.length ? `<details${wasOpen ? ' open' : ''}><summary>Show more ${ICON.chev}</summary>${rest}<div id="sum-posts" class="sum-posts"></div></details>` : ''}`;
     sec.hidden = false;
     if (wasBusy) fadeIn([...box.children]);
     renderSummaryPosts();
@@ -551,6 +561,23 @@
   let postsOpen = false;
   let evGlide = false; // set by filter and area changes so the next render animates the list
 
+  // --- "New since your last visit": event ids this device saw last time (ignored after a week, e.g. a new storm) ---
+  // The baseline is pinned for the tab session, so a reload doesn't clear the marks.
+  const lastVisit = (() => {
+    try {
+      let raw = sessionStorage.getItem('visit-base');
+      if (raw === null) { raw = localStorage.getItem('seen-events') || ''; sessionStorage.setItem('visit-base', raw); }
+      const v = raw ? JSON.parse(raw) : null;
+      return v && Array.isArray(v.ids) && okTime(v.at) && Date.now() - new Date(v.at) < 7 * 864e5 ? { ids: new Set(v.ids), at: v.at } : null;
+    } catch (e) { return null; }
+  })();
+  const unseen = (ev) => !!lastVisit && !lastVisit.ids.has(ev.id);
+  function saveSeen() {
+    if (!seenEvents.size) return;
+    try { localStorage.setItem('seen-events', JSON.stringify({ ids: [...seenEvents], at: new Date().toISOString() })); } catch (e) { /* private mode */ }
+  }
+  const SEV_RANK = { major: 0, notable: 1, info: 2 };
+
   function normEvents(d) {
     if (!d || !Array.isArray(d.events)) return null;
     const events = d.events
@@ -587,7 +614,7 @@
       <span class="evs-n">${n}</span><span class="evs-ic">${evSourceIcon(s)}</span>
       <span class="evs-who"><b>${esc(s.publisher || s.author || 'Source')}</b>${social && s.author ? `<span class="evs-at">@${esc(s.author)}</span>` : ''}<span class="stype">${pick(EV_SRC, s.type) || 'Web'}</span></span>
       ${okTime(s.time) ? `<time datetime="${esc(s.time)}">${esc(fmtTime(s.time))}</time>` : ''}
-      ${s.title ? `<span class="evs-t">${esc(tidy(s.title))}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
+      ${s.title ? `<span class="evs-t">${esc(plain(s.title))}</span>` : ''}<span class="sr-only"> (opens in a new tab)</span>
     </a></li>`;
   }
 
@@ -602,15 +629,15 @@
     const open = openEvents.has(ev.id);
     const sev = ev.severity === 'info' ? '<span class="sr-only">Info:</span>' : `<span class="ev-sev">${ev.severity === 'major' ? 'Major' : 'Notable'}</span>`;
     // [n] refs become superscript links to sources[n-1]; out-of-range refs stay as text
-    const details = esc(tidy(ev.details)).replace(/\[(\d+)\]/g, (m, n) => {
+    const details = esc(plain(ev.details)).replace(/\[(\d+)\]/g, (m, n) => {
       const s = ev.sources[n - 1];
       return s && s.url ? `<sup><a class="ref" href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener noreferrer" aria-label="Source ${n}: ${esc(s.publisher || '')}">${n}</a></sup>` : m;
     });
     return `<article class="ev sev-${ev.severity}${open ? ' open' : ''}${isNew ? ' new' : ''}" data-id="${esc(ev.id)}" data-k="ev:${esc(ev.id)}">
       <div class="ev-head">
-        <div class="ev-meta">${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
-        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(tidy(ev.title))}</button></h3>
-        ${ev.summary ? `<p class="ev-sum">${esc(tidy(ev.summary))}</p>` : ''}
+        <div class="ev-meta">${unseen(ev) ? '<span class="ev-new">New</span>' : ''}${sev}<span class="ev-cat">${catIcon}${catLabel}</span>${pick(EV_AREA, ev.area) ? `<span class="ev-area">${pick(EV_AREA, ev.area)}</span>` : ''}<time datetime="${esc(ev.start)}">${esc(fmtRange(ev.start, ev.end))}</time></div>
+        <h3 class="ev-h"><button class="ev-btn" type="button" aria-expanded="${open}" aria-controls="evb-${i}">${esc(plain(ev.title))}</button></h3>
+        ${ev.summary ? `<p class="ev-sum">${esc(plain(ev.summary))}</p>` : ''}
         ${ICON.chev}
       </div>
       <div class="ev-body" id="evb-${i}"><div class="ev-inner"><div class="ev-content">
@@ -626,9 +653,10 @@
     $('#ev-list').removeAttribute('aria-busy');
     const on = eventsMode();
     $('#events').hidden = !on;
-    $('#all-posts').hidden = on && !postsOpen;
+    $('#all-posts').hidden = on && (!postsOpen || !detailed);
     const n = feedData ? feedData.items.length : 0;
     const t = $('#posts-toggle');
+    t.hidden = !detailed;
     t.setAttribute('aria-expanded', String(postsOpen));
     t.innerHTML = `${postsOpen ? 'Hide all posts' : `Show all posts${n ? ` <span class="cnt">${n}</span>` : ''}`} ${ICON.chev}`;
     if (!on && feedData) {
@@ -659,10 +687,19 @@
     $('#ev-filters').innerHTML = Object.entries(EV_FILTERS).map(([k, label]) =>
       `<button type="button" data-evf="${k}" aria-pressed="${k === evFilter}">${label} <span class="cnt">${inArea.filter((e) => evMatches(e, k)).length}</span></button>`).join('');
 
-    const list = inArea.filter((e) => evMatches(e, evFilter));
+    // within each day (events arrive newest first by end), Major comes first, then Notable, then the rest
+    const byDay = [];
+    for (const e of inArea.filter((x) => evMatches(x, evFilter))) {
+      const k = dayKey(new Date(e.end));
+      if (!byDay.length || byDay[byDay.length - 1].k !== k) byDay.push({ k, items: [] });
+      byDay[byDay.length - 1].items.push(e);
+    }
+    const list = byDay.flatMap((g) => g.items.sort((a, b) => SEV_RANK[a.severity] - SEV_RANK[b.severity]));
     let newCount = 0;
     let html = '';
     let day = '';
+    const fresh = list.filter(unseen).length;
+    if (fresh) html += `<div class="since" data-k="since">${fresh} new since your last visit at ${esc(fmtTime(lastVisit.at, now))}</div>`;
     list.forEach((ev, i) => {
       const d = dayLabel(new Date(ev.end)); // events arrive newest first by end, so group by end day
       if (d !== day) { day = d; html += `<div class="hour" data-k="day:${esc(d)}"><b>${esc(d)}</b></div>`; }
@@ -680,6 +717,7 @@
     if (firstPaint) fadeIn([...$('#ev-list').children].slice(0, 10));
     for (const e of eventsData.events) seenEvents.add(e.id);
     evFirstLoad = false;
+    saveSeen();
 
     if (focusSel) {
       const el = focusSel.startsWith('[') ? $(focusSel) : $$('#ev-list .ev').find((c) => c.dataset.id === focusSel)?.querySelector('.ev-btn');
@@ -738,6 +776,9 @@
     const el = $('#warn-banner');
     const ws = warnData && Array.isArray(warnData.warnings) ? warnData.warnings.filter((w) => w && w.title) : [];
     const fix = anchor();
+    el.classList.remove('pending');
+    el.removeAttribute('aria-hidden');
+    el.removeAttribute('tabindex');
     if (!ws.length) { el.hidden = true; fix(); return; }
     const w = ws[0];
     const c = WARN_COLOURS.includes(w.colour) ? w.colour : 'yellow';
@@ -799,13 +840,13 @@
           <span class="l-meta"><b>Latest</b>${isPost(latest)
             ? `${avatarHTML(latest, 'av av-s')}${esc(latest.author || latest.handle)}`
             : `${faviconHTML(latest.source, latest.favicon)}${esc(src(latest.source).label)}`} · ${timeHTML(latest.time, 'ago')}</span>
-          <span class="l-title">${esc(tidy(latest.title || String(latest.text || '').replace(/https?:\/\/\S+/g, '').trim() || latest.text))}</span>
+          <span class="l-title">${esc(plain(latest.title || String(latest.text || '').replace(/https?:\/\/\S+/g, '').trim() || latest.text))}</span>
         </a>`
       : feedTried ? '' : SK_NOW.latest;
 
     const wasSk = ['.now-main', '.latest'].filter((sel) => el.querySelector(`${sel} .sk`));
     const fix = anchor();
-    el.innerHTML = `<div class="now-head"><h2 id="now-h">Right now</h2>${pill}</div>
+    el.innerHTML = `<div class="now-head"><h2 id="now-h">Next 24 hours</h2>${pill}</div>
       <div class="now-main">${line}</div>
       ${latestHTML}`;
     fix();
@@ -813,6 +854,9 @@
     tick('peak', el.querySelector('.now-line b'), peakMph);
   }
 
+  // one line of jargon help beside the forecast (standard Beaufort mean speeds)
+  const KEY_HTML = `<details class="key"><summary>What F9, knots, veering and backing mean ${ICON.chev}</summary>
+    <p>F numbers are the Beaufort scale of average wind: F7 near gale 32–38 mph, F8 gale 39–46 mph, F9 severe gale 47–54 mph, F10 storm 55–63 mph. Gusts are stronger. 1 knot ≈ 1.15 mph. Veering: the wind turns clockwise (south to west). Backing: anticlockwise.</p></details>`;
   function renderWeather(wx) {
     wxData = wx;
     renderNow();
@@ -870,12 +914,183 @@
       ${next && next.windDescription ? `<p class="wind-desc"><strong>${esc(next.day)}:</strong> ${esc(next.windDescription)}</p>` : ''}
       </div>`;
     }
+    html += KEY_HTML;
     html += `<p class="issued">Jersey Met forecast issued ${esc(tidy(f.issued))} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
     const firstPaint = !!$('#weather .skel');
+    const keyOpen = !!$('#weather details.key[open]');
     $('#weather').innerHTML = html;
+    if (keyOpen) $('#weather details.key').open = true;
     if (firstPaint) fadeIn([...$('#weather').children]);
     tick('cond', $('#weather .cond-big'), gust);
   }
+
+  // --- observations (/api/obs): Jersey Airport METAR, St Helier tides, Jersey Met image times ---
+  let obsData = null;
+  let obsTried = false;
+  const COMPASS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+  const compass = (deg) => COMPASS[Math.round(deg / 22.5) % 16];
+  const ktMph = (kt) => `${mph(kt)} mph (${kt} kt)`;
+  // drawn pointing down (where a north wind blows), so rotating by the "from" bearing shows where the wind is going
+  const ARROW = (deg) => `<svg class="dir-arrow" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${Math.round(deg)}deg)"><path d="M12 3v18M5 14l7 7 7-7"/></svg>`;
+  const WX_CODES = { TS: 'thunderstorm', SH: 'showers', RA: 'rain', DZ: 'drizzle', SN: 'snow', GR: 'hail', GS: 'small hail', BR: 'mist', FG: 'fog', HZ: 'haze', SQ: 'squalls', FC: 'funnel cloud' };
+  function wxWords(code) {
+    return String(code || '').split(/\s+/).filter(Boolean).map((g) => {
+      const near = /^VC/.test(g);
+      const body = g.replace(/^[-+]|^VC/g, '');
+      const words = (body.match(/.{2}/g) || []).map((c) => WX_CODES[c]).filter(Boolean);
+      if (!words.length) return '';
+      const w = words.length > 1 && words[0] === 'showers' ? `${words.slice(1).join(' ')} showers` : words.join(' ');
+      return `${g[0] === '-' ? 'light ' : g[0] === '+' ? 'heavy ' : ''}${w}${near ? ' nearby' : ''}`;
+    }).filter(Boolean).join(', ');
+  }
+  const pressureTrend = (c) => (!c ? '' : Math.abs(c.hpa) < 1 ? 'steady' : c.hpa < 0 ? 'falling' : 'rising');
+  const visText = (m) => (m == null ? '—' : m >= 9999 ? '10 km or more' : m >= 1000 ? `${Math.round(m / 100) / 10} km` : `${m} m`);
+  function nextHigh(tides) {
+    const now = Date.now();
+    return (tides || []).find((t) => t.high && new Date(t.at) > now) || null;
+  }
+  function tileHTML(label, value, sub) {
+    return `<span class="t-l">${label}</span><span class="t-v">${value}</span><span class="t-s">${sub}</span>`;
+  }
+  function renderObs() {
+    const tiles = $('#tiles');
+    const m = obsData && obsData.metar;
+    const tide = obsData && nextHigh(obsData.tides);
+    const set = (k, html) => {
+      const el = tiles.querySelector(`[data-tile="${k}"]`);
+      el.hidden = !html && obsTried; // a tile whose data failed disappears; before the first answer it keeps its skeleton
+      if (html) el.innerHTML = html;
+    };
+    if (!obsTried) return;
+    const fix = anchor();
+    const firstPaint = tiles.hasAttribute('aria-busy');
+    tiles.removeAttribute('aria-busy');
+    set('wind', m && m.windKt != null && tileHTML('Wind', `${mph(m.windKt)}<small> mph (${m.windKt} kt)</small>`, m.gustKt ? `Gusts ${ktMph(m.gustKt)}` : 'No gusts reported'));
+    set('dir', m && tileHTML('Direction', m.windDir == null ? 'Variable' : `${ARROW(m.windDir)}${compass(m.windDir)}`, m.windDir == null ? 'changing direction' : `from ${m.windDir}°`));
+    const pc = m && m.pressureChange;
+    const trend = pressureTrend(pc);
+    set('pressure', m && m.pressureHpa != null && tileHTML('Pressure', `${trend === 'falling' ? '<span class="trend" aria-hidden="true">↓</span>' : trend === 'rising' ? '<span class="trend" aria-hidden="true">↑</span>' : ''}${m.pressureHpa}<small> hPa</small>`,
+      pc ? `${trend}${trend === 'steady' ? '' : ` ${Math.abs(pc.hpa)} in ${pc.hours} h`}` : ''));
+    set('tide', tide && tileHTML('High tide', esc(clock(new Date(tide.at))), `Next · ${tide.heightM.toFixed(1)} m${dayKey(new Date(tide.at)) === dayKey(new Date()) ? '' : ` · ${dayLabel(new Date(tide.at)).toLowerCase()}`}`));
+    const all = [...tiles.children];
+    tiles.hidden = all.every((t) => t.hidden);
+    const t = $('#obs-time');
+    if (m && okTime(m.time)) {
+      const old = Date.now() - new Date(m.time) > 90 * 60e3;
+      t.textContent = `Jersey Airport, observed ${fmtTime(m.time)}${old ? ' · may be out of date' : ''}`;
+      t.className = `small ${old ? 'err' : 'muted'}`;
+    } else t.textContent = '';
+    if (firstPaint) fadeIn(all.filter((x) => !x.hidden));
+    tick('obs-wind', tiles.querySelector('[data-tile="wind"] .t-v'), m && m.windKt);
+    fix();
+  }
+  $('#tiles').addEventListener('click', (e) => {
+    if (!e.target.closest('.tile')) return;
+    setDetailed(true, true);
+    $('#detail').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  });
+
+  // --- detailed view: imagery, Windy, METAR readout, tides ---
+  let imgTab = 'radar';
+  const IMG_ALT = { radar: 'Jersey Met rain radar for the Channel Islands', satellite: 'Satellite picture of north-west Europe', waves: 'Jersey Met wind and wave chart for now' };
+  function renderImage() {
+    const im = obsData && obsData.images && obsData.images[imgTab];
+    const img = $('#img-main');
+    $$('.img-tabs [role="tab"]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.img === imgTab)));
+    $('#img-panel').setAttribute('aria-labelledby', `tab-${imgTab}`);
+    $('#img-none').hidden = !!(im || !obsTried);
+    if (!im || !isUrl(im.url)) { img.hidden = true; $('#img-time').textContent = ''; return; }
+    // the version in the URL changes only when Jersey Met uploads a new picture, so the browser re-downloads only then
+    const v = okTime(im.updatedAt) ? +new Date(im.updatedAt) : Math.floor(Date.now() / 300e3);
+    const src = `${im.url}?v=${v}`;
+    if (img.getAttribute('src') !== src) img.src = src;
+    img.alt = IMG_ALT[imgTab];
+    img.hidden = false;
+    $('#img-time').textContent = okTime(im.updatedAt) ? `Updated ${fmtTime(im.updatedAt)} · ` : '';
+  }
+  $('#img-main').addEventListener('error', () => { $('#img-main').hidden = true; $('#img-none').hidden = false; });
+  $('.img-tabs').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-img]');
+    if (!b) return;
+    imgTab = b.dataset.img;
+    renderImage();
+  });
+  $('.img-tabs').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const tabs = $$('.img-tabs [role="tab"]');
+    const i = tabs.findIndex((b) => b.dataset.img === imgTab);
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    imgTab = next.dataset.img;
+    renderImage();
+    next.focus();
+  });
+
+  function renderMetar() {
+    const el = $('#metar');
+    const m = obsData && obsData.metar;
+    if (!m) { el.innerHTML = `<h3>Jersey Airport observation</h3><p class="muted small">${obsTried ? 'Not available right now.' : 'Loading…'}</p>`; return; }
+    const pc = m.pressureChange;
+    const clouds = m.clouds.map((c) => `${{ FEW: 'few', SCT: 'scattered', BKN: 'broken', OVC: 'overcast' }[c.cover] || c.cover}${c.baseFt != null ? ` at ${c.baseFt.toLocaleString('en-GB')} ft` : ''}`).join(', ');
+    const rows = [
+      ['Wind', m.windKt == null ? '—' : `${ktMph(m.windKt)}${m.windDir == null ? ', variable' : `, from ${compass(m.windDir)} (${m.windDir}°)`}`],
+      ['Gusts', m.gustKt ? ktMph(m.gustKt) : 'none reported'],
+      ['Visibility', visText(m.visibilityM)],
+      ['Weather', wxWords(m.weather) || 'nothing significant'],
+      ['Temperature', m.tempC == null ? '—' : `${m.tempC}°C${m.dewC != null ? ` · dew point ${m.dewC}°C` : ''}`],
+      ['Pressure', m.pressureHpa == null ? '—' : `${m.pressureHpa} hPa${pc ? ` · ${pressureTrend(pc)}${pressureTrend(pc) === 'steady' ? '' : ` ${Math.abs(pc.hpa)} hPa`} in ${pc.hours} h` : ''}`],
+      ['Cloud', clouds || '—'],
+    ];
+    el.innerHTML = `<h3>Jersey Airport observation</h3>
+      <dl class="readout">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+      <p class="muted small">Observed ${esc(fmtTime(m.time))} · <a href="https://aviationweather.gov/data/metar/?ids=EGJJ" target="_blank" rel="noopener noreferrer">METAR EGJJ<span class="ext" aria-hidden="true"></span></a></p>
+      ${m.raw ? `<details class="key"><summary>Raw report ${ICON.chev}</summary><p><code>${esc(m.raw)}</code></p></details>` : ''}`;
+  }
+  function renderTides() {
+    const el = $('#tides');
+    const ts = obsData && obsData.tides;
+    if (!ts || !ts.length) { el.innerHTML = `<h3>Tides · St Helier</h3><p class="muted small">${obsTried ? 'Not available right now.' : 'Loading…'}</p>`; return; }
+    const today = dayKey(new Date());
+    const tomorrow = dayKey(new Date(Date.now() + 864e5));
+    const next = nextHigh(ts);
+    const days = [today, tomorrow].map((k) => ({ k, rows: ts.filter((t) => dayKey(new Date(t.at)) === k) })).filter((d) => d.rows.length);
+    el.innerHTML = `<h3>Tides · St Helier</h3>${days.map((d) => `<h4>${d.k === today ? 'Today' : 'Tomorrow'}</h4>
+      <table class="tide-t"><tbody>${d.rows.map((t) => `<tr${t === next ? ' class="next"' : ''}><td>${esc(clock(new Date(t.at)))}</td><td>${t.high ? 'High' : 'Low'}</td><td>${t.heightM.toFixed(1)} m</td></tr>`).join('')}</tbody></table>`).join('')}
+      <p class="muted small">Predictions by the National Oceanography Centre via <a href="https://www.gov.je/weather/tidetimes/" target="_blank" rel="noopener noreferrer">gov.je<span class="ext" aria-hidden="true"></span></a>. Storm surge and waves can push water higher.</p>`;
+  }
+  function renderDetail() {
+    if (!detailed) return; // nothing in the detailed view loads until someone opens it
+    const fix = anchor();
+    renderImage();
+    renderMetar();
+    renderTides();
+    fix();
+  }
+  async function loadObs() {
+    try { obsData = await getJSON(bust('/api/obs')); } catch (e) { /* keep what we had */ }
+    obsTried = true;
+    renderObs();
+    renderDetail();
+  }
+
+  // --- Simple / Detailed view, remembered on this device ---
+  const WINDY_SRC = 'https://embed.windy.com/embed2.html?lat=49.214&lon=-2.131&detailLat=49.214&detailLon=-2.131&zoom=8&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=&metricWind=mph&metricTemp=%C2%B0C&radarRange=-1';
+  function setDetailed(on, persist) {
+    detailed = on;
+    document.body.classList.toggle('detailed', on);
+    const mb = $('#mode-toggle');
+    mb.setAttribute('aria-pressed', String(on));
+    mb.title = on ? 'Back to the simple view' : 'Show live data, maps and all posts';
+    const db = $('#detail-btn');
+    db.setAttribute('aria-expanded', String(on));
+    db.textContent = on ? 'Hide live data & maps' : 'Show live data & maps';
+    if (persist) { try { localStorage.setItem('view-mode', on ? 'detailed' : 'simple'); } catch (e) { /* private mode */ } }
+    if (on && !$('#windy').getAttribute('src')) $('#windy').src = WINDY_SRC;
+    renderDetail();
+    applyMode();
+  }
+  $('#mode-toggle').addEventListener('click', () => setDetailed(!detailed, true));
+  $('#detail-btn').addEventListener('click', () => setDetailed(!detailed, true));
+  setDetailed(detailed, false);
 
   // --- status + loading ---
   // The header says how old the data is (summary.json / events.json's own timestamps), not when we last fetched it.
@@ -958,7 +1173,7 @@
     if (refreshBtn.classList.contains('spinning')) return; // one refresh at a time
     refreshBtn.classList.add('spinning');
     lastPoll.data = lastPoll.wx = Date.now();
-    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather(), loadWarnings()]);
+    await Promise.allSettled([loadSummary(), loadEvents(), loadFeed(), loadWeather(), loadWarnings(), loadObs()]);
     const svg = refreshBtn.querySelector('svg');
     if (reduceMotion.matches || !svg) { refreshBtn.classList.remove('spinning'); return; }
     const done = () => { svg.removeEventListener('animationiteration', done); clearTimeout(timer); refreshBtn.classList.remove('spinning'); };
@@ -1031,7 +1246,7 @@
       if (document.visibilityState !== 'visible') return;
       const now = Date.now();
       if (now - lastPoll.data >= dataEvery) { lastPoll.data = now; loadSummary(); loadEvents(); loadFeed(); }
-      if (now - lastPoll.wx >= wxEvery) { lastPoll.wx = now; loadWeather(); loadWarnings(); }
+      if (now - lastPoll.wx >= wxEvery) { lastPoll.wx = now; loadWeather(); loadWarnings(); loadObs(); }
     };
     setInterval(poll, 15e3);
     document.addEventListener('visibilitychange', poll);
