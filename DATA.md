@@ -237,3 +237,82 @@ If the whole function fails: `{ forecast: null, warnings: [], sources: { error: 
 - `id` (X) and `title` (`""` on Bluesky) are not used by the card.
 
 Any new UI should rely only on these fields and treat `author`, `avatar` and `media` as optional.
+
+## Extending the data (modular options)
+
+This section describes **planned, optional** extension points. Nothing here exists in the code yet. It is the agreed shape, so the UI (or Claude Code) can add these features without breaking the automated refresh. Every field below is optional. When it is missing, the frontend must fall back to today's behaviour.
+
+### 1. Source registry: `sources.json` (static, served at `/sources.json`)
+
+This is one place to define how each source looks and behaves. The key is the `items[].source` / `sources[].name` value from the table above (for example `"BBC Jersey"`, `"gov.je"`, `"X"`, `"Bluesky"`).
+
+```jsonc
+{
+  "version": 1,
+  "sources": {
+    "BBC Jersey": {
+      "label": "BBC Jersey",            // display name (default: the key)
+      "homepage": "https://www.bbc.co.uk/news/world/europe/jersey",
+      "domain": "bbc.co.uk",            // used to derive a favicon if `favicon` is unset
+      "favicon": null,                  // explicit icon URL (png/svg/ico); overrides `domain`
+      "icon": null,                     // optional inline SVG or emoji, e.g. "📰"; used if no favicon
+      "color": "#bb1919",               // accent colour for the badge, border or chip
+      "kind": "news",                   // "news" | "official" | "warning" | "social" | "weather" | "transport" | "utility"
+      "region": "jersey",               // "jersey" | "guernsey" | "channel-islands" | "uk"
+      "priority": 50,                   // 0–100, higher sorts first within the same hour (default 50)
+      "official": false,                // true for gov.je, Jersey Met, Ports of Jersey, etc.
+      "hidden": false                   // true hides the source without code changes
+    },
+    "gov.je": { "domain": "gov.je", "kind": "official", "official": true, "priority": 80, "color": "#1b5e9e" }
+  }
+}
+```
+
+**Favicon resolution order (frontend):**
+1. `favicon`, if set.
+2. `https://<domain>/favicon.ico`, if `domain` is set. Load it lazily and listen for `onerror`.
+3. As a fallback, a favicon service, e.g. `https://www.google.com/s2/favicons?domain=<domain>&sz=64` or `https://icons.duckduckgo.com/ip3/<domain>.ico`.
+4. `icon` (emoji or SVG), or else the first letter of `label` in a coloured circle using `color`.
+
+Always render favicons as `<img loading="lazy" referrerpolicy="no-referrer" width="16" height="16" alt="">`, so a broken icon never breaks layout. If you want the server to do this, `/api/feed` may add an optional `favicon` string to each item; the UI must still work without it.
+
+### 2. Optional per-item display hints
+
+Any feed item, X post or summary post may carry an optional `display` object. The refresh may set it, and the UI may ignore it.
+
+```jsonc
+"display": {
+  "pinned": false,          // keep at top of its hour group
+  "importance": "normal",   // "low" | "normal" | "high" | "critical" (critical = highlighted card)
+  "tags": ["travel", "power"], // free-form topic tags for filters/chips
+  "region": "jersey",       // overrides the source's region
+  "image": null             // preferred preview image URL
+}
+```
+
+### 3. Optional summary extras (`summary.json`)
+
+- `"status"`: `"calm" | "watch" | "warning" | "severe" | "easing" | "over"`. A UI hint for a coloured status pill.
+- `"highlights"`: `[{ "label": "Max gust", "value": "75 mph", "source": "https://…" }]`. Small stat chips.
+- `"sections[].icon"`: an emoji or icon name for each section heading.
+
+### 4. UI config: `config.json` (optional, static)
+
+These are site-wide switches, so Claude Code can add features behind flags instead of hard-coding them.
+
+```jsonc
+{
+  "title": "Storm Austen tracker",
+  "subtitle": null,
+  "theme": { "accent": "#e53935", "mode": "auto" },   // "auto" | "light" | "dark"
+  "refresh": { "feedSeconds": 180, "weatherSeconds": 300 },
+  "filters": { "regions": ["jersey", "channel-islands"], "showGuernseyOnlyIfImportant": true },
+  "features": { "favicons": true, "postCards": true, "summaryBox": true, "statusPill": false }
+}
+```
+
+### Rules for extensions
+
+- New files (`sources.json`, `config.json`) are **owned by Jack/the UI**. The automated refresh only ever rewrites `summary.json` and `x-posts.json`, and may add the optional `display`, `status` and `highlights` fields to them.
+- Fetch new files with a fallback: `fetch('/sources.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))`.
+- Never make an extension field required. Bump `version` if a shape has to change incompatibly, and keep reading the old shape.
