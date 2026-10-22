@@ -387,6 +387,8 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
 .safety p+p{margin-top:4px}
 
 .foot{padding-top:20px;padding-bottom:32px;border-top:1px solid var(--line);margin-top:8px}
+.visits{margin:var(--space-xs) 0 0;visibility:hidden;font-variant-numeric:tabular-nums}
+.visits.on{visibility:visible}
 
 /* smooth <details> where height:auto can be animated (falls back to an instant open) */
 @supports (interpolate-size:allow-keywords){

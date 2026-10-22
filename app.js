@@ -989,6 +989,30 @@
     setInterval(loadSummary, wxEvery);
   });
 
+  // --- unique visitor count (functions/api/visit.js): a random ID kept in localStorage and a cookie ---
+  (() => {
+    const el = $('#visits');
+    if (!el || !window.fetch) return;
+    const KEY = 'visitor-id', DONE = 'visitor-counted';
+    const ls = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { /* private mode */ } return null; };
+    const cookie = (document.cookie.match(/(?:^|; )vid=([A-Za-z0-9_-]{16,64})/) || [])[1];
+    let id = ls(KEY) || cookie;
+    if (!id) id = crypto.randomUUID ? crypto.randomUUID() : [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
+    ls(KEY, id);
+    try { document.cookie = `vid=${id}; Max-Age=34560000; Path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`; } catch (e) { /* ignore */ }
+    const counted = ls(DONE) === '1';
+    const req = counted ? fetch('/api/visit', { cache: 'no-store' })
+      : fetch('/api/visit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }), cache: 'no-store' });
+    req.then((r) => (r.ok ? r.json() : null)).then((d) => {
+      if (!d || typeof d.count !== 'number' || d.count < 1) return;
+      if (!counted) ls(DONE, '1');
+      const n = d.count.toLocaleString('en-GB');
+      el.textContent = d.count === 1 ? '1 person has visited' : `${n} people have visited`;
+      el.removeAttribute('aria-hidden');
+      el.classList.add('on');
+    }).catch(() => { /* leave the line hidden */ });
+  })();
+
   // refresh relative times every minute, and refresh on return to the tab
   setInterval(() => { updateTimes(); renderEvents(); }, 60 * 1000);
   document.addEventListener('visibilitychange', () => {
