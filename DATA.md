@@ -316,6 +316,33 @@ Feeds the "Right now" tiles and the detailed view. Each part can fail on its own
 
 The tide numbers come from the function behind https://www.gov.je/weather/tidetimes/. The access code in `lib/obs.js` is the public one in that page's own script. If gov.je changes it, the tide tile hides until the code is updated.
 
+## `GET /api/travel` (Pages Function, `lib/travel.js`)
+
+Feeds the "Flights / Ferries" line in the simple view and the two boards in the detailed view. It reads the public JSON files that jerseyairport.com and ports.je load in the browser:
+- `cdn.ports.je/data/airportArrivals48h.json`: arrivals and departures for 48 hours.
+- `test-cdn.ports.je/data/GetHarbourLive.json`: every ship movement at St Helier. Despite the host name, this is the file ports.je's live page uses.
+
+Both are fetched with a `?t=` time parameter, as those sites do, because their CDN otherwise serves a copy that's hours old. Cached for 2 minutes per data centre, or 1 minute when a part failed.
+
+```
+{
+  flights: { updated: "22 Oct 2026 21:15" (Jersey time, as published),
+             flights: [{ dir: "arr"|"dep", at (ISO), flight, airline, place, status ("Landed at 07:48"),
+                         kind: "ok"|"done"|"delayed"|"cancelled"|"diverted" }] } | null,
+  harbour: { updated (ISO),
+             sailings: [{ dir, at (ISO), estimated (ISO)|null, vessel, port, passenger: boolean (car/passenger ferry or fast craft),
+                          status: "Scheduled"|"Expected"|"Delayed"|"Arrived"|"Departed"|"Cancelled", reason ("Weather"), kind }] } | null,
+  sources: { flights, harbour: {ok, error?} },
+  generatedAt
+}
+```
+
+Not used:
+- **Condor Ferries:** their sailing-updates API only lists Guernsey routes; the harbour file covers every Jersey sailing.
+- **LibertyBus:** service alerts need an API key from LibertyBus's own site.
+- **Jersey Electricity:** has no public outage feed.
+- **gov.je road closures:** the page is an index of planned roadworks.
+
 ## `GET /api/weather` (Pages Function, `lib/weather.js`)
 
 It always returns HTTP 200 JSON, with the same caching as `/api/feed`. The data comes from Jersey Met. Warnings come from `/api/warnings`, not from here.

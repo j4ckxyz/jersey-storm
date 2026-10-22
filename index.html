@@ -60,6 +60,7 @@
       <button class="tile" type="button" data-tile="pressure" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
       <button class="tile" type="button" data-tile="tide"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
     </div>
+    <button id="travel-sum" class="travel-sum" type="button"><span class="sk sk-text"></span><span class="sk sk-text sk-w60"></span></button>
     <button id="detail-btn" class="detail-btn" type="button" aria-expanded="false" aria-controls="detail">Show live data &amp; maps</button>
   </section>
 
@@ -77,14 +78,29 @@
       </figure>
     </div>
     <div class="card windy">
-      <h3>Wind map</h3>
-      <div class="windy-frame"><iframe id="windy" title="Windy.com wind forecast map centred on Jersey" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-      <p class="muted small">Forecast model map from <a href="https://www.windy.com/49.214/-2.131?49.214,-2.131,8" target="_blank" rel="noopener noreferrer">Windy.com<span class="ext" aria-hidden="true"></span></a>, not Jersey Met.</p>
+      <div class="img-tabs map-tabs" role="tablist" aria-label="Live maps">
+        <button type="button" role="tab" id="tab-wind" data-map="wind" aria-selected="true" aria-controls="map-panel">Wind</button>
+        <button type="button" role="tab" id="tab-lightning" data-map="lightning" aria-selected="false" aria-controls="map-panel">Lightning</button>
+      </div>
+      <div id="map-panel" role="tabpanel" aria-labelledby="tab-wind">
+        <div class="windy-frame"><iframe id="map-frame" title="Windy.com wind forecast map centred on Jersey" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+        <p id="map-credit" class="muted small"></p>
+      </div>
     </div>
     <div class="detail-pair">
       <div id="metar" class="card metar"><h3>Jersey Airport observation</h3><p class="muted small">Loading…</p></div>
       <div id="tides" class="card tides"><h3>Tides · St Helier</h3><p class="muted small">Loading…</p></div>
     </div>
+    <div id="flights" class="card board">
+      <div class="board-head"><h3>Flights</h3>
+        <div class="img-tabs" role="tablist" aria-label="Flights">
+          <button type="button" role="tab" data-fl="arr" aria-selected="true" aria-controls="fl-list">Arrivals</button>
+          <button type="button" role="tab" data-fl="dep" aria-selected="false" aria-controls="fl-list">Departures</button>
+        </div>
+      </div>
+      <div id="fl-list" role="tabpanel" aria-live="off"><p class="muted small">Loading…</p></div>
+    </div>
+    <div id="sailings" class="card board"><h3>Ferries · St Helier harbour</h3><div id="sl-list"><p class="muted small">Loading…</p></div></div>
     <div class="card services">
       <h3>Travel &amp; services</h3>
       <div class="svc-grid">
