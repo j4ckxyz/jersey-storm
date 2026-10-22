@@ -1048,17 +1048,44 @@
     if (!id) id = crypto.randomUUID ? crypto.randomUUID() : [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
     ls(KEY, id);
     try { document.cookie = `vid=${id}; Max-Age=34560000; Path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`; } catch (e) { /* ignore */ }
-    const counted = ls(DONE) === '1';
-    const req = counted ? fetch('/api/visit', { cache: 'no-store' })
-      : fetch('/api/visit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }), cache: 'no-store' });
-    req.then((r) => (r.ok ? r.json() : null)).then((d) => {
+    const show = (d) => {
       if (!d || typeof d.count !== 'number' || d.count < 1) return;
-      if (!counted) ls(DONE, '1');
       const n = d.count.toLocaleString('en-GB');
       el.textContent = d.count === 1 ? '1 person has visited' : `${n} people have visited`;
       el.removeAttribute('aria-hidden');
       el.classList.add('on');
-    }).catch(() => { /* leave the line hidden */ });
+    };
+    const get = () => fetch('/api/visit', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null));
+    if (ls(DONE) === '1') { get().then(show).catch(() => { /* leave the line hidden */ }); return; }
+
+    // Count only real engagement: visible for 3 s plus a scroll, tap or key press, or visible for 10 s
+    let token = null, tokenAt = 0, shown = 0, since = 0, engaged = false, sent = false, timer = 0;
+    const fetchToken = () => get().then((d) => { if (d) { token = d.token; tokenAt = Date.now(); } return d; });
+    const visibleMs = () => shown + (since ? Date.now() - since : 0);
+    const send = () => {
+      if (sent) return;
+      sent = true;
+      clearTimeout(timer);
+      ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach((t) => removeEventListener(t, onEngage, true));
+      (Date.now() - tokenAt > 25 * 60e3 ? fetchToken().then(() => new Promise((ok) => setTimeout(ok, 3200))) : Promise.resolve())
+        .then(() => fetch('/api/visit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, t: token }), cache: 'no-store' }))
+        .then((r) => (r.ok || r.status === 429 ? r.json().then((d) => { if (r.ok) ls(DONE, '1'); return d; }) : null))
+        .then(show).catch(() => { /* leave the line as it is */ });
+    };
+    const check = () => {
+      clearTimeout(timer);
+      if (sent || !token || !since) return;
+      const ms = visibleMs(), need = engaged ? 3e3 : 10e3;
+      if (ms >= need) send(); else timer = setTimeout(check, need - ms + 50);
+    };
+    function onEngage() { engaged = true; check(); }
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') { if (!since) since = Date.now(); } else if (since) { shown += Date.now() - since; since = 0; }
+      check();
+    };
+    ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach((t) => addEventListener(t, onEngage, { capture: true, passive: true }));
+    document.addEventListener('visibilitychange', onVisibility);
+    fetchToken().then((d) => { show(d); if (token) { since = 0; shown = 0; onVisibility(); } }).catch(() => { /* leave the line hidden */ });
   })();
 
   // refresh relative times and the data's age every minute
