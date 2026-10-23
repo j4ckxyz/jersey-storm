@@ -267,7 +267,7 @@
     label.remove();
   }
   const HAPTIC_FIRM = '#refresh';
-  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, .seg button, .now-strip button, .img-tabs button, details > summary';
+  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, .cam-msg, .seg button, .now-strip button, .img-tabs button, details > summary';
   document.addEventListener('click', (e) => {
     if (!(e.target instanceof Element)) return;
     if (e.target.closest(HAPTIC_FIRM)) haptic(true);
@@ -1319,6 +1319,146 @@
     document.getElementById(b.dataset.to).scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
   });
 
+  // --- webcams (Detailed > Webcams) ---
+  // The ipcamlive cameras play their HLS stream straight from ipcamlive, which allows any origin; /api/cams only
+  // says which server and stream each one is on right now (JSON, never video). Safari plays HLS itself; elsewhere
+  // the vendored hls.js loads the first time a camera starts. Nothing loads until Detailed is open and a camera is
+  // on screen (or tapped), and each one stops when it scrolls away, the tab is hidden or the view goes back to
+  // Simple, so nobody streams video they can't see. See DATA.md, "Webcams".
+  const CAMS = [
+    { alias: '69b3d2ab49e7d', name: 'JamCam east', where: 'St Helier', credit: 'Islands Insurance', link: 'https://www.ipcamlive.com/69b3d2ab49e7d' },
+    { alias: '69b43d50d3820', name: 'JamCam west', where: 'St Helier', credit: 'Islands Insurance', link: 'https://www.ipcamlive.com/69b43d50d3820' },
+    { alias: '5cd3eb0ba2d30', name: 'St Aubin’s harbour', where: 'St Aubin', credit: 'Panorama Guest House', link: 'https://www.ipcamlive.com/5cd3eb0ba2d30' },
+    { alias: '667152e6e359f', name: 'Runway', where: 'Jersey Airport', credit: 'Jersey Aero Club', link: 'https://www.ipcamlive.com/667152e6e359f' },
+  ];
+  const HLS_JS = '/hls-1.5.17.light.min.js';
+  const CAM_MSG = { idle: 'Tap to play', loading: 'Connecting…', offline: 'Camera offline · tap to try again' };
+  const camState = CAMS.map(() => ({ st: 'idle', seen: false, token: null, el: null, hls: null, timer: 0 }));
+  const camTile = (i) => document.querySelector(`#cams .cam[data-i="${i}"]`);
+  $('#cams').innerHTML = CAMS.map((c, i) => `<figure class="cam" data-i="${i}" data-st="idle">
+      <div class="cam-frame"><span class="cam-live" hidden>Live</span><button type="button" class="cam-msg">${CAM_MSG.idle}</button></div>
+      <figcaption><b>${esc(c.name)}</b> <span class="muted">· ${esc(c.where)}</span><a class="cam-src" href="${esc(c.link)}" target="_blank" rel="noopener noreferrer">${esc(c.credit)}<span class="ext" aria-hidden="true"></span></a></figcaption>
+    </figure>`).join('');
+  function setCam(i, st) {
+    camState[i].st = st;
+    const el = camTile(i);
+    el.dataset.st = st;
+    el.querySelector('.cam-live').hidden = st !== 'playing';
+    const msg = el.querySelector('.cam-msg');
+    msg.textContent = CAM_MSG[st] || '';
+    msg.setAttribute('aria-label', `${CAMS[i].name}: ${st === 'playing' ? 'live' : CAM_MSG[st]}`);
+  }
+
+  // stream addresses, re-read at most every 2 minutes, or straight away after a camera failed
+  let camInfo = null;
+  let camInfoAt = 0;
+  let camInfoP = null;
+  function loadCamInfo() {
+    if (camInfo && Date.now() - camInfoAt < 120e3) return Promise.resolve(camInfo);
+    if (!camInfoP) {
+      const ac = window.AbortController ? new AbortController() : null;
+      const timer = setTimeout(() => ac && ac.abort(), 8000);
+      camInfoP = fetch('/api/cams', { cache: 'no-cache', signal: ac && ac.signal })
+        .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+        .then((d) => { camInfo = d; camInfoAt = Date.now(); return d; })
+        .finally(() => { clearTimeout(timer); camInfoP = null; });
+    }
+    return camInfoP;
+  }
+  let hlsP = null;
+  const nativeHls = () => /Apple/.test(navigator.vendor || '') && !!document.createElement('video').canPlayType('application/vnd.apple.mpegurl');
+  function loadHls() {
+    hlsP = hlsP || new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = HLS_JS;
+      s.onload = () => (window.Hls ? resolve(window.Hls) : reject(new Error('hls.js missing')));
+      s.onerror = () => { hlsP = null; reject(new Error('hls.js failed to load')); };
+      document.head.append(s);
+    });
+    return hlsP;
+  }
+  async function camStart(i) {
+    const s = camState[i];
+    if (s.st === 'loading' || s.st === 'playing') return;
+    const token = {}; // a stop or a newer start replaces it, so late callbacks from this attempt do nothing
+    s.token = token;
+    setCam(i, 'loading');
+    s.timer = setTimeout(() => camFail(i, token), 20000); // nothing playing after 20 s: show it as offline
+    try {
+      const info = await loadCamInfo();
+      if (s.token !== token) return;
+      const cam = (info.cams || []).find((x) => x.alias === CAMS[i].alias);
+      if (!cam || !cam.ok || !/^https:\/\/s\d+\.ipcamlive\.com\//.test(cam.hls || '')) throw new Error('offline');
+      const v = document.createElement('video');
+      v.muted = true;
+      v.playsInline = true;
+      v.autoplay = true;
+      for (const a of ['muted', 'playsinline', 'autoplay', 'disablepictureinpicture']) v.setAttribute(a, '');
+      v.setAttribute('aria-label', `${CAMS[i].name} live video, ${CAMS[i].where}`);
+      if (/^https:\/\/s\d+\.ipcamlive\.com\//.test(cam.snapshot || '')) v.poster = cam.snapshot;
+      v.addEventListener('playing', () => { if (s.token === token) { clearTimeout(s.timer); setCam(i, 'playing'); } });
+      v.addEventListener('error', () => camFail(i, token));
+      camTile(i).querySelector('.cam-frame').prepend(v);
+      s.el = v;
+      if (nativeHls()) v.src = cam.hls;
+      else {
+        const Hls = await loadHls();
+        if (s.token !== token) return;
+        if (!Hls.isSupported()) throw new Error('no HLS support');
+        // a short buffer: this is a live picture, not a film, and many readers are on mobile data
+        const h = new Hls({ maxBufferLength: 8, backBufferLength: 0, liveSyncDurationCount: 2, enableWorker: true });
+        s.hls = h;
+        h.on(Hls.Events.ERROR, (e, d) => { if (d && d.fatal) camFail(i, token); });
+        h.loadSource(cam.hls);
+        h.attachMedia(v);
+      }
+      const p = v.play();
+      if (p && p.catch) p.catch(() => { /* autoplay refused: the poster stays, and a tap tries again */ });
+    } catch (e) { camFail(i, token); }
+  }
+  function camStop(i, st = 'idle') {
+    const s = camState[i];
+    s.token = null;
+    clearTimeout(s.timer);
+    if (s.hls) { s.hls.destroy(); s.hls = null; }
+    if (s.el) { s.el.pause(); s.el.removeAttribute('src'); s.el.load(); s.el.remove(); s.el = null; } // load() after removing src ends the download
+    setCam(i, st);
+  }
+  function camFail(i, token) {
+    if (camState[i].token !== token) return;
+    camStop(i, 'offline');
+    camInfoAt = 0; // the camera may have reconnected on a new stream: re-read the addresses next time
+  }
+  // start what's on screen, stop the rest; offline cameras only retry when they come back into view or are tapped
+  const camsWanted = () => detailed && document.visibilityState === 'visible';
+  function camsSync() {
+    camState.forEach((s, i) => {
+      if (camsWanted() && s.seen) { if (s.st === 'idle') camStart(i); } else if (s.st === 'loading' || s.st === 'playing') camStop(i);
+    });
+  }
+  let camIO = null;
+  function camsInit() {
+    if (camIO || !window.IntersectionObserver) return;
+    camIO = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const i = Number(e.target.dataset.i);
+        const s = camState[i];
+        const was = s.seen;
+        s.seen = e.isIntersecting;
+        if (s.seen && !was && s.st === 'offline' && camsWanted()) camStart(i);
+      }
+      camsSync();
+    }, { threshold: 0.25 });
+    $$('#cams .cam').forEach((el) => camIO.observe(el));
+  }
+  $('#cams').addEventListener('click', (e) => {
+    const b = e.target.closest('.cam-msg');
+    if (!b) return;
+    const i = Number(b.closest('.cam').dataset.i);
+    if (camState[i].st === 'idle' || camState[i].st === 'offline') camStart(i);
+  });
+  document.addEventListener('visibilitychange', camsSync);
+
   function setDetailed(on, persist) {
     detailed = on;
     document.body.classList.toggle('detailed', on);
@@ -1329,6 +1469,8 @@
     renderDetail();
     renderSrcStatus();
     applyMode();
+    if (on) camsInit();
+    camsSync();
   }
   // only redraws from data already loaded: switching never refetches
   $('#view-seg').addEventListener('click', (e) => {

@@ -472,6 +472,20 @@ body.detailed .detail{display:flex}
 .dsec{display:grid;gap:var(--space-md);grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
 .dsec-h,.dwide{grid-column:1/-1}
 .dsec-h{margin-bottom:calc(var(--space-xs) * -1)}
+/* webcams: a 16:9 frame per camera; the live badge sits on the picture, so it's light on a dark scrim in both themes */
+.cams{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-md)}
+.cam{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cam-frame{position:relative;aspect-ratio:16/9;border-radius:var(--radius-sm);overflow:hidden;background:var(--surface-2);border:1px solid var(--line)}
+.cam-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--surface-2)}
+.cam-msg{position:absolute;inset:0;z-index:1;display:grid;place-items:center;width:100%;padding:12px;border:0;background:transparent;color:var(--muted);font-size:.9rem;font-weight:600;text-align:center}
+.cam[data-st="loading"] .cam-msg{color:#fff;background:rgba(15,20,25,.35);cursor:default}
+.cam[data-st="playing"] .cam-msg{display:none}
+.cam[data-st="offline"] .cam-msg{background:var(--surface-2)}
+.cam-live{position:absolute;bottom:8px;left:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;background:rgba(15,20,25,.6);color:#fff;font-size:.72rem;font-weight:700}
+.cam-live[hidden]{display:none}
+.cam-live::before{content:"";width:7px;height:7px;border-radius:50%;background:#68ca80}
+.cam figcaption{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;font-size:.88rem;line-height:1.4}
+.cam-src{margin-left:auto;font-size:.8rem}
 .src-status{list-style:none;margin:0;padding:0}
 .src-status li{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
 .src-status li:first-child{border-top:0;padding-top:0}
