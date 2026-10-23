@@ -1,8 +1,64 @@
 {
   "version": 1,
-  "updated": "2026-10-23T12:20:00+01:00",
+  "updated": "2026-10-23T14:15:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-orange-warning-1158",
+      "start": "2026-10-23T12:58:00+01:00",
+      "title": "Red warning downgraded to orange; around 170 incidents",
+      "summary": "Jersey Met issued an orange wind warning at 11:58am, replacing the red warning. Winds have eased, and teams are clearing around 170 reported incidents.",
+      "details": "Jersey Met confirmed an orange wind warning is in force, issued at 11:58am and replacing the red wind warning: west to north-west severe gale F9 with gusts to 60 knots continuing [1][2]. The government said winds have eased but asked islanders to take care when travelling, as teams clear fallen trees and debris from around 170 reported incidents, and to check on vulnerable people [3].",
+      "category": "warning",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "gov",
+          "publisher": "Jersey Met",
+          "title": "Jersey weather warnings",
+          "url": "https://www.gov.je/weather/jerseywarnings/",
+          "time": "2026-10-23T12:58:00+01:00",
+          "author": ""
+        },
+        {
+          "type": "gov",
+          "publisher": "Government of Jersey",
+          "title": "Storm Austen: Update for Islanders (1pm)",
+          "url": "https://www.gov.je/News/2026/Pages/StormAustenMorningUpdate.aspx",
+          "time": "2026-10-23T13:00:00+01:00",
+          "author": ""
+        },
+        {
+          "type": "bluesky",
+          "publisher": "Government of Jersey (Bluesky)",
+          "title": "Orange wind warning now in force",
+          "url": "https://bsky.app/profile/gov.je/post/3myk6doryiy2l",
+          "time": "2026-10-23T13:25:27+01:00",
+          "author": "gov.je"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-rubis-reopen-1300",
+      "start": "2026-10-23T12:38:50+01:00",
+      "title": "Rubis forecourts reopen from 1pm",
+      "summary": "Rubis says its forecourts will reopen from 1pm following the storm and a review of conditions.",
+      "details": "Following the storm and a review of the weather conditions, Rubis said its forecourts would reopen from 1pm today [1].",
+      "category": "travel",
+      "severity": "info",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "bluesky",
+          "publisher": "today.je (relaying Rubis)",
+          "title": "Rubis forecourts reopen from 1pm",
+          "url": "https://bsky.app/profile/today.je/post/3myk3qczy4e2q",
+          "time": "2026-10-23T12:38:50+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
     {
       "id": "2026-10-23-jec-beyond-worst-1200",
       "start": "2026-10-23T12:00:00+01:00",
@@ -20,6 +76,14 @@
           "url": "https://bsky.app/profile/today.je/post/3myjztijcgl2k",
           "time": "2026-10-23T12:04:49+01:00",
           "author": "today.je"
+        },
+        {
+          "type": "web",
+          "publisher": "Jersey Electricity",
+          "title": "12pm Friday 23 October: Storm Austen Update",
+          "url": "https://www.jec.co.uk/the-energy-blog/12pm-friday-23-october-storm-austen-update/",
+          "time": "2026-10-23T13:57:51+01:00",
+          "author": ""
         }
       ]
     },
