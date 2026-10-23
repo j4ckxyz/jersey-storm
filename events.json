@@ -1,8 +1,44 @@
 {
   "version": 1,
-  "updated": "2026-10-23T08:15:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-gusts-top-80mph-services-close",
+      "start": "2026-10-23T08:38:37+01:00",
+      "end": "2026-10-23T08:56:36+01:00",
+      "title": "Gusts top 80mph as businesses and services close",
+      "summary": "Wind speeds topped 80mph on Friday morning; many businesses and services closed, with emergency, urgent and maternity services running as normal.",
+      "details": "Bailiwick Express reported wind speeds topping 80mph on Friday morning and many services closing, while emergency, urgent and maternity services operate as normal [1]. Trinity Parish Office is closed today [2]. Rubis posted a Storm Austen customer update [3].",
+      "category": "closures",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "news",
+          "publisher": "Bailiwick Express",
+          "author": "",
+          "title": "Businesses and services close as Storm Austen hit",
+          "url": "https://www.bailiwickexpress.com/news/businesses-and-services-close-as-storm-austen-hit/",
+          "time": "2026-10-23T08:56:36+01:00"
+        },
+        {
+          "type": "bluesky",
+          "publisher": "Trinity Honorary Police (via today.je)",
+          "author": "today.je",
+          "title": "Trinity Parish Office closed today",
+          "url": "https://bsky.app/profile/today.je/post/3myjp5r5rss2k",
+          "time": "2026-10-23T08:53:42+01:00"
+        },
+        {
+          "type": "bluesky",
+          "publisher": "Rubis (via today.je)",
+          "author": "today.je",
+          "title": "Storm Austen Customer Update",
+          "url": "https://bsky.app/profile/today.je/post/3myjocrms6h2c",
+          "time": "2026-10-23T08:38:37+01:00"
+        }
+      ]
+    },
     {
       "id": "2026-10-23-trees-roads-closures-morning",
       "start": "2026-10-23T07:12:15+01:00",
