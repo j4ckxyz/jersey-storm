@@ -8,11 +8,12 @@ Live at **https://storm.jsylabs.uk** (Cloudflare Pages). The old Vercel deployme
 
 ```
 index.html, app.js, style.css   Frontend (plain HTML/CSS/JS, no framework)
+hls-1.5.17.light.min.js         Vendored hls.js (Apache-2.0) for the webcams outside Safari; loaded only when one starts
 404.html                        Not-found page
 summary.json                    "What's happening" box. Rewritten by the scheduled runs
 x-posts.json                    X posts merged into the feed. Rewritten by the scheduled runs
 events.json                     Grouped storm events for the timeline. Rewritten by the scheduled runs
-functions/api/*.js              Cloudflare Pages Functions: /api/feed, /api/weather, /api/warnings, /api/obs, /api/travel, /api/x-avatar
+functions/api/*.js              Cloudflare Pages Functions: /api/feed, /api/weather, /api/warnings, /api/obs, /api/travel, /api/cams, /api/x-avatar
 lib/*.js                        Shared API logic (ES modules, web APIs only), used by both runtimes
 lib/edge-cache.js               Cloudflare Cache API layer (stands in for Vercel's s-maxage)
 build.mjs                       Copies the public files into dist/ and checks the data files

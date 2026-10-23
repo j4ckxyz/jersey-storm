@@ -17,6 +17,9 @@
   Cache-Control: public, max-age=31536000, immutable
 /bsky.*.js
   Cache-Control: public, max-age=31536000, immutable
+# Vendored libraries carry their version in the name.
+/hls-*.js
+  Cache-Control: public, max-age=31536000, immutable
 # Unhashed copies, only for HTML cached before hashing started.
 /app.js
   Cache-Control: public, max-age=0, must-revalidate

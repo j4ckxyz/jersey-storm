@@ -343,6 +343,44 @@ Not used:
 - **Jersey Electricity:** has no public outage feed.
 - **gov.je road closures:** the page is an index of planned roadworks.
 
+## `GET /api/cams` (Pages Function, `lib/cams.js`) and the Webcams section
+
+Detailed > Webcams shows four live cameras. They're the same streams as https://jsy-webcams.vercel.app/, worked out by recording that page's network requests in a headless browser and reading the ipcamlive player.
+
+```
+{ cams: [{ alias, ok: true, hls: "https://s46.ipcamlive.com/streams/<id>/stream.m3u8", snapshot: ".../snapshot.jpg" }
+        | { alias, ok: false, error }],
+  generatedAt }
+```
+
+| Camera (UI name) | Credit / link | ipcamlive alias |
+|---|---|---|
+| JamCam east · St Helier | Islands Insurance · ipcamlive.com/69b3d2ab49e7d | `69b3d2ab49e7d` |
+| JamCam west · St Helier | Islands Insurance · ipcamlive.com/69b43d50d3820 | `69b43d50d3820` |
+| St Aubin's harbour · St Aubin | Panorama Guest House · ipcamlive.com/5cd3eb0ba2d30 | `5cd3eb0ba2d30` |
+| Runway · Jersey Airport | Jersey Aero Club · ipcamlive.com/667152e6e359f | `667152e6e359f` |
+
+**How it's fetched:**
+- **The function** reads `https://g2.ipcamlive.com/player/player.php?alias=<alias>`, ipcamlive's own embed page. Its script sets `address = 'http://sNN.ipcamlive.com/'` (the stream server is the last `sNN` one) and `streamid = '…'`. That page has no CORS headers, which is why a function is needed.
+- **The function returns JSON only.** The camera list is fixed in `lib/cams.js`, so it can't fetch anything else. Cached 2 minutes per data centre, or 1 minute when a camera failed.
+- **The browser** then plays `https://sNN.ipcamlive.com/streams/<id>/stream.m3u8` directly. ipcamlive sends `Access-Control-Allow-Origin: *` on the playlist and segments, and no Referer or token is needed, so **no video passes through our functions**. The poster image is `snapshot.jpg` from the same folder.
+- **Players:** Safari (macOS and iOS) plays HLS natively. Other browsers load the vendored `hls-1.5.17.light.min.js` (Apache-2.0, unmodified from npm) the first time a camera starts.
+
+**When things load:**
+- Nothing loads until Detailed is open **and** a camera is at least 25% on screen (IntersectionObserver) or tapped.
+- Each camera stops (hls.js destroyed, `src` removed, the download ended) when it scrolls away, the tab is hidden or the view goes back to Simple.
+- An error, a failed `/api/cams` or nothing playing after 20 s shows a calm "Camera offline · tap to try again" tile. The next try re-reads the stream addresses.
+
+**Fragility:**
+- The stream id changes when a camera reconnects; the function picks up the new one within 2 minutes.
+- If ipcamlive renames `address` or `streamid` in player.php, every camera shows "Camera offline" until the regexes in `lib/cams.js` are updated.
+- If an owner disables a camera or turns off public embedding, that camera alone shows offline.
+- The names and locations are ours, read from each camera's own picture overlay and ipcamlive title. They aren't published as data, so check them if a camera moves.
+
+**Looked at, not used:**
+- **HDOnTap "Watersplash" (St Ouen's):** its config (`portal.hdontap.com/backend/embed/watersplash_visitjersey-CUST`) has no CORS headers, and its HLS host `live.hdontap.com` returns **403 to `Origin: https://storm.jsylabs.uk`**. hls.js always sends Origin, so playing it would mean proxying the video bytes, which isn't allowed on the free plan. jsy-webcams does exactly that through a third-party CORS proxy. The Splash Cam link in Maps & imagery still opens HDOnTap's own page.
+- **Twitch `elticojersey`:** it plays (needs `parent=<our hostname>`), but on 23 Oct 2026 the picture was an unreadable, rain-covered lens. The embed also brings Twitch's ad and analytics scripts, and it can't report whether the channel is live or offline. Easy to add later as an iframe if it becomes useful.
+
 ## `GET /api/weather` (Pages Function, `lib/weather.js`)
 
 It always returns HTTP 200 JSON, with the same caching as `/api/feed`. The data comes from Jersey Met. Warnings come from `/api/warnings`, not from here.
