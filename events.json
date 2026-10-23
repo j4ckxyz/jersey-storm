@@ -1,8 +1,96 @@
 {
   "version": 1,
-  "updated": "2026-10-23T14:15:00+01:00",
+  "updated": "2026-10-23T16:20:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-shipping-orange-1552",
+      "start": "2026-10-23T15:52:00+01:00",
+      "title": "Orange wind warning for the Channel Islands Shipping Area",
+      "summary": "Jersey Met issued an orange wind warning for the Channel Islands Shipping Area at 3:52pm: gale F8 with gusts to 50 knots.",
+      "details": "Jersey Met's latest warning, issued at 3:52pm, is an orange wind warning for the Channel Islands Shipping Area: west to north-west gale F8 with gusts to 50 knots, backing south-west 7 with gusts to 45 knots later [1].",
+      "category": "warning",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "gov",
+          "publisher": "Jersey Met",
+          "title": "Jersey weather warnings",
+          "url": "https://www.gov.je/weather/jerseywarnings/",
+          "time": "2026-10-23T15:52:00+01:00",
+          "author": ""
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-ie-169-reports-1530",
+      "start": "2026-10-23T15:30:00+01:00",
+      "title": "169 storm reports, 134 about trees",
+      "summary": "Infrastructure and Environment have received 169 Storm Austen reports so far, 134 of them about trees.",
+      "details": "In a 3:30pm update, Infrastructure and Environment said they had received 169 reports related to Storm Austen, including 134 about trees [1].",
+      "category": "damage",
+      "severity": "notable",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "bluesky",
+          "publisher": "today.je (relaying Infrastructure and Environment)",
+          "title": "Storm Austen Update 15:30",
+          "url": "https://bsky.app/profile/today.je/post/3mykgqjrsqq2n",
+          "time": "2026-10-23T15:55:48+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-jersey-post-saturday",
+      "start": "2026-10-23T14:45:46+01:00",
+      "title": "Post Offices open as normal on Saturday",
+      "summary": "Jersey Post's Broad Street and Rue des Pres Post Offices will open as normal from 8.30am on Saturday.",
+      "details": "Jersey Post said its Broad Street and Rue des Pres Post Offices will be open as normal from 8.30am tomorrow (Saturday 24 October) [1].",
+      "category": "closures",
+      "severity": "info",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "bluesky",
+          "publisher": "today.je (relaying Jersey Post)",
+          "title": "Jersey Post Storm Austen update",
+          "url": "https://bsky.app/profile/today.je/post/3mykctcip3r2o",
+          "time": "2026-10-23T14:45:46+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-st-helier-hazards",
+      "start": "2026-10-23T14:41:48+01:00",
+      "title": "St Helier: hazards remain as clean-up continues",
+      "summary": "St Helier Parish warns that hazards remain as the clean-up continues across the parish.",
+      "details": "St Helier Parish published an update saying hazards remain as the clean-up continues across St Helier [1][2].",
+      "category": "damage",
+      "severity": "notable",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "web",
+          "publisher": "St Helier Parish",
+          "title": "Storm Austen: Hazards remain as clean-up continues across St Helier",
+          "url": "https://sthelier.je/storm-austen-hazards-remain-as-clean-up-continues-across-st-helier/",
+          "time": "2026-10-23T14:41:48+01:00",
+          "author": ""
+        },
+        {
+          "type": "bluesky",
+          "publisher": "today.je",
+          "title": "St Helier Parish update",
+          "url": "https://bsky.app/profile/today.je/post/3mykcm7uaik2n",
+          "time": "2026-10-23T14:41:48+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
     {
       "id": "2026-10-23-orange-warning-1158",
       "start": "2026-10-23T12:58:00+01:00",
