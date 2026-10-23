@@ -1,8 +1,36 @@
 {
   "version": 1,
-  "updated": "2026-10-23T18:15:00+01:00",
+  "updated": "2026-10-23T20:15:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-day-of-disruption-wrap-1958",
+      "start": "2026-10-23T19:58:59+01:00",
+      "title": "Storm Austen wrap-up: a day of disruption",
+      "summary": "BBC says Jersey Airport recorded an 84mph gust just before 6am and all Jersey schools closed; tree surgeons spent the day clearing fallen trees, and St Helier says teamwork got the parish through.",
+      "details": "BBC News reports gusts of 84mph (135km/h) at Jersey Airport just before 06:00 BST and that all schools in Jersey and Guernsey closed for the day. A Jersey tree surgeon told the BBC it was a \"really busy\" morning clearing roads and removing trees that had fallen on power lines [1]. St Helier Parish published a round-up of how its teams handled the storm [2].",
+      "category": "impact",
+      "severity": "info",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "web",
+          "publisher": "BBC News",
+          "title": "First storm of season brings day of disruption",
+          "url": "https://www.bbc.co.uk/news/articles/crq5nq8g4q6do",
+          "time": "2026-10-23T19:58:59+01:00",
+          "author": ""
+        },
+        {
+          "type": "web",
+          "publisher": "St Helier Parish",
+          "title": "St Helier weathers Storm Austen with a little ingenuity – and a lot of teamwork",
+          "url": "https://sthelier.je/st-helier-weathers-storm-austen-with-a-little-ingenuity-and-a-lot-of-teamwork/",
+          "time": "2026-10-23T18:41:53+01:00",
+          "author": ""
+        }
+      ]
+    },
     {
       "id": "2026-10-23-jec-19-without-power-1645",
       "start": "2026-10-23T16:45:00+01:00",
