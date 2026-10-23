@@ -1,8 +1,29 @@
 {
   "version": 1,
-  "updated": "2026-10-23T09:18:00+01:00",
+  "updated": "2026-10-23T09:50:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-peak-gust-85mph-0400",
+      "start": "2026-10-23T04:00:00+01:00",
+      "end": "2026-10-23T09:37:28+01:00",
+      "title": "85mph peak gust recorded around 4am; severe gales continue",
+      "summary": "Winds of 85mph were recorded in Jersey overnight, peaking around 4am; severe gale F9 winds continue from the west to north-west.",
+      "details": "Bailiwick Express reported a top wind speed of 85mph, reached at around 4am, with severe gale F9 west to north-west winds still blowing across the island. Many services and businesses are closed and Islanders are being told to stay inside; emergency, maternity and urgent care at the hospital remain open [1].",
+      "category": "weather",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "news",
+          "publisher": "Bailiwick Express",
+          "author": "James Lewis",
+          "title": "Islanders wake to fallen trees and travel disruption as Storm Austen continues",
+          "url": "https://www.bailiwickexpress.com/news/islanders-wake-to-fallen-trees-and-travel-disruption-as-storm-austen-continues/",
+          "time": "2026-10-23T09:37:28+01:00"
+        }
+      ]
+    },
     {
       "id": "2026-10-23-gusts-top-80mph-services-close",
       "start": "2026-10-23T08:38:37+01:00",
