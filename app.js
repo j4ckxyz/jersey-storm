@@ -1146,12 +1146,53 @@
       <table class="tide-t"><tbody>${d.rows.map((t) => `<tr${t === next ? ' class="next"' : ''}><td>${esc(clock(new Date(t.at)))}</td><td>${t.high ? 'High' : 'Low'}</td><td>${t.heightM.toFixed(1)} m</td></tr>`).join('')}</tbody></table>`).join('')}
       <p class="muted small">Predictions by the National Oceanography Centre via <a href="https://www.gov.je/weather/tidetimes/" target="_blank" rel="noopener noreferrer">gov.je<span class="ext" aria-hidden="true"></span></a>. Storm surge and waves can push water higher.</p>`;
   }
+  // Jersey Met's coastal station reports: "W8" is direction and Beaufort force, gusts are knots, tendency is a
+  // shipping-forecast code ("RS" rising slowly, "FVR" falling very rapidly)
+  const TEND_RATE = { S: ' slowly', Q: ' quickly', VR: ' very rapidly' };
+  function tendency(code) {
+    const c = String(code || '').toUpperCase();
+    if (/^(S|STDY|STEADY)$/.test(c)) return 'steady';
+    const m = c.match(/^(R|F)(S|Q|VR)?$/);
+    return m ? `${m[1] === 'R' ? 'rising' : 'falling'}${TEND_RATE[m[2]] || ''}` : '';
+  }
+  const SHIPPING_PAGE = 'https://www.gov.je/weather/shipping/';
+  function renderCoastal() {
+    const el = $('#coastal');
+    const c = obsData && obsData.coastal;
+    if (!c || !c.stations.length) { el.innerHTML = `<h3>Coastal stations</h3><p class="muted small">${obsTried ? 'Not available right now.' : 'Loading…'}</p>`; return; }
+    const row = (s) => {
+      if (!s.report) return 'no report';
+      const tend = tendency(s.tendency);
+      return [s.windDir && s.force != null ? `${s.windDir} force ${s.force}` : '', s.gustKt ? `gusts ${mph(s.gustKt)} mph` : '',
+        s.pressureHpa ? `${s.pressureHpa} hPa${tend ? `, ${tend}` : ''}` : '', s.visibility ? `visibility ${s.visibility.replace(/NM$/i, ' NM')}` : '', s.weather.toLowerCase()].filter(Boolean).join(' · ');
+    };
+    el.innerHTML = `<h3>Coastal stations</h3>
+      <dl class="readout">${c.stations.map((s) => `<div><dt>${esc(s.name)}</dt><dd>${esc(row(s))}</dd></div>`).join('')}</dl>
+      <p class="muted small">${okTime(c.at) ? `Reports from ${esc(fmtTime(c.at))} · ` : ''}Jersey Met · <a href="${SHIPPING_PAGE}" target="_blank" rel="noopener noreferrer">gov.je/weather/shipping<span class="ext" aria-hidden="true"></span></a>${okTime(c.at) ? `<span class="asof-w"> · ${asOfHTML(c.at, 360)}</span>` : ''}</p>`;
+  }
+  function renderSea() {
+    const el = $('#sea');
+    const s = obsData && obsData.shipping;
+    const h = '<h3>At sea · Jersey inshore waters</h3>';
+    if (!s) { el.innerHTML = `${h}<p class="muted small">${obsTried ? 'Not available right now.' : 'Loading…'}</p>`; return; }
+    const rows = (x) => [['Wind', x.wind], ['Sea', x.sea], ['Weather', x.weather], ['Visibility', x.visibility], ['Sea temperature', x.seaTemp]]
+      .filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(tidy(v))}</dd></div>`).join('');
+    const wasOpen = !!el.querySelector('details[open]');
+    el.innerHTML = `${h}<dl class="readout">${rows(s.today)}</dl>
+      ${s.outlook.wind || s.general ? `<details class="key"${wasOpen ? ' open' : ''}><summary>Outlook and general situation ${ICON.chev}</summary>
+        ${s.outlookPeriod ? `<p><b>${esc(tidy(s.outlookPeriod))}</b></p>` : ''}<dl class="readout">${rows(s.outlook)}</dl>
+        ${s.general ? `<p>${esc(tidy(s.general))}</p>` : ''}</details>` : ''}
+      <p class="muted small">Jersey Met marine forecast${okTime(s.issuedAt) ? `, issued ${esc(fmtTime(s.issuedAt))}` : ''} · <a href="${SHIPPING_PAGE}" target="_blank" rel="noopener noreferrer">gov.je/weather/shipping<span class="ext" aria-hidden="true"></span></a>${okTime(s.issuedAt) ? `<span class="asof-w"> · ${asOfHTML(s.issuedAt, 14 * 60)}</span>` : ''}</p>`;
+  }
   function renderDetail() {
     if (!detailed) return; // nothing in the detailed view loads until someone opens it
     const fix = anchor();
     renderImage();
     renderMetar();
     renderTides();
+    renderCoastal();
+    renderSea();
+    refreshAsOf();
     fix();
   }
   async function loadObs() {
@@ -1492,6 +1533,9 @@
     ['Jersey Met warnings', warnData && warnData.checkedAt, 45, 5, 'https://www.gov.je/weather/jerseywarnings/', 'Warnings'],
     ['Jersey Met forecast', wxData && wxData.forecast && wxData.forecast.issuedAt, 8 * 60, 5, 'https://www.gov.je/weather/', 'Forecast'],
     ['Jersey Airport observation', obsData && obsData.metar && obsData.metar.time, 90, 5, 'https://aviationweather.gov/data/metar/?ids=EGJJ', 'Wind reading'],
+    // published about 3 hours after the observation; the inshore forecast is issued a couple of times a day
+    ['Jersey Met coastal stations', obsData && obsData.coastal && obsData.coastal.at, 360, 5, 'https://www.gov.je/weather/shipping/', 'Coastal reports'],
+    ['Jersey Met inshore waters forecast', obsData && obsData.shipping && obsData.shipping.issuedAt, 14 * 60, 5, 'https://www.gov.je/weather/shipping/', 'Sea forecast'],
   ];
   function dataTime() {
     const ts = [summaryData && summaryData.updatedAt, eventsData && eventsData.updated, apiFeed && apiFeed.generatedAt].filter(okTime).map((t) => new Date(t));

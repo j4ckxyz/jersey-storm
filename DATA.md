@@ -309,10 +309,26 @@ Feeds the wind part of the simple view's "now" strip and Detailed > Weather now 
   } | null,
   tides: [{ at (ISO), high: boolean, heightM }] | null,   // St Helier, from the gov.je tide table, from early today
   images: { radar|satellite|waves: { url, updatedAt (the file's Last-Modified) } } | null,
-  sources: { metar, tides, images: {ok, error?} },
+  coastal: {                     // optional; Jersey Met "Weather Reports from Coastal Stations"
+    at (ISO, the report hour, Jersey time) | null,
+    stations: [{ name, report: boolean (false = "No Report"), windDir ("W"), force (Beaufort), gustKt | null,
+                 visibility ("2NM", "" if n/a), weather ("Cloudy"), pressureHpa | null, tendency ("RS", "FVR"…) }]
+  } | null,
+  shipping: {                    // optional; Jersey Met inshore waters forecast
+    issuedAt (ISO) | null, general, period,
+    today: { wind, sea, weather, visibility, seaTemp }, outlookPeriod, outlook: { wind, sea, weather, visibility }
+  } | null,
+  sources: { metar, tides, images, coastal, shipping: {ok, error?} },
   generatedAt
 }
 ```
+
+`coastal` and `shipping` come from `prodgojweatherstorage.blob.core.windows.net/data/CoastalReports.json` and `Shipping.json`, the files https://www.gov.je/weather/shipping/ loads. They're fetched here because their CORS only allows www.gov.je.
+- **Coastal reports:** hourly. The file appears about 2¾ hours after the report hour (its "7am" matched the 06:00 UTC airport METAR, so the time is Jersey time). The page marks it stale after 6 hours.
+- **Inshore forecast:** issued a few times a day, with the issue time read from its `Date` text. Marked stale after 14 hours.
+- **Fragility:** both files are undocumented. If a field is renamed, that card shows "Not available right now".
+
+Both appear in Detailed > Weather now, with their own "as of" time and a gov.je link, and in Detailed > Sources. They aren't in the simple view's now strip: neither is one short fact, and a fourth part would push the strip past two lines on phones.
 
 The tide numbers come from the function behind https://www.gov.je/weather/tidetimes/. The access code in `lib/obs.js` is the public one in that page's own script. If gov.je changes it, the tide tile hides until the code is updated.
 
@@ -337,11 +353,13 @@ Both are fetched with a `?t=` time parameter, as those sites do, because their C
 }
 ```
 
-Not used:
-- **Condor Ferries:** their sailing-updates API only lists Guernsey routes; the harbour file covers every Jersey sailing.
+Not used (re-checked 23 Oct 2026):
+- **Condor Ferries:** `condorferries.co.uk/Umbraco/Api/SailingUpdates/GetSailingUpdates` (no CORS) only lists Guernsey, Poole and St Malo routes. The harbour file covers every Jersey sailing.
 - **LibertyBus:** service alerts need an API key from LibertyBus's own site.
-- **Jersey Electricity:** has no public outage feed.
-- **gov.je road closures:** the page is an index of planned roadworks.
+- **Jersey Electricity:** has no public outage feed. The power-cuts page redirects to static advice and points to JEC's Facebook for live updates.
+- **gov.je road closures:** the gov.je page is an index. Its "current road closures" link goes to Trafficworx (`roadworks.gov.je/trafficreport/`, server-rendered HTML), which only lists planned works (promoter, contractor, dates). It has no emergency or storm closures, so showing it as "road closures" during a storm would mislead. Storm closures come through the timeline's Closures filter.
+- **Ports of Jersey coastguard and harbour pages:** these hold static guidance and notices to mariners, with no live data file. The harbour board above is the live part.
+- **Jersey Met live station observations:** gov.je/weather has no live station feed beyond the coastal reports above (now used). `oursites.json`, which it also loads, is just footer links.
 
 ## `GET /api/cams` (Pages Function, `lib/cams.js`) and the Webcams section
 

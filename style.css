@@ -515,7 +515,9 @@ body.detailed .detail{display:flex}
 .tide-t td:last-child{text-align:right}
 .tide-t tr.next td{font-weight:700}
 .tide-t tr.next td:first-child::after{content:" · next";font-weight:500;color:var(--muted)}
-.tides p,.metar p,.windy p{margin-top:var(--space-xs)}
+.tides p,.metar p,.windy p,.coastal>p,.sea>p{margin-top:var(--space-xs)}
+.coastal .readout div,.sea .readout div{grid-template-columns:9em minmax(0,1fr)}
+.sea details p{margin-top:var(--space-xs);color:var(--text)}
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
 .svc{display:flex;flex-direction:column;gap:2px;min-height:56px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--text)}
 .svc:hover{border-color:var(--line-2)}
