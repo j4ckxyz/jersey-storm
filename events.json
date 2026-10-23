@@ -1,8 +1,36 @@
 {
   "version": 1,
-  "updated": "2026-10-23T16:20:00+01:00",
+  "updated": "2026-10-23T18:15:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-jec-19-without-power-1645",
+      "start": "2026-10-23T16:45:00+01:00",
+      "title": "Jersey Electricity: 19 customers still without power",
+      "summary": "Jersey Electricity says 133 customers were affected across 20 incidents; 19 remain without power and should be restored today.",
+      "details": "Jersey Electricity's 4.45pm update said 133 customers had been affected across 20 separate incidents. Just 19 customers remained without power, with teams working to fix the final three network issues and all customers expected back on supply today, weather permitting. Electricity hazards can be reported on 01534 505050, and vulnerable customers without power can call Customer Care on 01534 505460 [1][2].",
+      "category": "power",
+      "severity": "notable",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "web",
+          "publisher": "Jersey Electricity",
+          "title": "4.45pm Friday 23 October: Storm Austen Update",
+          "url": "https://www.jec.co.uk/the-energy-blog/445pm-friday-23-october-storm-austen-update/",
+          "time": "2026-10-23T16:45:00+01:00",
+          "author": ""
+        },
+        {
+          "type": "bluesky",
+          "publisher": "today.je (Bluesky)",
+          "title": "[JEC Blog] 4.45pm Storm Austen Update",
+          "url": "https://bsky.app/profile/today.je/post/3myknkwuaqp2k",
+          "time": "2026-10-23T17:57:56+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
     {
       "id": "2026-10-23-shipping-orange-1552",
       "start": "2026-10-23T15:52:00+01:00",
