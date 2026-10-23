@@ -298,7 +298,7 @@ If Jersey Met can't be reached, the function returns HTTP 502 with `no-store`. T
 
 ## `GET /api/obs` (Pages Function, `lib/obs.js`)
 
-Feeds the "Right now" tiles and the detailed view. Each part can fail on its own (it's then `null`, and the page hides that tile or card). The response is cached for 5 minutes per data centre, or 1 minute when a part failed. The tide table is cached for an hour.
+Feeds the wind part of the simple view's "now" strip and Detailed > Weather now (tiles, METAR readout, tides) and Maps & imagery. Each part can fail on its own (it's then `null`, and the page hides that tile or card). The response is cached for 5 minutes per data centre, or 1 minute when a part failed. The tide table is cached for an hour.
 
 ```
 {
@@ -318,7 +318,7 @@ The tide numbers come from the function behind https://www.gov.je/weather/tideti
 
 ## `GET /api/travel` (Pages Function, `lib/travel.js`)
 
-Feeds the "Flights / Ferries" line in the simple view and the two boards in the detailed view. It reads the public JSON files that jerseyairport.com and ports.je load in the browser:
+Feeds the "Flights / Ferries" parts of the simple view's "now" strip and Detailed > Travel (summary lines and the two boards). It reads the public JSON files that jerseyairport.com and ports.je load in the browser:
 - `cdn.ports.je/data/airportArrivals48h.json`: arrivals and departures for 48 hours.
 - `test-cdn.ports.je/data/GetHarbourLive.json`: every ship movement at St Helier. Despite the host name, this is the file ports.je's live page uses.
 

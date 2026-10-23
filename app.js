@@ -27,7 +27,8 @@
   // themselves, so they're hidden and the tiles' message goes in the line above them.
   const PLACEHOLDERS = {
     '#tiles': (box) => { box.hidden = true; return document.querySelector('#obs-time'); },
-    '#travel-sum': (box) => { box.hidden = true; return null; },
+    '#travel-sum': (box) => box,
+    '#now-strip': (box) => box,
     '#now-live': (box) => box,
     '#summary': (box) => box,
     '#ev-list': (box) => box,
@@ -266,7 +267,7 @@
     label.remove();
   }
   const HAPTIC_FIRM = '#refresh';
-  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, #detail-btn, #mode-toggle, .img-tabs button, #travel-sum, details > summary';
+  const HAPTIC_LIGHT = '.ev-btn, #ev-filters button, #filters button, #theme-toggle, .tabbar button, #posts-toggle, #new-pill, #gust-chip, .tile, .seg button, .now-strip button, .img-tabs button, details > summary';
   document.addEventListener('click', (e) => {
     if (!(e.target instanceof Element)) return;
     if (e.target.closest(HAPTIC_FIRM)) haptic(true);
@@ -318,7 +319,13 @@
   let activeSource = 'All';
   const seenUrls = new Set();
   let firstLoad = true;
-  let detailed = (() => { try { return localStorage.getItem('view-mode') === 'detailed'; } catch (e) { return false; } })();
+  // Simple by default; ?view=detailed (or simple) and #detailed choose for this visit only, a tap on the toggle is remembered
+  let detailed = (() => {
+    const q = (location.search.match(/[?&]view=(simple|detailed)\b/) || [])[1];
+    if (q) return q === 'detailed';
+    if (location.hash === '#detailed') return true;
+    try { return localStorage.getItem('view-mode') === 'detailed'; } catch (e) { return false; }
+  })();
 
   // Keep what the reader is looking at in place while content above it re-renders (an innerHTML swap
   // defeats the browser's own scroll anchoring). Call before the change; call the returned function after.
@@ -529,7 +536,7 @@
     const wasOpen = el.open;
     // as of: when the server last gathered the sources; Bluesky separately, as the browser fetches it every minute
     const asOf = [apiFeed && asOfHTML(apiFeed.generatedAt, 6), liveBsky && `Bluesky ${asOfHTML(liveBsky.at, 3)}`].filter(Boolean).join(' · ');
-    el.innerHTML = `<summary>Sources: ${good.length} live${asOf ? ` · ${asOf}` : ''}${bad.length ? ` · <span class="err">unavailable: ${esc(bad.map((s) => s.name).join(', '))}</span>` : ''}${ICON.chev}</summary>
+    el.innerHTML = `<summary>Sources: ${good.length} live${asOf ? `<span class="asof-w"> · ${asOf}</span>` : ''}${bad.length ? ` · <span class="err">unavailable: ${esc(bad.map((s) => s.name).join(', '))}</span>` : ''}${ICON.chev}</summary>
       <div class="src-list">${good.map((s) => `<span class="src-chip good"><span class="dot"></span>${esc(s.name)} (${esc(s.count)})</span>`).join('')}${bad.map((s) => `<span class="src-chip bad" title="${esc(s.error || '')}"><span class="dot"></span>${esc(s.name)}</span>`).join('')}</div>`;
     el.open = wasOpen;
   }
@@ -580,12 +587,8 @@
     const secs = Array.isArray(s.sections) ? s.sections : [];
     const secIcon = (ic) => (typeof ic === 'string' && ic.length <= 8 && /[^\x00-\x7F]/.test(ic) ? `<span aria-hidden="true">${esc(ic)}</span>` : '');
     const secHTML = (sec) => `<h3>${secIcon(sec.icon)}${esc(sec.title)}</h3><ul>${(sec.points || []).map((p) => `<li>${md(p)}</li>`).join('')}</ul>`;
-    // the first 3 points of the first section stay visible; the rest of it and the other sections sit behind "Show more"
-    const lead = secs[0] || { points: [] };
-    const leadPts = Array.isArray(lead.points) ? lead.points : [];
-    const first = secs.length ? secHTML({ ...lead, points: leadPts.slice(0, 3) }) : '';
-    const more = leadPts.length > 3 ? `<ul class="sum-cont">${leadPts.slice(3).map((pt) => `<li>${md(pt)}</li>`).join('')}</ul>` : '';
-    const rest = more + secs.slice(1).map(secHTML).join('');
+    // the lead stays visible; the sections sit behind "Show more", so the simple view fits on one phone screen
+    const rest = secs.map(secHTML).join('');
     const posts = Array.isArray(s.posts) ? s.posts : [];
     const wasOpen = box.querySelector('details') && box.querySelector('details').open;
     $('#sum-upd').innerHTML = valid ? asOfHTML(s.updatedAt, 30) : '';
@@ -594,13 +597,15 @@
     box.removeAttribute('aria-busy');
     box.innerHTML = `<p class="sum-lead">${md(s.headline)}</p>
       ${hlHTML}
-      ${first}
       ${rest || posts.length ? `<details${wasOpen ? ' open' : ''}><summary>Show more ${ICON.chev}</summary>${rest}<div id="sum-posts" class="sum-posts"></div></details>` : ''}`;
     sec.hidden = false;
+    box.classList.toggle('open', !!wasOpen);
     if (wasBusy) fadeIn([...box.children]);
     renderSummaryPosts();
     fix();
   }
+  // the lead is clamped on phones in the simple view until "Show more" opens
+  $('#summary').addEventListener('toggle', (e) => { if (e.target.matches('.summary > details')) $('#summary').classList.toggle('open', e.target.open); }, true);
   function renderSummaryPosts() {
     const el = document.getElementById('sum-posts');
     if (!el || !summaryData) return;
@@ -736,10 +741,9 @@
     $('#ev-list').removeAttribute('aria-busy');
     const on = eventsMode();
     $('#events').hidden = !on;
-    $('#all-posts').hidden = on && (!postsOpen || !detailed);
+    $('#all-posts').hidden = on && !postsOpen;
     const n = feedData ? feedData.items.length : 0;
     const t = $('#posts-toggle');
-    t.hidden = !detailed;
     t.setAttribute('aria-expanded', String(postsOpen));
     t.innerHTML = `${postsOpen ? 'Hide all posts' : `Show all posts${n ? ` <span class="cnt">${n}</span>` : ''}`} ${ICON.chev}`;
     if (!on && feedData) {
@@ -864,12 +868,13 @@
     if (!ws.length) { el.hidden = true; fix(); return; }
     const w = ws[0];
     const c = WARN_COLOURS.includes(w.colour) ? w.colour : 'yellow';
-    const meta = [okTime(w.issuedAt) && esc(`Issued ${fmtTime(w.issuedAt)}`), ws.length > 1 && `+${ws.length - 1} more`, asOfHTML(warnData.checkedAt, 45)].filter(Boolean).join(' · '); // Jersey Met re-checks every 15 min
+    const meta = [okTime(w.issuedAt) && esc(`Issued ${fmtTime(w.issuedAt)}`), ws.length > 1 && `+${ws.length - 1} more`].filter(Boolean).join(' · ');
+    const asOf = asOfHTML(warnData.checkedAt, 45); // Jersey Met re-checks every 15 min
     el.className = `warn-banner ${c}`;
     if (isUrl(warnData.source)) el.href = warnData.source;
     el.innerHTML = `<span class="badge ${c}">${esc(c)}</span>
       <span class="wb-main"><b class="wb-title">${esc(w.title)}</b>${w.summary ? `<span class="wb-sum">${esc(tidy(w.summary))}</span>` : ''}
-      <span class="wb-meta">${meta ? `${meta} · ` : ''}Jersey Met<span class="ext" aria-hidden="true"></span></span></span>`;
+      <span class="wb-meta">${meta ? `${meta} · ` : ''}${asOf ? `<span class="asof-w">${asOf} · </span>` : ''}Jersey Met<span class="ext" aria-hidden="true"></span></span></span>`;
     el.hidden = false;
     refreshAsOf();
     fix();
@@ -879,6 +884,7 @@
       if (Date.now() - warnOkAt > 30 * 60e3) warnData = null; // a passing blip keeps the last warning; a long outage hides it
     }
     renderBanner();
+    renderStatus();
   }
 
   // Highest period gust over today and tomorrow, with a plain-language "when".
@@ -999,7 +1005,7 @@
     }
     html += KEY_HTML;
     html += `<p class="issued">Jersey Met forecast issued ${esc(tidy(f.issued))} · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener">gov.je/weather<span class="ext" aria-hidden="true"></span></a></p>`;
-    $('#wx-asof').innerHTML = okTime(f.issuedAt) ? `· ${asOfHTML(f.issuedAt, 8 * 60)}` : ''; // forecasts come out several times a day
+    $('#wx-asof').innerHTML = okTime(f.issuedAt) ? `<span class="asof-w">· ${asOfHTML(f.issuedAt, 8 * 60)}</span>` : ''; // forecasts come out several times a day
     const firstPaint = !!$('#weather .skel');
     const keyOpen = !!$('#weather details.key[open]');
     $('#weather').innerHTML = html;
@@ -1070,8 +1076,7 @@
   }
   $('#tiles').addEventListener('click', (e) => {
     if (!e.target.closest('.tile')) return;
-    setDetailed(true, true);
-    $('#detail').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+    $('#metar').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
   });
 
   // --- detailed view: imagery, Windy, METAR readout, tides ---
@@ -1153,7 +1158,9 @@
     try { obsData = await getJSON(bust('/api/obs')); } catch (e) { /* keep what we had */ }
     obsTried = true;
     renderObs();
+    renderStrip();
     renderDetail();
+    renderStatus();
   }
 
   // --- Simple / Detailed view, remembered on this device ---
@@ -1197,26 +1204,32 @@
   const TRAVEL_KIND = { cancelled: 'Cancelled', diverted: 'Diverted', delayed: 'Delayed' };
   // the airport writes 24-hour times ("Landed at 07:48"); show them like every other time on the page
   const time24 = (s) => String(s || '').replace(/\b(\d{1,2}):(\d{2})\b/g, (m, h, mi) => clock24(`${h}:${mi}`));
-  function travelSummary() {
+  function travelCounts() {
     const now = new Date();
-    const out = [];
+    const c = { flights: null, ferries: null };
     const fl = travelData && travelData.flights && travelData.flights.flights;
     if (fl) {
       // the next 24 hours (late at night, "today" would be nearly over)
       const soon = fl.filter((f) => new Date(f.at) > now - 3600e3 && new Date(f.at) < +now + 24 * 3600e3);
-      const off = soon.filter((f) => f.kind === 'cancelled').length; // diverted flights still fly, so they aren't counted as cancelled
-      if (soon.length) out.push(`<b>Flights, next 24 hours:</b> ${off ? `${off} of ${soon.length} cancelled` : 'none cancelled so far'}`);
+      // diverted flights still fly, so they aren't counted as cancelled
+      if (soon.length) c.flights = { n: soon.length, off: soon.filter((f) => f.kind === 'cancelled').length };
     }
     const sl = travelData && travelData.harbour && travelData.harbour.sailings;
     if (sl) {
       // passenger ferries from 2 hours ago to 36 hours ahead
       const win = sl.filter((x) => x.passenger && new Date(x.at) > now - 2 * 3600e3 && new Date(x.at) < +now + 36 * 3600e3);
-      const off = win.filter((x) => x.kind === 'cancelled');
       if (win.length) {
-        const next = win.find((x) => x.kind !== 'cancelled' && new Date(x.at) > now);
-        out.push(`<b>Ferries:</b> ${off.length === win.length ? `all passenger sailings cancelled until at least ${esc(fmtTime(win[win.length - 1].at))}` : off.length ? `${off.length} of ${win.length} passenger sailings cancelled${next ? `, next ${esc(fmtTime(next.at))}` : ''}` : 'passenger sailings running'}`);
+        c.ferries = { n: win.length, off: win.filter((x) => x.kind === 'cancelled').length, last: win[win.length - 1].at,
+          next: (win.find((x) => x.kind !== 'cancelled' && new Date(x.at) > now) || {}).at };
       }
     }
+    return c;
+  }
+  function travelSummary() {
+    const { flights: f, ferries: s } = travelCounts();
+    const out = [];
+    if (f) out.push(`<b>Flights, next 24 hours:</b> ${f.off ? `${f.off} of ${f.n} cancelled` : 'none cancelled so far'}`);
+    if (s) out.push(`<b>Ferries:</b> ${s.off === s.n ? `all passenger sailings cancelled until at least ${esc(fmtTime(s.last))}` : s.off ? `${s.off} of ${s.n} passenger sailings cancelled${s.next ? `, next ${esc(fmtTime(s.next))}` : ''}` : 'passenger sailings running'}`);
     return out;
   }
   function renderTravelSum() {
@@ -1271,56 +1284,107 @@
     flTab = b.dataset.fl;
     renderBoards();
   });
-  $('#travel-sum').addEventListener('click', () => {
-    setDetailed(true, true);
-    $('#flights').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
-  });
   async function loadTravel() {
     try { travelData = await getJSON(bust('/api/travel')); } catch (e) { /* keep what we had */ }
     travelTried = true;
     renderTravelSum();
+    renderStrip();
     if (detailed) { const fix = anchor(); renderBoards(); fix(); }
+    renderStatus();
   }
+
+  // --- now strip (simple view): one or two lines of live readings; each part opens its detailed section ---
+  function renderStrip() {
+    const el = $('#now-strip');
+    if (!obsTried && !travelTried) return;
+    const m = obsData && obsData.metar;
+    const parts = [];
+    if (m && m.windKt != null) {
+      const trend = pressureTrend(m.pressureChange);
+      const w = [`Wind ${mph(m.windKt)} mph${m.gustKt ? `, gusts ${mph(m.gustKt)}` : ''}`, m.windDir != null && compass(m.windDir), trend && `Pressure ${trend}`].filter(Boolean);
+      parts.push(['d-weather', w.join(' · ')]);
+    }
+    const { flights: f, ferries: s } = travelCounts();
+    if (f) parts.push(['flights', `Flights: ${f.off ? `${f.off} cancelled` : 'none cancelled'}`]);
+    if (s) parts.push(['sailings', `Ferries: ${s.off === s.n ? 'cancelled' : s.off ? `${s.off} of ${s.n} cancelled` : 'running'}`]);
+    const html = parts.length
+      ? parts.map(([to, text]) => `<button type="button" data-to="${to}">${esc(text)}</button>`).join('<span aria-hidden="true">&nbsp;· </span>')
+      : (obsTried && travelTried) || gaveUp ? 'Live readings aren\'t available right now.' : el.innerHTML;
+    if (el.innerHTML !== html) el.innerHTML = html;
+  }
+  $('#now-strip').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-to]');
+    if (!b) return;
+    setDetailed(true, true);
+    document.getElementById(b.dataset.to).scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  });
 
   function setDetailed(on, persist) {
     detailed = on;
     document.body.classList.toggle('detailed', on);
-    const mb = $('#mode-toggle');
-    mb.setAttribute('aria-pressed', String(on));
-    mb.title = on ? 'Back to the simple view' : 'Show live data, maps and all posts';
-    const db = $('#detail-btn');
-    db.setAttribute('aria-expanded', String(on));
-    db.textContent = on ? 'Hide live data & maps' : 'Show live data & maps';
+    $$('#view-seg button').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.mode === 'detailed') === on)));
     if (persist) { try { localStorage.setItem('view-mode', on ? 'detailed' : 'simple'); } catch (e) { /* private mode */ } }
     renderMap();
     if (on) renderBoards();
     renderDetail();
+    renderSrcStatus();
     applyMode();
   }
-  $('#mode-toggle').addEventListener('click', () => setDetailed(!detailed, true));
-  $('#detail-btn').addEventListener('click', () => setDetailed(!detailed, true));
-  setDetailed(detailed, false);
+  // only redraws from data already loaded: switching never refetches
+  $('#view-seg').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-mode]');
+    if (b && (b.dataset.mode === 'detailed') !== detailed) setDetailed(!detailed, true);
+  });
 
   // --- status + loading ---
-  // The header says how old the data is (summary.json / events.json's own timestamps), not when we last fetched it.
-  const STALE_MS = 30 * 60e3;
+  // One quiet line in the header: "Updated 9:55pm", from the data's own timestamps (not when we last fetched).
+  // It turns amber with a reason once any source is older than its section's "as of" stamp allows (same
+  // thresholds), plus that source's refresh interval, so a poll that's simply due doesn't flicker it.
   let netOk = true;
+  const SOURCES = () => [
+    // [label, time, as-of threshold (min), refresh interval (min), link, short label for the header]
+    ['Summary', summaryData && summaryData.updatedAt, 30, 3, '', 'Summary'],
+    ['Timeline', eventsData && eventsData.updated, 30, 3, '', 'Timeline'],
+    ['News feed', apiFeed && apiFeed.generatedAt, 6, 3, '', 'News feed'],
+    ['Bluesky', liveBsky && liveBsky.at, 3, 1, 'https://bsky.app/', 'Bluesky'],
+    ['Jersey Met warnings', warnData && warnData.checkedAt, 45, 5, 'https://www.gov.je/weather/jerseywarnings/', 'Warnings'],
+    ['Jersey Met forecast', wxData && wxData.forecast && wxData.forecast.issuedAt, 8 * 60, 5, 'https://www.gov.je/weather/', 'Forecast'],
+    ['Jersey Airport observation', obsData && obsData.metar && obsData.metar.time, 90, 5, 'https://aviationweather.gov/data/metar/?ids=EGJJ', 'Wind reading'],
+  ];
   function dataTime() {
-    const ts = [summaryData && summaryData.updatedAt, eventsData && eventsData.updated].filter(okTime).map((t) => new Date(t));
+    const ts = [summaryData && summaryData.updatedAt, eventsData && eventsData.updated, apiFeed && apiFeed.generatedAt].filter(okTime).map((t) => new Date(t));
     return ts.length ? new Date(Math.max(...ts)) : null;
   }
+  const staleSources = () => SOURCES().filter(([, t, max, every]) => okTime(t) && Date.now() - new Date(t) > (max + every) * 60e3);
   function renderStatus(ping) {
     const t = dataTime();
     const dot = $('#live-dot');
     const upd = $('#updated');
+    renderSrcStatus();
     if (!t) { if (!netOk) { dot.className = 'dot err'; upd.textContent = 'Could not load updates'; } return; }
-    const stale = Date.now() - t > STALE_MS;
-    const state = !netOk ? 'err' : stale ? 'stale' : 'ok';
+    const stale = staleSources();
+    const state = !netOk ? 'err' : stale.length ? 'stale' : 'ok';
     dot.className = `dot ${state}`;
     if (ping && state === 'ok' && !reduceMotion.matches) { void dot.offsetWidth; dot.classList.add('ping'); } // restart the one-shot ping
     upd.className = state === 'ok' ? '' : state;
-    upd.textContent = `${netOk ? '' : 'Offline? '}Updated ${ago(t)}`;
-    upd.title = `Data last updated ${fmtTime(t.toISOString())}`;
+    // "last" drops out on small phones so the line fits beside the header buttons
+    upd.innerHTML = !netOk ? `Offline? Updated ${esc(fmtTime(t.toISOString()))}`
+      : stale.length ? `${esc(stale[0][5])}<span class="lu-x"> last</span> updated ${esc(fmtTime(stale[0][1]))}` : `Updated ${esc(fmtTime(t.toISOString()))}`;
+    upd.title = stale.length ? `Older than usual: ${stale.map(([l, s]) => `${l} (${fmtTime(s)})`).join(', ')}` : '';
+  }
+  // Detailed > Sources: every source with its own "as of" time
+  function renderSrcStatus() {
+    if (!detailed) return;
+    const fl = travelData && travelData.flights;
+    const hb = travelData && travelData.harbour;
+    const rows = SOURCES().map(([label, t, max, , link]) => [label, okTime(t) ? asOfHTML(t, max) : '', link]);
+    rows.push(
+      ['Flights · Ports of Jersey', fl && fl.updated ? `<span class="muted">as of ${esc(time24(fl.updated.replace(/^\d{1,2} \w{3} \d{4} /, '')))}</span>` : '', 'https://www.jerseyairport.com/flight/arrivals'],
+      ['Harbour · Ports of Jersey', hb && okTime(hb.updated) ? asOfHTML(hb.updated, 30) : '', 'https://www.ports.je/jerseyharbours/arrivals-departures/'],
+    );
+    const html = rows.map(([label, when, link]) => `<li><span>${link ? `<a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(label)}<span class="ext" aria-hidden="true"></span></a>` : esc(label)}</span>${when || '<span class="src-na muted">not available</span>'}</li>`).join('');
+    const el = $('#src-status');
+    if (el.innerHTML !== html) { el.innerHTML = html; refreshAsOf(); }
   }
 
   // --- Bluesky, straight from the browser: shared rules in /bsky.js, polled every minute while the tab is visible.
@@ -1342,6 +1406,7 @@
       }
       const items = bskyMod.toItems(posts).filter(bskyMod.guernseyRule);
       liveBsky = { items, at: new Date().toISOString() };
+      renderStatus();
       const key = items.map((i) => i.url).sort().join(' ');
       if (key !== liveBskyKey) { liveBskyKey = key; if (feedData || apiFeed) renderFeed(); } // only re-render when posts changed
       else if (feedData) { renderSources(); refreshAsOf(); }
@@ -1394,6 +1459,7 @@
       const wx = await getJSON('/api/weather');
       wxTried = true;
       renderWeather(wx);
+      renderStatus();
     } catch (e) {
       wxTried = true;
       renderNow();
@@ -1416,6 +1482,8 @@
     svg.addEventListener('animationiteration', done);
   }
   refreshBtn.addEventListener('click', refreshAll);
+
+  setDetailed(detailed, false); // after the status code above, which it uses
 
   // --- theme: auto (follows OS) / light / dark, persisted ---
   const THEMES = ['auto', 'light', 'dark'];
@@ -1458,7 +1526,7 @@
     else withTransition(() => setView(b.dataset.go, true));
   });
   $('#gust-chip').addEventListener('click', () => setView('forecast', true));
-  if (location.hash) setView(location.hash.slice(1), mobile.matches);
+  if (location.hash && location.hash !== '#detailed') setView(location.hash.slice(1), mobile.matches);
 
   // --- optional extension files, then first load ---
   Promise.all([getOptional('/config.json'), getOptional('/sources.json')]).then(([cfg, srcs]) => {

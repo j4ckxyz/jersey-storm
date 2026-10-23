@@ -27,7 +27,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>/* before style.css, so a stale or missing stylesheet can't show the detailed view; style.css has the full rules */
-.detail{display:none}body:not(.detailed) .posts-toggle{display:none}</style>
+.detail{display:none}</style>
 <link rel="stylesheet" href="/style.css">
 </head>
 <body data-active="updates">
@@ -45,7 +45,6 @@
     <div class="actions">
       <button id="gust-chip" class="gust-chip" type="button" hidden></button>
       <button id="refresh" class="icon-btn" type="button" aria-label="Refresh now" title="Refresh now"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
-      <button id="mode-toggle" class="mode-btn" type="button" aria-pressed="false" title="Show live data, maps and all posts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg><span class="gc-l">Detailed</span><span class="sr-only"> view</span></button>
       <button id="theme-toggle" class="icon-btn" type="button" aria-label="Theme: auto" title="Theme: auto"></button>
     </div>
   </div>
@@ -53,85 +52,96 @@
 
 <div class="wrap">
   <p id="subtitle" class="intro" hidden></p>
+  <div class="viewbar" data-view="updates">
+    <div id="view-seg" class="seg" role="group" aria-label="View">
+      <button type="button" data-mode="simple" aria-pressed="true">Simple</button>
+      <button type="button" data-mode="detailed" aria-pressed="false">Detailed</button>
+    </div>
+  </div>
   <a id="warn-banner" class="warn-banner pending" href="https://www.gov.je/weather/jerseywarnings/" target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1"><span class="sk sk-label"></span><span class="wb-main"><span class="sk sk-text"></span><span class="sk sk-text"></span><span class="sk sk-text sk-w60"></span></span></a>
-  <section id="obs" class="obs" data-view="updates forecast" aria-labelledby="obs-h">
-    <div class="obs-head"><h2 id="obs-h">Right now</h2><span id="obs-time" class="muted small"></span></div>
-    <div id="tiles" class="tiles" aria-busy="true">
-      <button class="tile" type="button" data-tile="wind" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
-      <button class="tile" type="button" data-tile="dir" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
-      <button class="tile" type="button" data-tile="pressure" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
-      <button class="tile" type="button" data-tile="tide"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
-    </div>
-    <button id="travel-sum" class="travel-sum" type="button"><span class="sk sk-text"></span><span class="sk sk-text sk-w60"></span></button>
-    <button id="detail-btn" class="detail-btn" type="button" aria-expanded="false" aria-controls="detail">Show live data &amp; maps</button>
-  </section>
+  <div class="strip-wrap" data-view="updates">
+    <p id="now-strip" class="now-strip" aria-label="Right now"><span class="sk sk-text"></span></p>
+  </div>
 
-  <section id="detail" class="detail" aria-labelledby="detail-h">
-    <h2 id="detail-h" class="sr-only">Live data and maps</h2>
-    <div class="card imagery">
-      <div class="img-tabs" role="tablist" aria-label="Jersey Met images">
-        <button type="button" role="tab" id="tab-radar" data-img="radar" aria-selected="true" aria-controls="img-panel">Radar</button>
-        <button type="button" role="tab" id="tab-satellite" data-img="satellite" aria-selected="false" aria-controls="img-panel">Satellite</button>
-        <button type="button" role="tab" id="tab-waves" data-img="waves" aria-selected="false" aria-controls="img-panel">Wind &amp; waves</button>
-      </div>
-      <figure id="img-panel" class="img-panel" role="tabpanel" aria-labelledby="tab-radar">
-        <div class="img-frame"><img id="img-main" alt="" width="800" height="612" decoding="async" hidden><p id="img-none" class="muted small" hidden>Image unavailable right now.</p></div>
-        <figcaption><span id="img-time"></span>Jersey Met · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">gov.je/weather<span class="ext" aria-hidden="true"></span></a></figcaption>
-      </figure>
-    </div>
-    <div class="card windy">
-      <div class="img-tabs map-tabs" role="tablist" aria-label="Live maps">
-        <button type="button" role="tab" id="tab-wind" data-map="wind" aria-selected="true" aria-controls="map-panel">Wind</button>
-        <button type="button" role="tab" id="tab-lightning" data-map="lightning" aria-selected="false" aria-controls="map-panel">Lightning</button>
-      </div>
-      <div id="map-panel" role="tabpanel" aria-labelledby="tab-wind">
-        <div class="windy-frame"><iframe id="map-frame" title="Windy.com wind forecast map centred on Jersey" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-        <p id="map-credit" class="muted small"></p>
-      </div>
-    </div>
-    <div class="detail-pair">
-      <div id="metar" class="card metar"><h3>Jersey Airport observation</h3><p class="muted small">Loading…</p></div>
-      <div id="tides" class="card tides"><h3>Tides · St Helier</h3><p class="muted small">Loading…</p></div>
-    </div>
-    <div id="flights" class="card board">
-      <div class="board-head"><h3>Flights</h3>
-        <div class="img-tabs" role="tablist" aria-label="Flights">
-          <button type="button" role="tab" data-fl="arr" aria-selected="true" aria-controls="fl-list">Arrivals</button>
-          <button type="button" role="tab" data-fl="dep" aria-selected="false" aria-controls="fl-list">Departures</button>
+  <section id="detail" class="detail" aria-label="Detailed view">
+    <section id="d-weather" class="dsec" aria-labelledby="d-weather-h">
+      <h2 id="d-weather-h" class="dsec-h">Weather now</h2>
+      <div id="obs" class="obs dwide">
+        <div class="obs-head"><h3>Right now</h3><span id="obs-time" class="muted small"></span></div>
+        <div id="tiles" class="tiles" aria-busy="true">
+          <button class="tile" type="button" data-tile="wind" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
+          <button class="tile" type="button" data-tile="dir" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
+          <button class="tile" type="button" data-tile="pressure" aria-describedby="obs-time"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
+          <button class="tile" type="button" data-tile="tide"><span class="sk sk-label"></span><span class="sk sk-tile"></span><span class="sk sk-text sk-w60"></span></button>
         </div>
       </div>
-      <div id="fl-list" role="tabpanel" aria-live="off"><p class="muted small">Loading…</p></div>
-    </div>
-    <div id="sailings" class="card board"><h3>Ferries · St Helier harbour</h3><div id="sl-list"><p class="muted small">Loading…</p></div></div>
-    <div class="card services">
-      <h3>Travel &amp; services</h3>
-      <div class="svc-grid">
-        <a class="svc" href="https://www.jec.co.uk/for-home/help/powercuts/" target="_blank" rel="noopener noreferrer"><b>Power cuts</b><span>Jersey Electricity · 01534 505050</span></a>
-        <a class="svc" href="https://www.jerseyairport.com/flight/arrivals" target="_blank" rel="noopener noreferrer"><b>Flights</b><span>Ports of Jersey · arrivals &amp; departures</span></a>
-        <a class="svc" href="https://www.ports.je/jerseyharbours/arrivals-departures/" target="_blank" rel="noopener noreferrer"><b>Harbour</b><span>Ports of Jersey · ship arrivals &amp; departures</span></a>
-        <a class="svc" href="https://www.condorferries.co.uk/ferry-routes-ports/plan-your-journey/sailing-updates" target="_blank" rel="noopener noreferrer"><b>Ferries</b><span>Condor Ferries (DFDS) · sailing updates</span></a>
-        <a class="svc" href="https://libertybus.je/service-updates" target="_blank" rel="noopener noreferrer"><b>Buses</b><span>LibertyBus · service updates</span></a>
-        <a class="svc" href="https://www.gov.je/travel/roads/roadclosures/Pages/index.aspx" target="_blank" rel="noopener noreferrer"><b>Road closures</b><span>gov.je</span></a>
-        <a class="svc svc-cam" href="https://hdontap.com/stream/216480/st-ouens-bay-live-cam/" target="_blank" rel="noopener noreferrer"><b>Watch the Splash Cam live</b><span>St Ouen&rsquo;s Bay · HDOnTap, opens in a new tab</span></a>
+      <div id="now" class="now card dwide">
+        <div id="now-live" class="now-live">
+          <div class="now-head"><h3 id="now-h">Next 24 hours</h3></div>
+          <div class="now-main" aria-hidden="true"><div class="sk sk-display"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60 sk-wrap2"></div></div>
+          <div class="latest" aria-hidden="true"><div class="sk sk-label"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60"></div></div>
+        </div>
       </div>
-    </div>
-  </section>
+      <div id="metar" class="card metar"><h3>Jersey Airport observation</h3><p class="muted small">Loading…</p></div>
+      <div id="tides" class="card tides"><h3>Tides · St Helier</h3><p class="muted small">Loading…</p></div>
+    </section>
 
-  <section id="now" class="now" data-view="updates forecast" aria-labelledby="now-h">
-    <div id="now-live" class="now-live">
-      <div class="now-head"><h2 id="now-h">Next 24 hours</h2></div>
-      <div class="now-main" aria-hidden="true"><div class="sk sk-display"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60 sk-wrap2"></div></div>
-      <div class="latest" aria-hidden="true"><div class="sk sk-label"></div><div class="sk sk-text"></div><div class="sk sk-text sk-w60"></div></div>
-    </div>
-    <div class="todo">
-      <h3 class="wg-h">What to do tonight</h3>
-      <ul>
-        <li><b>Stay indoors until Friday lunchtime.</b> Avoid travel and going outside unless you have to. <a class="todo-src" href="https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx" target="_blank" rel="noopener noreferrer">gov.je<span class="ext" aria-hidden="true"></span></a></li>
-        <li><b>Call 999 only if there&rsquo;s a risk to life.</b> <a class="todo-src" href="https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx" target="_blank" rel="noopener noreferrer">gov.je<span class="ext" aria-hidden="true"></span></a></li>
-        <li><b>Power cut?</b> Jersey Electricity emergency line <a href="tel:+441534505050">01534&nbsp;505050</a>. <a class="todo-src" href="https://www.jec.co.uk/for-home/help/powercuts/" target="_blank" rel="noopener noreferrer">jec.co.uk<span class="ext" aria-hidden="true"></span></a></li>
-        <li><b>Report fallen trees, blocked roads or damage</b> to <a href="mailto:dfi@gov.je">dfi@gov.je</a> with a photo, the road and the parish. <a class="todo-src" href="https://x.com/GovJersey/status/2113314559507235184" target="_blank" rel="noopener noreferrer">@GovJersey<span class="ext" aria-hidden="true"></span></a></li>
-      </ul>
-    </div>
+    <section id="d-travel" class="dsec" aria-labelledby="d-travel-h">
+      <h2 id="d-travel-h" class="dsec-h">Travel</h2>
+      <div id="travel-sum" class="travel-sum dwide"><span class="sk sk-text"></span><span class="sk sk-text sk-w60"></span></div>
+      <div id="flights" class="card board">
+        <div class="board-head"><h3>Flights</h3>
+          <div class="img-tabs" role="tablist" aria-label="Flights">
+            <button type="button" role="tab" data-fl="arr" aria-selected="true" aria-controls="fl-list">Arrivals</button>
+            <button type="button" role="tab" data-fl="dep" aria-selected="false" aria-controls="fl-list">Departures</button>
+          </div>
+        </div>
+        <div id="fl-list" role="tabpanel" aria-live="off"><p class="muted small">Loading…</p></div>
+      </div>
+      <div id="sailings" class="card board"><h3>Ferries · St Helier harbour</h3><div id="sl-list"><p class="muted small">Loading…</p></div></div>
+      <div class="card services dwide">
+        <h3>Travel &amp; services</h3>
+        <div class="svc-grid">
+          <a class="svc" href="https://www.jec.co.uk/for-home/help/powercuts/" target="_blank" rel="noopener noreferrer"><b>Power cuts</b><span>Jersey Electricity · 01534 505050</span></a>
+          <a class="svc" href="https://www.jerseyairport.com/flight/arrivals" target="_blank" rel="noopener noreferrer"><b>Flights</b><span>Ports of Jersey · arrivals &amp; departures</span></a>
+          <a class="svc" href="https://www.ports.je/jerseyharbours/arrivals-departures/" target="_blank" rel="noopener noreferrer"><b>Harbour</b><span>Ports of Jersey · ship arrivals &amp; departures</span></a>
+          <a class="svc" href="https://www.condorferries.co.uk/ferry-routes-ports/plan-your-journey/sailing-updates" target="_blank" rel="noopener noreferrer"><b>Ferries</b><span>Condor Ferries (DFDS) · sailing updates</span></a>
+          <a class="svc" href="https://libertybus.je/service-updates" target="_blank" rel="noopener noreferrer"><b>Buses</b><span>LibertyBus · service updates</span></a>
+          <a class="svc" href="https://www.gov.je/travel/roads/roadclosures/Pages/index.aspx" target="_blank" rel="noopener noreferrer"><b>Road closures</b><span>gov.je</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="d-maps" class="dsec" aria-labelledby="d-maps-h">
+      <h2 id="d-maps-h" class="dsec-h">Maps &amp; imagery</h2>
+      <div class="card imagery">
+        <div class="img-tabs" role="tablist" aria-label="Jersey Met images">
+          <button type="button" role="tab" id="tab-radar" data-img="radar" aria-selected="true" aria-controls="img-panel">Radar</button>
+          <button type="button" role="tab" id="tab-satellite" data-img="satellite" aria-selected="false" aria-controls="img-panel">Satellite</button>
+          <button type="button" role="tab" id="tab-waves" data-img="waves" aria-selected="false" aria-controls="img-panel">Wind &amp; waves</button>
+        </div>
+        <figure id="img-panel" class="img-panel" role="tabpanel" aria-labelledby="tab-radar">
+          <div class="img-frame"><img id="img-main" alt="" width="800" height="612" decoding="async" hidden><p id="img-none" class="muted small" hidden>Image unavailable right now.</p></div>
+          <figcaption><span id="img-time"></span>Jersey Met · <a href="https://www.gov.je/weather/" target="_blank" rel="noopener noreferrer">gov.je/weather<span class="ext" aria-hidden="true"></span></a></figcaption>
+        </figure>
+      </div>
+      <div class="card windy">
+        <div class="img-tabs map-tabs" role="tablist" aria-label="Live maps">
+          <button type="button" role="tab" id="tab-wind" data-map="wind" aria-selected="true" aria-controls="map-panel">Wind</button>
+          <button type="button" role="tab" id="tab-lightning" data-map="lightning" aria-selected="false" aria-controls="map-panel">Lightning</button>
+        </div>
+        <div id="map-panel" role="tabpanel" aria-labelledby="tab-wind">
+          <div class="windy-frame"><iframe id="map-frame" title="Windy.com wind forecast map centred on Jersey" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+          <p id="map-credit" class="muted small"></p>
+        </div>
+      </div>
+      <a class="svc svc-cam dwide" href="https://hdontap.com/stream/216480/st-ouens-bay-live-cam/" target="_blank" rel="noopener noreferrer"><b>Watch the Splash Cam live</b><span>St Ouen&rsquo;s Bay · HDOnTap, opens in a new tab</span></a>
+    </section>
+
+    <section id="d-sources" class="dsec" aria-labelledby="d-sources-h">
+      <h2 id="d-sources-h" class="dsec-h">Sources</h2>
+      <div class="card dwide"><ul id="src-status" class="src-status"><li class="muted small">Loading…</li></ul></div>
+    </section>
   </section>
 </div>
 
@@ -187,7 +197,8 @@
         </ul>
       </div>
       <div class="card safety">
-        <p><strong>Emergency: 999 / 112.</strong></p>
+        <p><strong>Emergency: 999 / 112.</strong> Call 999 only if there&rsquo;s a risk to life.</p>
+        <p class="small">Power cut? Jersey Electricity <a href="tel:+441534505050">01534&nbsp;505050</a>. Report fallen trees, blocked roads or damage to <a href="mailto:dfi@gov.je">dfi@gov.je</a> with a photo, the road and the parish.</p>
         <p class="muted small">Stay away from coastal paths and sea walls during the storm. Always follow official advice from <a href="https://www.gov.je/" target="_blank" rel="noopener">gov.je</a>.</p>
       </div>
     </section>

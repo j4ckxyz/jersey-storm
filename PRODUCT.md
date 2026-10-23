@@ -41,7 +41,7 @@ An unofficial, local, sourced view. Every factual claim links to its source, and
 ## Capabilities and Constraints
 
 - **Surfaces:**
-  - the "Right now" panel (gusts, warnings, latest item);
+  - two views, chosen with a "Simple | Detailed" toggle and remembered per device. Simple (the default) is the warning banner, a one-line "now" strip (wind, pressure, flights, ferries), the summary, the timeline and the feed, with one status line in the header. Detailed adds Weather now, Travel, Maps & imagery and Sources;
   - the "What's happening" summary, with Key updates;
   - a timeline of grouped events, with severity, category and sources;
   - the full post and news feed behind "Show all posts";
