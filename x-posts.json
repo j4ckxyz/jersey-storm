@@ -1,783 +1,795 @@
 {
- "generatedAt": "2026-10-22T22:10:50Z",
- "posts": [
-  {
-   "id": "2113381403073057255",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
-   "media": [],
-   "time": "2026-10-22T21:26:05.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113381403073057255"
-  },
-  {
-   "id": "2113381375558701355",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.",
-   "media": [],
-   "time": "2026-10-22T21:25:59.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113381375558701355"
-  },
-  {
-   "id": "2113381342972960861",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-22T21:25:51.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113381342972960861"
-  },
-  {
-   "id": "2113369285783388415",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Met",
-   "handle": "GuernseyMet",
-   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
-   "text": "A wind warning was issued at 20:35 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-22T20:37:56.000Z",
-   "url": "https://x.com/GuernseyMet/status/2113369285783388415"
-  },
-  {
-   "id": "2113361488517763108",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Met",
-   "handle": "GuernseyMet",
-   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.\n\nA Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
-   "media": [],
-   "time": "2026-10-22T20:06:57.000Z",
-   "url": "https://x.com/GuernseyMet/status/2113361488517763108"
-  },
-  {
-   "id": "2113361431194227180",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-22T20:06:44.000Z",
-   "url": "https://x.com/Jersey_Met/status/2113361431194227180"
-  },
-  {
-   "id": "2113361104575570222",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
-   "media": [],
-   "time": "2026-10-22T20:05:26.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113361104575570222"
-  },
-  {
-   "id": "2113361067862855957",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.\n\nA Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.",
-   "media": [],
-   "time": "2026-10-22T20:05:17.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113361067862855957"
-  },
-  {
-   "id": "2113359001207316556",
-   "source": "X",
-   "platform": "x",
-   "author": "Government of Jersey",
-   "handle": "GovJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
-   "text": "To help keep customers and colleagues safe during the expected severe weather, the Government’s Union Street Customer Hub will now be closed on Friday morning.\n\nWe expect to reopen at 1pm, unless otherwise advised.\n\nFor the latest updates: https://bit.ly/3UBHNOC",
-   "media": [
+  "generatedAt": "2026-10-23T07:05:00+01:00",
+  "posts": [
     {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVQoz8fXQAAJ91W.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVQoz8fXQAAJ91W.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T19:57:04.000Z",
-   "url": "https://x.com/GovJersey/status/2113359001207316556"
-  },
-  {
-   "id": "2113357969265946763",
-   "source": "X",
-   "platform": "x",
-   "author": "ITV Channel News",
-   "handle": "ITVChannelTV",
-   "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
-   "text": "Channel Islands brace for Storm Austen. Catch up on how to prepare and the advice in tonight's programme: https://www.itv.com/watch/news/catch-up-on-itv-news-channels-main-programme-from-thursday-22nd-october/4b1d46n",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2113357972164280320/vlP2XadW?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2113357972164280320/vlP2XadW?format=jpg&name=orig",
-     "alt": "Catch up on ITV News Channel's main programme from Thursday 22nd October - Latest From ITV News",
-     "link": "https://www.itv.com/watch/news/catch-up-on-itv-news-channels-main-programme-from-thursday-22nd-october/4b1d46n",
-     "title": "Catch up on ITV News Channel's main programme from Thursday 22nd October - Latest From ITV News"
-    }
-   ],
-   "time": "2026-10-22T19:52:58.000Z",
-   "url": "https://x.com/ITVChannelTV/status/2113357969265946763"
-  },
-  {
-   "id": "2113324098835419618",
-   "source": "X",
-   "platform": "x",
-   "author": "ITV Channel News",
-   "handle": "ITVChannelTV",
-   "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
-   "text": "Red Wind Warning issued in Channel Islands as Storm Austen approaches. Organisations across the Islands have warned of closures, cancellations, and delays. https://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
-     "alt": "Jersey schools to close as Storm Austen looms | ITV News",
-     "link": "https://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
-     "title": "Jersey schools to close as Storm Austen looms | ITV News"
-    }
-   ],
-   "time": "2026-10-22T17:38:23.000Z",
-   "url": "https://x.com/ITVChannelTV/status/2113324098835419618"
-  },
-  {
-   "id": "2113321327259947408",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Met",
-   "handle": "GuernseyMet",
-   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
-   "text": "Wind tomorrow – am: West to northwest severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph, occasionally gale F8 later, pm: West to northwest gale F8, occasionally severe gale F9 with gusts to 70mph at first, decreasing strong F7 with gusts to 60mph later.",
-   "media": [],
-   "time": "2026-10-22T17:27:22.000Z",
-   "url": "https://x.com/GuernseyMet/status/2113321327259947408"
-  },
-  {
-   "id": "2113321134452035970",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "Wind tomorrow – am: West to northwest severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph, occasionally gale F8 later, pm: West to northwest gale F8, occasionally severe gale F9 with gusts to 70mph at first, decreasing strong F7 with gusts to 60mph later.",
-   "media": [],
-   "time": "2026-10-22T17:26:36.000Z",
-   "url": "https://x.com/Jersey_Met/status/2113321134452035970"
-  },
-  {
-   "id": "2113314559507235184",
-   "source": "X",
-   "platform": "x",
-   "author": "Government of Jersey",
-   "handle": "GovJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
-   "text": "Storm Austen | Report fallen trees and other issues.\n\nTo report a fallen tree, blocked road or storm damage, email dfi@gov.je with:\n- A photograph\n- The road name or location\n- The Parish\n\nLive map: https://bit.ly/4zQoOyX\n\n🔗 https://bit.ly/4zFXTWk & https://gov.je/weather",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVQAZJHWkAA9Q-q.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVQAZJHWkAA9Q-q.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T17:00:29.000Z",
-   "url": "https://x.com/GovJersey/status/2113314559507235184"
-  },
-  {
-   "id": "2113309137278820555",
-   "source": "X",
-   "platform": "x",
-   "author": "Government of Jersey",
-   "handle": "GovJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
-   "text": "The weather situation continues to develop, with the potential for conditions to become more severe.\n\nWe are advising Islanders to remain indoors during the worst of the weather and avoid unnecessary travel or outdoor activity until lunchtime on Friday.\n\nhttps://bit.ly/4zFXTWk",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVP7djlWAAAgWcd.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVP7djlWAAAgWcd.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T16:38:56.000Z",
-   "url": "https://x.com/GovJersey/status/2113309137278820555"
-  },
-  {
-   "id": "2113305870066979232",
-   "source": "X",
-   "platform": "x",
-   "author": "Pit-Stop Mobile Paint Solutions",
-   "handle": "PitStopJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/2006330851915595776/e5myESDn_bigger.jpg",
-   "text": "🌧️🏁\n\nWith Storm Austen heading our way and a red weather warning in place, Pit-Stop won’t be carrying out any mobile repairs on tomorrow.\n\nWe’ll still be available for online quotes! 📸\n\nStay safe out there, Jersey.\n\nPit-Stop Mobile Paint Solutions 🏁",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVP4fAlX0AEjwoe.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVP4fAlX0AEjwoe.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T16:25:57.000Z",
-   "url": "https://x.com/PitStopJersey/status/2113305870066979232"
-  },
-  {
-   "id": "2113284580325118129",
-   "source": "X",
-   "platform": "x",
-   "author": "BBC Guernsey",
-   "handle": "BBCGuernsey",
-   "avatar": "https://pbs.twimg.com/profile_images/1546408197174484993/o820p5_V_bigger.jpg",
-   "text": "Red wind warning issued for Channel Islands https://bbc.in/4BsBtd1",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2113284581071736834/MJT6k999?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2113284581071736834/MJT6k999?format=jpg&name=orig",
-     "alt": "Channel Islands red wind warning as Storm Austen approaches",
-     "link": "https://www.bbc.com/news/articles/cm62ye5nw5z5o?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_campaign=Social_Flow&at_ptr_name=twitter&at_link_origin=BBC_Guernsey&at_campaign_type=owned&at_link_id=6E5A0D76-CE29-11F1-843E-B3D10164F539&at_medium=social&at_format=link&at_link_type=web_link&at_bbc_team=editorial",
-     "title": "Channel Islands red wind warning as Storm Austen approaches"
-    }
-   ],
-   "time": "2026-10-22T15:01:21.000Z",
-   "url": "https://x.com/BBCGuernsey/status/2113284580325118129"
-  },
-  {
-   "id": "2113280465507324118",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A wind warning was issued at 14:43 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-22T14:45:00.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113280465507324118"
-  },
-  {
-   "id": "2113265277316325838",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Airport  ✈",
-   "handle": "GuernseyAirport",
-   "avatar": "https://pbs.twimg.com/profile_images/1572862563406290946/Qzu0c6py_bigger.jpg",
-   "text": "We regret flights are disrupted this evening and tomorrow as the forecast weather exceeds safe operating limits. We expect to open noon Friday with flights resuming around 2pm. If you are booked to travel your airline will advise of alternative arrangements.",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVPTXgbXEAAXR-A.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVPTXgbXEAAXR-A.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T13:44:39.000Z",
-   "url": "https://x.com/GuernseyAirport/status/2113265277316325838"
-  },
-  {
-   "id": "2113249698274271454",
-   "source": "X",
-   "platform": "x",
-   "author": "States of Guernsey",
-   "handle": "Govgg",
-   "avatar": "https://pbs.twimg.com/profile_images/2036740702756102144/AVDguo5k_bigger.jpg",
-   "text": "States of Guernsey customer counters will be closed on Friday morning while the worst of Storm Austen passes over the islands. This includes counters at Frossard House, Brickfield House, the Guernsey Registry, Edward T Wheadon House and the New Jetty: https://gov.gg/StormAusten",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVPFFymXAAAMarJ.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVPFFymXAAAMarJ.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T12:42:45.000Z",
-   "url": "https://x.com/Govgg/status/2113249698274271454"
-  },
-  {
-   "id": "2113248926992081261",
-   "source": "X",
-   "platform": "x",
-   "author": "Local To Guernsey",
-   "handle": "LocalToGuernsey",
-   "avatar": "https://pbs.twimg.com/profile_images/1763624151971995648/CzS8qY3s_bigger.jpg",
-   "text": "Schools in Guernsey to close for Storm Austen\nhttps://www.islandfm.com/news/guernsey/schools-in-guernsey-to-close-for-storm-austen/",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2113228967444451328/F8GaV-oC?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2113228967444451328/F8GaV-oC?format=jpg&name=orig",
-     "alt": "Schools in Guernsey to close for Storm Austen",
-     "link": "https://www.islandfm.com/news/guernsey/schools-in-guernsey-to-close-for-storm-austen/",
-     "title": "Schools in Guernsey to close for Storm Austen"
-    }
-   ],
-   "time": "2026-10-22T12:39:41.000Z",
-   "url": "https://x.com/LocalToGuernsey/status/2113248926992081261"
-  },
-  {
-   "id": "2113248762890215594",
-   "source": "X",
-   "platform": "x",
-   "author": "Visit Jersey",
-   "handle": "VisitJerseyCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1764575048155762688/p4BRzvN9_bigger.jpg",
-   "text": "⚠️Storm Austen: Red Wind Warning issued for Jersey.\n\n🚨Avoid outdoor activity and coastal areas\n🏰@JerseyHeritage sites closed Friday (23rd)\n🧳Contact your travel operator regarding any flight/ferry disruption\n\nMore updates via @GovJersey and @Jersey_Met: https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVO_74jW0AAMome.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVO_74jW0AAMome.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T12:39:01.000Z",
-   "url": "https://x.com/VisitJerseyCI/status/2113248762890215594"
-  },
-  {
-   "id": "2113244732084146251",
-   "source": "X",
-   "platform": "x",
-   "author": "Brittany Ferries",
-   "handle": "BrittanyFerries",
-   "avatar": "https://pbs.twimg.com/profile_images/1738209868287270912/MPnmgzLu_bigger.jpg",
-   "text": "⚠️ Weather update: changes to Guernsey sailings\n\nStorm Austen is forecast to bring gale force winds (up to 75mph) and waves of more than 6.5m to the English Channel ahead of half term, so we’ve had to change some of our sailings for comfort and safety reasons:\n❌ High-speed",
-   "media": [],
-   "time": "2026-10-22T12:23:00.000Z",
-   "url": "https://x.com/BrittanyFerries/status/2113244732084146251"
-  },
-  {
-   "id": "2113243804035596743",
-   "source": "X",
-   "platform": "x",
-   "author": "BBC Guernsey",
-   "handle": "BBCGuernsey",
-   "avatar": "https://pbs.twimg.com/profile_images/1546408197174484993/o820p5_V_bigger.jpg",
-   "text": "States schools to close due to Storm Austen https://bbc.in/4zeT4mU",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2113243805465899008/heFFiDho?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2113243805465899008/heFFiDho?format=jpg&name=orig",
-     "alt": "Guernsey schools to close due to Storm Austen",
-     "link": "https://www.bbc.com/news/articles/cqn49jvdnypwo?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_ptr_name=twitter&at_bbc_team=editorial&at_link_type=web_link&at_campaign=Social_Flow&at_link_id=CC08A408-CE12-11F1-9D8D-D01D7760CEA8&at_link_origin=BBC_Guernsey&at_campaign_type=owned&at_medium=social&at_format=link",
-     "title": "Guernsey schools to close due to Storm Austen"
-    }
-   ],
-   "time": "2026-10-22T12:19:19.000Z",
-   "url": "https://x.com/BBCGuernsey/status/2113243804035596743"
-  },
-  {
-   "id": "2113217364388938039",
-   "source": "X",
-   "platform": "x",
-   "author": "States of Guernsey",
-   "handle": "Govgg",
-   "avatar": "https://pbs.twimg.com/profile_images/2036740702756102144/AVDguo5k_bigger.jpg",
-   "text": "Storm Austen should arrive over the Channel Islands this evening. The Met Office has issued a red wind warning this morning in advance of winds starting to pick up.\n\nFor more information, go to https://gov.gg/StormAusten",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVOne4RWoAErtLN.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVOne4RWoAErtLN.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T10:34:16.000Z",
-   "url": "https://x.com/Govgg/status/2113217364388938039"
-  },
-  {
-   "id": "2113214202286342538",
-   "source": "X",
-   "platform": "x",
-   "author": "Loganair",
-   "handle": "FlyLoganair",
-   "avatar": "https://pbs.twimg.com/profile_images/1904197644123312128/Yn72vg1A_bigger.jpg",
-   "text": "⚠️Weather Disruption: Thursday 22nd to Friday 23rd October 2026\n\nStorm Austen is affecting Loganair flights operating to and from Jersey.\n\n🔗 to the latest travel information: https://www.loganair.co.uk/news/weather-warning-friday-23-october/",
-   "media": [],
-   "time": "2026-10-22T10:21:42.000Z",
-   "url": "https://x.com/FlyLoganair/status/2113214202286342538"
-  },
-  {
-   "id": "2113210136344879614",
-   "source": "X",
-   "platform": "x",
-   "author": "Government of Jersey",
-   "handle": "GovJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
-   "text": "⚠️ Storm Austen Update: A Channel Islands Red Wind Warning has been issued. Islanders should avoid outdoor activity on Friday morning where possible.\n\nInformation on Friday closures can be found here: https://bit.ly/4zFXTWk\nWeather updates here: https://gov.je/weather",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVOha5hWMAA2FAr.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVOha5hWMAA2FAr.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T10:05:32.000Z",
-   "url": "https://x.com/GovJersey/status/2113210136344879614"
-  },
-  {
-   "id": "2113194399966674952",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A wind warning was issued at 08:45 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-22T09:03:00.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113194399966674952"
-  },
-  {
-   "id": "2113193408982286632",
-   "source": "X",
-   "platform": "x",
-   "author": "Cheesy Left",
-   "handle": "CheesyLeft",
-   "avatar": "https://pbs.twimg.com/profile_images/2094419859186552832/svW3Ppug_bigger.jpg",
-   "text": "So apparently #Guernsey 🇬🇬 is going to be getting the worst of #StormAusten as we have been given a RED warning.",
-   "media": [],
-   "time": "2026-10-22T08:59:04.000Z",
-   "url": "https://x.com/CheesyLeft/status/2113193408982286632"
-  },
-  {
-   "id": "2113189284459004089",
-   "source": "X",
-   "platform": "x",
-   "author": "Local To Guernsey",
-   "handle": "LocalToGuernsey",
-   "avatar": "https://pbs.twimg.com/profile_images/1763624151971995648/CzS8qY3s_bigger.jpg",
-   "text": "States of Guernsey 'carefully monitoring' forecasts for Storm Austen\nhttps://www.islandfm.com/news/guernsey/states-of-guernsey-carefully-monitoring-forecasts-for-storm-austen/",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2113183669762318336/QKtcV3Fu?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2113183669762318336/QKtcV3Fu?format=jpg&name=orig",
-     "alt": "States of Guernsey 'carefully monitoring' forecasts for Storm Austen",
-     "link": "https://www.islandfm.com/news/guernsey/states-of-guernsey-carefully-monitoring-forecasts-for-storm-austen/",
-     "title": "States of Guernsey 'carefully monitoring' forecasts for Storm Austen"
-    }
-   ],
-   "time": "2026-10-22T08:42:41.000Z",
-   "url": "https://x.com/LocalToGuernsey/status/2113189284459004089"
-  },
-  {
-   "id": "2113150564121083909",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "Jersey today: Bright or sunny spells and showers, occasionally heavy.\nPM: Rather cloudy with showers, perhaps heavy and thundery.\nMax: 16°C\nWind: West to southwest strong F6, decreasing moderate F4 to fresh F5.\nPM: Southwest moderate F4 to fresh F5, backing south strong F6 later.",
-   "media": [],
-   "time": "2026-10-22T06:08:49.000Z",
-   "url": "https://x.com/Jersey_Met/status/2113150564121083909"
-  },
-  {
-   "id": "2113150057109500288",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Met",
-   "handle": "GuernseyMet",
-   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
-   "text": "Guernsey: Bright or sunny spells and showers, occasionally heavy.\nPM: Rather cloudy with showers, perhaps heavy and thundery. Max: 16°C.\nWind: West to southwest strong F6, decreasing moderate F4 to fresh F5.\nPM: Southwest moderate F4 to fresh F5, backing south strong F6 by dusk.",
-   "media": [],
-   "time": "2026-10-22T06:06:48.000Z",
-   "url": "https://x.com/GuernseyMet/status/2113150057109500288"
-  },
-  {
-   "id": "2113147225295487205",
-   "source": "X",
-   "platform": "x",
-   "author": "ITV Channel News",
-   "handle": "ITVChannelTV",
-   "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
-   "text": "Good Morning! 🌅\n\nHere is @MeganMurphyITV with your Thursday @GMB  headlines:\n\n🇯🇪 Jury to continue deliberating the fourth verdict in the Haut du Mont trial\n\n☔ Jersey schools to close tomorrow as the islands prepare for Storm Austen\n\n✈ Number of air passengers up in Guernsey",
-   "media": [
-    {
-     "type": "video",
-     "url": "https://pbs.twimg.com/amplify_video_thumb/2113146796939567104/img/zCLdsw9uZxqQr17l.jpg",
-     "thumb": "https://pbs.twimg.com/amplify_video_thumb/2113146796939567104/img/zCLdsw9uZxqQr17l.jpg",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-22T05:55:33.000Z",
-   "url": "https://x.com/ITVChannelTV/status/2113147225295487205"
-  },
-  {
-   "id": "2113144318286303722",
-   "source": "X",
-   "platform": "x",
-   "author": "BBC Jersey",
-   "handle": "BBCJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/1546407714892431361/O51HwWpe_bigger.jpg",
-   "text": "Preparations under way as Storm Austen approaches https://bbc.in/4yYQa5J",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2113144319439691776/IB8bmqke?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2113144319439691776/IB8bmqke?format=jpg&name=orig",
-     "alt": "Preparations under way as Storm Austen approaches Jersey",
-     "link": "https://www.bbc.com/news/articles/cm62ye5nw5z5o?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_campaign=Social_Flow&at_format=link&at_medium=social&at_link_id=936E07D2-CDDB-11F1-B18E-F76955E9C080&at_link_origin=BBC_Jersey&at_campaign_type=owned&at_ptr_name=twitter&at_bbc_team=editorial&at_link_type=web_link",
-     "title": "Preparations under way as Storm Austen approaches Jersey"
-    }
-   ],
-   "time": "2026-10-22T05:44:00.000Z",
-   "url": "https://x.com/BBCJersey/status/2113144318286303722"
-  },
-  {
-   "id": "2113123932924531191",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Met",
-   "handle": "GuernseyMet",
-   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
-   "text": "Guernsey today - Bright or sunny spells with heavy showers, perhaps thundery at first. Becoming cloudy with showers this afternoon.\nMax: 16°C\nWind - West to southwest strong F6 at first, decreasing moderate F4 to fresh F5.",
-   "media": [],
-   "time": "2026-10-22T04:23:00.000Z",
-   "url": "https://x.com/GuernseyMet/status/2113123932924531191"
-  },
-  {
-   "id": "2113123408825516287",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "Jersey today - Bright or sunny spells with heavy showers, perhaps thundery at first. Becoming cloudy with showers this afternoon.\nMax: 16°C\nWind - West to southwest strong F6 at first, decreasing moderate F4 to fresh F5.",
-   "media": [],
-   "time": "2026-10-22T04:20:55.000Z",
-   "url": "https://x.com/Jersey_Met/status/2113123408825516287"
-  },
-  {
-   "id": "2113100963305361559",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Jersey, Guernsey and Alderney. More information is available at https://www.gov.je/weather.",
-   "media": [],
-   "time": "2026-10-22T02:51:43.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113100963305361559"
-  },
-  {
-   "id": "2113100630868807945",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A wind warning was issued at 02:44 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-22T02:50:24.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113100630868807945"
-  },
-  {
-   "id": "2113006660008710639",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A wind warning was issued at 20:34 UTC on Wednesday 21 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-21T20:37:00.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2113006660008710639"
-  },
-  {
-   "id": "2112996818015711293",
-   "source": "X",
-   "platform": "x",
-   "author": "jepnews",
-   "handle": "JEPnews",
-   "avatar": "https://pbs.twimg.com/profile_images/1724022644876386304/vT68XyXa_bigger.jpg",
-   "text": "Government schools to close on Friday as Storm Austen bears down on Island...\n\nhttps://jerseyeveningpost.com/news/2026/10/21/state-schools-to-close-on-friday-as-storm-austen-moves-closer-to-island/",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVLfW2cWcAAe7jR.png",
-     "thumb": "https://pbs.twimg.com/media/HVLfW2cWcAAe7jR.png",
-     "alt": ""
-    }
-   ],
-   "time": "2026-10-21T19:57:53.000Z",
-   "url": "https://x.com/JEPnews/status/2112996818015711293"
-  },
-  {
-   "id": "2112989737287901368",
-   "source": "X",
-   "platform": "x",
-   "author": "BBC Jersey",
-   "handle": "BBCJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/1546407714892431361/O51HwWpe_bigger.jpg",
-   "text": "Schools to close on Friday due to Storm Austen https://bbc.in/4iy2Zy3",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2112989739846455296/_WmIPS8O?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2112989739846455296/_WmIPS8O?format=jpg&name=orig",
-     "alt": "Storm Austen wind concern leads to all Jersey schools closing",
-     "link": "https://www.bbc.com/news/articles/ckeq30jp2w1no?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_link_origin=BBC_Jersey&at_campaign_type=owned&at_link_type=web_link&at_link_id=C1AFC1B8-CD85-11F1-A8E7-F31228FC01C7&at_ptr_name=twitter&at_bbc_team=editorial&at_format=link&at_medium=social&at_campaign=Social_Flow",
-     "title": "Storm Austen wind concern leads to all Jersey schools closing"
-    }
-   ],
-   "time": "2026-10-21T19:29:45.000Z",
-   "url": "https://x.com/BBCJersey/status/2112989737287901368"
-  },
-  {
-   "id": "2112975528395456819",
-   "source": "X",
-   "platform": "x",
-   "author": "ITV Channel News",
-   "handle": "ITVChannelTV",
-   "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
-   "text": "All government-run schools in Jersey will close on Friday as the island prepares for potential Gale F9 winds with Storm Austen's arrival.\nhttps://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
-   "media": [
-    {
-     "type": "link",
-     "url": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
-     "thumb": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
-     "alt": "Jersey schools to close as Storm Austen looms | ITV News",
-     "link": "https://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
-     "title": "Jersey schools to close as Storm Austen looms | ITV News"
-    }
-   ],
-   "time": "2026-10-21T18:33:17.000Z",
-   "url": "https://x.com/ITVChannelTV/status/2112975528395456819"
-  },
-  {
-   "id": "2112956056640934300",
-   "source": "X",
-   "platform": "x",
-   "author": "Government of Jersey",
-   "handle": "GovJersey",
-   "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
-   "text": "⚠️ Storm Austen Update - Wednesday 21 October 6:10pm\n\n🏫 All Government of Jersey schools will be closed on Friday\n💨 Gusts could reach 70–80 mph\n🚗 Travel disruption and fallen trees are possible\n🌧️ There is a risk of localised flooding\n\nRead more here: https://bit.ly/4zFXTWk",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVK6VjHXgAEhHZg.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVK6VjHXgAEhHZg.jpg",
-     "alt": "A yellow background features a black icon of a cloud with raindrops and wind lines. In the top left corner, text reads \"Storm Austen.\" A heraldic emblem is in the top right corner."
-    }
-   ],
-   "time": "2026-10-21T17:15:55.000Z",
-   "url": "https://x.com/GovJersey/status/2112956056640934300"
-  },
-  {
-   "id": "2112954578702377179",
-   "source": "X",
-   "platform": "x",
-   "author": "Guernsey Met",
-   "handle": "GuernseyMet",
-   "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
-   "text": "Guernsey tomorrow – am: Sunny periods with showers, perhaps heavy and thundery at first, pm: Rather cloudy with showery rain, perhaps heavy and thundery. Max: 16°C.\n\nWind –  West to southwest fresh F5 to strong F6, easing moderate F4 to fresh F5,  backing south strong F6 by dusk",
-   "media": [],
-   "time": "2026-10-21T17:10:03.000Z",
-   "url": "https://x.com/GuernseyMet/status/2112954578702377179"
-  },
-  {
-   "id": "2112954235340087443",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "Jersey tomorrow – am: Sunny periods with showers, perhaps heavy and thundery at first, pm: Rather cloudy with showery rain, perhaps heavy and thundery. Max: 16°C.\n\nWind –  West to southwest fresh F5 to strong F6, decreasing moderate F4 to fresh F5 backing south strong F6 by dusk.",
-   "media": [],
-   "time": "2026-10-21T17:08:41.000Z",
-   "url": "https://x.com/Jersey_Met/status/2112954235340087443"
-  },
-  {
-   "id": "2112920559877038125",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A wind warning was issued at 14:45 UTC on Wednesday 21 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-21T14:54:52.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2112920559877038125"
-  },
-  {
-   "id": "2112894098281513118",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-21T13:09:43.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2112894098281513118"
-  },
-  {
-   "id": "2112765337871540312",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "Jersey today\nam: Sunny periods and blustery showers.\npm: Sunny periods and blustery showers, perhaps heavy. Max: 14°C.\n\nWind\nam: West to northwest strong F6 to 7, occasionally with gusts to 55mph.\npm: West to northwest strong F6 to 7, perhaps with gusts to 40mph at first.",
-   "media": [
-    {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVIMjEsWcAAt72P.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVIMjEsWcAAt72P.jpg",
-     "alt": ""
+      "id": "2113487629950054732",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_normal.jpg",
+      "text": "Jersey today: cloudy with rain, sometimes heavy, turning to blustery showers.\n\nMax: 15°C\nMax UV: 2\n\nWind: west to northwest severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph, decreasing gale F8, then strong F7 later.",
+      "media": [],
+      "time": "2026-10-23T04:28:12.000Z",
+      "url": "https://x.com/Jersey_Met/status/2113487629950054732"
     },
     {
-     "type": "photo",
-     "url": "https://pbs.twimg.com/media/HVIMjErX0AA_OsW.jpg",
-     "thumb": "https://pbs.twimg.com/media/HVIMjErX0AA_OsW.jpg",
-     "alt": ""
+      "id": "2113381403073057255",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
+      "media": [],
+      "time": "2026-10-22T21:26:05.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113381403073057255"
+    },
+    {
+      "id": "2113381375558701355",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.",
+      "media": [],
+      "time": "2026-10-22T21:25:59.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113381375558701355"
+    },
+    {
+      "id": "2113381342972960861",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-22T21:25:51.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113381342972960861"
+    },
+    {
+      "id": "2113369285783388415",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Met",
+      "handle": "GuernseyMet",
+      "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+      "text": "A wind warning was issued at 20:35 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-22T20:37:56.000Z",
+      "url": "https://x.com/GuernseyMet/status/2113369285783388415"
+    },
+    {
+      "id": "2113361488517763108",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Met",
+      "handle": "GuernseyMet",
+      "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.\n\nA Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
+      "media": [],
+      "time": "2026-10-22T20:06:57.000Z",
+      "url": "https://x.com/GuernseyMet/status/2113361488517763108"
+    },
+    {
+      "id": "2113361431194227180",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-22T20:06:44.000Z",
+      "url": "https://x.com/Jersey_Met/status/2113361431194227180"
+    },
+    {
+      "id": "2113361104575570222",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Alderney. See https://www.gov.je/weather/guernsey-forecast for more information.",
+      "media": [],
+      "time": "2026-10-22T20:05:26.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113361104575570222"
+    },
+    {
+      "id": "2113361067862855957",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.\n\nA Thunderstorm Warning has been issued for Guernsey. See https://www.gov.je/weather/guernsey-forecast for more information.",
+      "media": [],
+      "time": "2026-10-22T20:05:17.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113361067862855957"
+    },
+    {
+      "id": "2113359001207316556",
+      "source": "X",
+      "platform": "x",
+      "author": "Government of Jersey",
+      "handle": "GovJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
+      "text": "To help keep customers and colleagues safe during the expected severe weather, the Government’s Union Street Customer Hub will now be closed on Friday morning.\n\nWe expect to reopen at 1pm, unless otherwise advised.\n\nFor the latest updates: https://bit.ly/3UBHNOC",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVQoz8fXQAAJ91W.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVQoz8fXQAAJ91W.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T19:57:04.000Z",
+      "url": "https://x.com/GovJersey/status/2113359001207316556"
+    },
+    {
+      "id": "2113357969265946763",
+      "source": "X",
+      "platform": "x",
+      "author": "ITV Channel News",
+      "handle": "ITVChannelTV",
+      "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
+      "text": "Channel Islands brace for Storm Austen. Catch up on how to prepare and the advice in tonight's programme: https://www.itv.com/watch/news/catch-up-on-itv-news-channels-main-programme-from-thursday-22nd-october/4b1d46n",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2113357972164280320/vlP2XadW?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2113357972164280320/vlP2XadW?format=jpg&name=orig",
+          "alt": "Catch up on ITV News Channel's main programme from Thursday 22nd October - Latest From ITV News",
+          "link": "https://www.itv.com/watch/news/catch-up-on-itv-news-channels-main-programme-from-thursday-22nd-october/4b1d46n",
+          "title": "Catch up on ITV News Channel's main programme from Thursday 22nd October - Latest From ITV News"
+        }
+      ],
+      "time": "2026-10-22T19:52:58.000Z",
+      "url": "https://x.com/ITVChannelTV/status/2113357969265946763"
+    },
+    {
+      "id": "2113324098835419618",
+      "source": "X",
+      "platform": "x",
+      "author": "ITV Channel News",
+      "handle": "ITVChannelTV",
+      "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
+      "text": "Red Wind Warning issued in Channel Islands as Storm Austen approaches. Organisations across the Islands have warned of closures, cancellations, and delays. https://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
+          "alt": "Jersey schools to close as Storm Austen looms | ITV News",
+          "link": "https://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
+          "title": "Jersey schools to close as Storm Austen looms | ITV News"
+        }
+      ],
+      "time": "2026-10-22T17:38:23.000Z",
+      "url": "https://x.com/ITVChannelTV/status/2113324098835419618"
+    },
+    {
+      "id": "2113321327259947408",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Met",
+      "handle": "GuernseyMet",
+      "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+      "text": "Wind tomorrow – am: West to northwest severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph, occasionally gale F8 later, pm: West to northwest gale F8, occasionally severe gale F9 with gusts to 70mph at first, decreasing strong F7 with gusts to 60mph later.",
+      "media": [],
+      "time": "2026-10-22T17:27:22.000Z",
+      "url": "https://x.com/GuernseyMet/status/2113321327259947408"
+    },
+    {
+      "id": "2113321134452035970",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "Wind tomorrow – am: West to northwest severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph, occasionally gale F8 later, pm: West to northwest gale F8, occasionally severe gale F9 with gusts to 70mph at first, decreasing strong F7 with gusts to 60mph later.",
+      "media": [],
+      "time": "2026-10-22T17:26:36.000Z",
+      "url": "https://x.com/Jersey_Met/status/2113321134452035970"
+    },
+    {
+      "id": "2113314559507235184",
+      "source": "X",
+      "platform": "x",
+      "author": "Government of Jersey",
+      "handle": "GovJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
+      "text": "Storm Austen | Report fallen trees and other issues.\n\nTo report a fallen tree, blocked road or storm damage, email dfi@gov.je with:\n- A photograph\n- The road name or location\n- The Parish\n\nLive map: https://bit.ly/4zQoOyX\n\n🔗 https://bit.ly/4zFXTWk & https://gov.je/weather",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVQAZJHWkAA9Q-q.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVQAZJHWkAA9Q-q.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T17:00:29.000Z",
+      "url": "https://x.com/GovJersey/status/2113314559507235184"
+    },
+    {
+      "id": "2113309137278820555",
+      "source": "X",
+      "platform": "x",
+      "author": "Government of Jersey",
+      "handle": "GovJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
+      "text": "The weather situation continues to develop, with the potential for conditions to become more severe.\n\nWe are advising Islanders to remain indoors during the worst of the weather and avoid unnecessary travel or outdoor activity until lunchtime on Friday.\n\nhttps://bit.ly/4zFXTWk",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVP7djlWAAAgWcd.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVP7djlWAAAgWcd.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T16:38:56.000Z",
+      "url": "https://x.com/GovJersey/status/2113309137278820555"
+    },
+    {
+      "id": "2113305870066979232",
+      "source": "X",
+      "platform": "x",
+      "author": "Pit-Stop Mobile Paint Solutions",
+      "handle": "PitStopJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/2006330851915595776/e5myESDn_bigger.jpg",
+      "text": "🌧️🏁\n\nWith Storm Austen heading our way and a red weather warning in place, Pit-Stop won’t be carrying out any mobile repairs on tomorrow.\n\nWe’ll still be available for online quotes! 📸\n\nStay safe out there, Jersey.\n\nPit-Stop Mobile Paint Solutions 🏁",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVP4fAlX0AEjwoe.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVP4fAlX0AEjwoe.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T16:25:57.000Z",
+      "url": "https://x.com/PitStopJersey/status/2113305870066979232"
+    },
+    {
+      "id": "2113284580325118129",
+      "source": "X",
+      "platform": "x",
+      "author": "BBC Guernsey",
+      "handle": "BBCGuernsey",
+      "avatar": "https://pbs.twimg.com/profile_images/1546408197174484993/o820p5_V_bigger.jpg",
+      "text": "Red wind warning issued for Channel Islands https://bbc.in/4BsBtd1",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2113284581071736834/MJT6k999?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2113284581071736834/MJT6k999?format=jpg&name=orig",
+          "alt": "Channel Islands red wind warning as Storm Austen approaches",
+          "link": "https://www.bbc.com/news/articles/cm62ye5nw5z5o?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_campaign=Social_Flow&at_ptr_name=twitter&at_link_origin=BBC_Guernsey&at_campaign_type=owned&at_link_id=6E5A0D76-CE29-11F1-843E-B3D10164F539&at_medium=social&at_format=link&at_link_type=web_link&at_bbc_team=editorial",
+          "title": "Channel Islands red wind warning as Storm Austen approaches"
+        }
+      ],
+      "time": "2026-10-22T15:01:21.000Z",
+      "url": "https://x.com/BBCGuernsey/status/2113284580325118129"
+    },
+    {
+      "id": "2113280465507324118",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A wind warning was issued at 14:43 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-22T14:45:00.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113280465507324118"
+    },
+    {
+      "id": "2113265277316325838",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Airport  ✈",
+      "handle": "GuernseyAirport",
+      "avatar": "https://pbs.twimg.com/profile_images/1572862563406290946/Qzu0c6py_bigger.jpg",
+      "text": "We regret flights are disrupted this evening and tomorrow as the forecast weather exceeds safe operating limits. We expect to open noon Friday with flights resuming around 2pm. If you are booked to travel your airline will advise of alternative arrangements.",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVPTXgbXEAAXR-A.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVPTXgbXEAAXR-A.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T13:44:39.000Z",
+      "url": "https://x.com/GuernseyAirport/status/2113265277316325838"
+    },
+    {
+      "id": "2113249698274271454",
+      "source": "X",
+      "platform": "x",
+      "author": "States of Guernsey",
+      "handle": "Govgg",
+      "avatar": "https://pbs.twimg.com/profile_images/2036740702756102144/AVDguo5k_bigger.jpg",
+      "text": "States of Guernsey customer counters will be closed on Friday morning while the worst of Storm Austen passes over the islands. This includes counters at Frossard House, Brickfield House, the Guernsey Registry, Edward T Wheadon House and the New Jetty: https://gov.gg/StormAusten",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVPFFymXAAAMarJ.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVPFFymXAAAMarJ.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T12:42:45.000Z",
+      "url": "https://x.com/Govgg/status/2113249698274271454"
+    },
+    {
+      "id": "2113248926992081261",
+      "source": "X",
+      "platform": "x",
+      "author": "Local To Guernsey",
+      "handle": "LocalToGuernsey",
+      "avatar": "https://pbs.twimg.com/profile_images/1763624151971995648/CzS8qY3s_bigger.jpg",
+      "text": "Schools in Guernsey to close for Storm Austen\nhttps://www.islandfm.com/news/guernsey/schools-in-guernsey-to-close-for-storm-austen/",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2113228967444451328/F8GaV-oC?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2113228967444451328/F8GaV-oC?format=jpg&name=orig",
+          "alt": "Schools in Guernsey to close for Storm Austen",
+          "link": "https://www.islandfm.com/news/guernsey/schools-in-guernsey-to-close-for-storm-austen/",
+          "title": "Schools in Guernsey to close for Storm Austen"
+        }
+      ],
+      "time": "2026-10-22T12:39:41.000Z",
+      "url": "https://x.com/LocalToGuernsey/status/2113248926992081261"
+    },
+    {
+      "id": "2113248762890215594",
+      "source": "X",
+      "platform": "x",
+      "author": "Visit Jersey",
+      "handle": "VisitJerseyCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1764575048155762688/p4BRzvN9_bigger.jpg",
+      "text": "⚠️Storm Austen: Red Wind Warning issued for Jersey.\n\n🚨Avoid outdoor activity and coastal areas\n🏰@JerseyHeritage sites closed Friday (23rd)\n🧳Contact your travel operator regarding any flight/ferry disruption\n\nMore updates via @GovJersey and @Jersey_Met: https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVO_74jW0AAMome.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVO_74jW0AAMome.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T12:39:01.000Z",
+      "url": "https://x.com/VisitJerseyCI/status/2113248762890215594"
+    },
+    {
+      "id": "2113244732084146251",
+      "source": "X",
+      "platform": "x",
+      "author": "Brittany Ferries",
+      "handle": "BrittanyFerries",
+      "avatar": "https://pbs.twimg.com/profile_images/1738209868287270912/MPnmgzLu_bigger.jpg",
+      "text": "⚠️ Weather update: changes to Guernsey sailings\n\nStorm Austen is forecast to bring gale force winds (up to 75mph) and waves of more than 6.5m to the English Channel ahead of half term, so we’ve had to change some of our sailings for comfort and safety reasons:\n❌ High-speed",
+      "media": [],
+      "time": "2026-10-22T12:23:00.000Z",
+      "url": "https://x.com/BrittanyFerries/status/2113244732084146251"
+    },
+    {
+      "id": "2113243804035596743",
+      "source": "X",
+      "platform": "x",
+      "author": "BBC Guernsey",
+      "handle": "BBCGuernsey",
+      "avatar": "https://pbs.twimg.com/profile_images/1546408197174484993/o820p5_V_bigger.jpg",
+      "text": "States schools to close due to Storm Austen https://bbc.in/4zeT4mU",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2113243805465899008/heFFiDho?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2113243805465899008/heFFiDho?format=jpg&name=orig",
+          "alt": "Guernsey schools to close due to Storm Austen",
+          "link": "https://www.bbc.com/news/articles/cqn49jvdnypwo?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_ptr_name=twitter&at_bbc_team=editorial&at_link_type=web_link&at_campaign=Social_Flow&at_link_id=CC08A408-CE12-11F1-9D8D-D01D7760CEA8&at_link_origin=BBC_Guernsey&at_campaign_type=owned&at_medium=social&at_format=link",
+          "title": "Guernsey schools to close due to Storm Austen"
+        }
+      ],
+      "time": "2026-10-22T12:19:19.000Z",
+      "url": "https://x.com/BBCGuernsey/status/2113243804035596743"
+    },
+    {
+      "id": "2113217364388938039",
+      "source": "X",
+      "platform": "x",
+      "author": "States of Guernsey",
+      "handle": "Govgg",
+      "avatar": "https://pbs.twimg.com/profile_images/2036740702756102144/AVDguo5k_bigger.jpg",
+      "text": "Storm Austen should arrive over the Channel Islands this evening. The Met Office has issued a red wind warning this morning in advance of winds starting to pick up.\n\nFor more information, go to https://gov.gg/StormAusten",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVOne4RWoAErtLN.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVOne4RWoAErtLN.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T10:34:16.000Z",
+      "url": "https://x.com/Govgg/status/2113217364388938039"
+    },
+    {
+      "id": "2113214202286342538",
+      "source": "X",
+      "platform": "x",
+      "author": "Loganair",
+      "handle": "FlyLoganair",
+      "avatar": "https://pbs.twimg.com/profile_images/1904197644123312128/Yn72vg1A_bigger.jpg",
+      "text": "⚠️Weather Disruption: Thursday 22nd to Friday 23rd October 2026\n\nStorm Austen is affecting Loganair flights operating to and from Jersey.\n\n🔗 to the latest travel information: https://www.loganair.co.uk/news/weather-warning-friday-23-october/",
+      "media": [],
+      "time": "2026-10-22T10:21:42.000Z",
+      "url": "https://x.com/FlyLoganair/status/2113214202286342538"
+    },
+    {
+      "id": "2113210136344879614",
+      "source": "X",
+      "platform": "x",
+      "author": "Government of Jersey",
+      "handle": "GovJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
+      "text": "⚠️ Storm Austen Update: A Channel Islands Red Wind Warning has been issued. Islanders should avoid outdoor activity on Friday morning where possible.\n\nInformation on Friday closures can be found here: https://bit.ly/4zFXTWk\nWeather updates here: https://gov.je/weather",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVOha5hWMAA2FAr.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVOha5hWMAA2FAr.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T10:05:32.000Z",
+      "url": "https://x.com/GovJersey/status/2113210136344879614"
+    },
+    {
+      "id": "2113194399966674952",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A wind warning was issued at 08:45 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-22T09:03:00.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113194399966674952"
+    },
+    {
+      "id": "2113193408982286632",
+      "source": "X",
+      "platform": "x",
+      "author": "Cheesy Left",
+      "handle": "CheesyLeft",
+      "avatar": "https://pbs.twimg.com/profile_images/2094419859186552832/svW3Ppug_bigger.jpg",
+      "text": "So apparently #Guernsey 🇬🇬 is going to be getting the worst of #StormAusten as we have been given a RED warning.",
+      "media": [],
+      "time": "2026-10-22T08:59:04.000Z",
+      "url": "https://x.com/CheesyLeft/status/2113193408982286632"
+    },
+    {
+      "id": "2113189284459004089",
+      "source": "X",
+      "platform": "x",
+      "author": "Local To Guernsey",
+      "handle": "LocalToGuernsey",
+      "avatar": "https://pbs.twimg.com/profile_images/1763624151971995648/CzS8qY3s_bigger.jpg",
+      "text": "States of Guernsey 'carefully monitoring' forecasts for Storm Austen\nhttps://www.islandfm.com/news/guernsey/states-of-guernsey-carefully-monitoring-forecasts-for-storm-austen/",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2113183669762318336/QKtcV3Fu?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2113183669762318336/QKtcV3Fu?format=jpg&name=orig",
+          "alt": "States of Guernsey 'carefully monitoring' forecasts for Storm Austen",
+          "link": "https://www.islandfm.com/news/guernsey/states-of-guernsey-carefully-monitoring-forecasts-for-storm-austen/",
+          "title": "States of Guernsey 'carefully monitoring' forecasts for Storm Austen"
+        }
+      ],
+      "time": "2026-10-22T08:42:41.000Z",
+      "url": "https://x.com/LocalToGuernsey/status/2113189284459004089"
+    },
+    {
+      "id": "2113150564121083909",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "Jersey today: Bright or sunny spells and showers, occasionally heavy.\nPM: Rather cloudy with showers, perhaps heavy and thundery.\nMax: 16°C\nWind: West to southwest strong F6, decreasing moderate F4 to fresh F5.\nPM: Southwest moderate F4 to fresh F5, backing south strong F6 later.",
+      "media": [],
+      "time": "2026-10-22T06:08:49.000Z",
+      "url": "https://x.com/Jersey_Met/status/2113150564121083909"
+    },
+    {
+      "id": "2113150057109500288",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Met",
+      "handle": "GuernseyMet",
+      "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+      "text": "Guernsey: Bright or sunny spells and showers, occasionally heavy.\nPM: Rather cloudy with showers, perhaps heavy and thundery. Max: 16°C.\nWind: West to southwest strong F6, decreasing moderate F4 to fresh F5.\nPM: Southwest moderate F4 to fresh F5, backing south strong F6 by dusk.",
+      "media": [],
+      "time": "2026-10-22T06:06:48.000Z",
+      "url": "https://x.com/GuernseyMet/status/2113150057109500288"
+    },
+    {
+      "id": "2113147225295487205",
+      "source": "X",
+      "platform": "x",
+      "author": "ITV Channel News",
+      "handle": "ITVChannelTV",
+      "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
+      "text": "Good Morning! 🌅\n\nHere is @MeganMurphyITV with your Thursday @GMB  headlines:\n\n🇯🇪 Jury to continue deliberating the fourth verdict in the Haut du Mont trial\n\n☔ Jersey schools to close tomorrow as the islands prepare for Storm Austen\n\n✈ Number of air passengers up in Guernsey",
+      "media": [
+        {
+          "type": "video",
+          "url": "https://pbs.twimg.com/amplify_video_thumb/2113146796939567104/img/zCLdsw9uZxqQr17l.jpg",
+          "thumb": "https://pbs.twimg.com/amplify_video_thumb/2113146796939567104/img/zCLdsw9uZxqQr17l.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-22T05:55:33.000Z",
+      "url": "https://x.com/ITVChannelTV/status/2113147225295487205"
+    },
+    {
+      "id": "2113144318286303722",
+      "source": "X",
+      "platform": "x",
+      "author": "BBC Jersey",
+      "handle": "BBCJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/1546407714892431361/O51HwWpe_bigger.jpg",
+      "text": "Preparations under way as Storm Austen approaches https://bbc.in/4yYQa5J",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2113144319439691776/IB8bmqke?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2113144319439691776/IB8bmqke?format=jpg&name=orig",
+          "alt": "Preparations under way as Storm Austen approaches Jersey",
+          "link": "https://www.bbc.com/news/articles/cm62ye5nw5z5o?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_campaign=Social_Flow&at_format=link&at_medium=social&at_link_id=936E07D2-CDDB-11F1-B18E-F76955E9C080&at_link_origin=BBC_Jersey&at_campaign_type=owned&at_ptr_name=twitter&at_bbc_team=editorial&at_link_type=web_link",
+          "title": "Preparations under way as Storm Austen approaches Jersey"
+        }
+      ],
+      "time": "2026-10-22T05:44:00.000Z",
+      "url": "https://x.com/BBCJersey/status/2113144318286303722"
+    },
+    {
+      "id": "2113123932924531191",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Met",
+      "handle": "GuernseyMet",
+      "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+      "text": "Guernsey today - Bright or sunny spells with heavy showers, perhaps thundery at first. Becoming cloudy with showers this afternoon.\nMax: 16°C\nWind - West to southwest strong F6 at first, decreasing moderate F4 to fresh F5.",
+      "media": [],
+      "time": "2026-10-22T04:23:00.000Z",
+      "url": "https://x.com/GuernseyMet/status/2113123932924531191"
+    },
+    {
+      "id": "2113123408825516287",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "Jersey today - Bright or sunny spells with heavy showers, perhaps thundery at first. Becoming cloudy with showers this afternoon.\nMax: 16°C\nWind - West to southwest strong F6 at first, decreasing moderate F4 to fresh F5.",
+      "media": [],
+      "time": "2026-10-22T04:20:55.000Z",
+      "url": "https://x.com/Jersey_Met/status/2113123408825516287"
+    },
+    {
+      "id": "2113100963305361559",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Jersey, Guernsey and Alderney. More information is available at https://www.gov.je/weather.",
+      "media": [],
+      "time": "2026-10-22T02:51:43.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113100963305361559"
+    },
+    {
+      "id": "2113100630868807945",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A wind warning was issued at 02:44 UTC on Thursday 22 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-22T02:50:24.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113100630868807945"
+    },
+    {
+      "id": "2113006660008710639",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A wind warning was issued at 20:34 UTC on Wednesday 21 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-21T20:37:00.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2113006660008710639"
+    },
+    {
+      "id": "2112996818015711293",
+      "source": "X",
+      "platform": "x",
+      "author": "jepnews",
+      "handle": "JEPnews",
+      "avatar": "https://pbs.twimg.com/profile_images/1724022644876386304/vT68XyXa_bigger.jpg",
+      "text": "Government schools to close on Friday as Storm Austen bears down on Island...\n\nhttps://jerseyeveningpost.com/news/2026/10/21/state-schools-to-close-on-friday-as-storm-austen-moves-closer-to-island/",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVLfW2cWcAAe7jR.png",
+          "thumb": "https://pbs.twimg.com/media/HVLfW2cWcAAe7jR.png",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-21T19:57:53.000Z",
+      "url": "https://x.com/JEPnews/status/2112996818015711293"
+    },
+    {
+      "id": "2112989737287901368",
+      "source": "X",
+      "platform": "x",
+      "author": "BBC Jersey",
+      "handle": "BBCJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/1546407714892431361/O51HwWpe_bigger.jpg",
+      "text": "Schools to close on Friday due to Storm Austen https://bbc.in/4iy2Zy3",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2112989739846455296/_WmIPS8O?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2112989739846455296/_WmIPS8O?format=jpg&name=orig",
+          "alt": "Storm Austen wind concern leads to all Jersey schools closing",
+          "link": "https://www.bbc.com/news/articles/ckeq30jp2w1no?xtor=AL-71-%5Bpartner%5D-%5BBBC+England%5D-%5Bheadline%5D-%5Bnews%5D-%5Bbizdev%5D-%5Bisapi%5D&at_link_origin=BBC_Jersey&at_campaign_type=owned&at_link_type=web_link&at_link_id=C1AFC1B8-CD85-11F1-A8E7-F31228FC01C7&at_ptr_name=twitter&at_bbc_team=editorial&at_format=link&at_medium=social&at_campaign=Social_Flow",
+          "title": "Storm Austen wind concern leads to all Jersey schools closing"
+        }
+      ],
+      "time": "2026-10-21T19:29:45.000Z",
+      "url": "https://x.com/BBCJersey/status/2112989737287901368"
+    },
+    {
+      "id": "2112975528395456819",
+      "source": "X",
+      "platform": "x",
+      "author": "ITV Channel News",
+      "handle": "ITVChannelTV",
+      "avatar": "https://pbs.twimg.com/profile_images/1090970507745345538/kKQ-JS4T_bigger.jpg",
+      "text": "All government-run schools in Jersey will close on Friday as the island prepares for potential Gale F9 winds with Storm Austen's arrival.\nhttps://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
+      "media": [
+        {
+          "type": "link",
+          "url": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
+          "thumb": "https://pbs.twimg.com/news_img/2112975533860687872/V4PtUQco?format=jpg&name=orig",
+          "alt": "Jersey schools to close as Storm Austen looms | ITV News",
+          "link": "https://www.itv.com/news/channel/2026-10-21/jersey-schools-to-close-as-storm-austen-looms",
+          "title": "Jersey schools to close as Storm Austen looms | ITV News"
+        }
+      ],
+      "time": "2026-10-21T18:33:17.000Z",
+      "url": "https://x.com/ITVChannelTV/status/2112975528395456819"
+    },
+    {
+      "id": "2112956056640934300",
+      "source": "X",
+      "platform": "x",
+      "author": "Government of Jersey",
+      "handle": "GovJersey",
+      "avatar": "https://pbs.twimg.com/profile_images/2005571605720711168/dhGyrPto_bigger.jpg",
+      "text": "⚠️ Storm Austen Update - Wednesday 21 October 6:10pm\n\n🏫 All Government of Jersey schools will be closed on Friday\n💨 Gusts could reach 70–80 mph\n🚗 Travel disruption and fallen trees are possible\n🌧️ There is a risk of localised flooding\n\nRead more here: https://bit.ly/4zFXTWk",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVK6VjHXgAEhHZg.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVK6VjHXgAEhHZg.jpg",
+          "alt": "A yellow background features a black icon of a cloud with raindrops and wind lines. In the top left corner, text reads \"Storm Austen.\" A heraldic emblem is in the top right corner."
+        }
+      ],
+      "time": "2026-10-21T17:15:55.000Z",
+      "url": "https://x.com/GovJersey/status/2112956056640934300"
+    },
+    {
+      "id": "2112954578702377179",
+      "source": "X",
+      "platform": "x",
+      "author": "Guernsey Met",
+      "handle": "GuernseyMet",
+      "avatar": "https://pbs.twimg.com/profile_images/1572134445263503360/ZN64Cc2W_bigger.jpg",
+      "text": "Guernsey tomorrow – am: Sunny periods with showers, perhaps heavy and thundery at first, pm: Rather cloudy with showery rain, perhaps heavy and thundery. Max: 16°C.\n\nWind –  West to southwest fresh F5 to strong F6, easing moderate F4 to fresh F5,  backing south strong F6 by dusk",
+      "media": [],
+      "time": "2026-10-21T17:10:03.000Z",
+      "url": "https://x.com/GuernseyMet/status/2112954578702377179"
+    },
+    {
+      "id": "2112954235340087443",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "Jersey tomorrow – am: Sunny periods with showers, perhaps heavy and thundery at first, pm: Rather cloudy with showery rain, perhaps heavy and thundery. Max: 16°C.\n\nWind –  West to southwest fresh F5 to strong F6, decreasing moderate F4 to fresh F5 backing south strong F6 by dusk.",
+      "media": [],
+      "time": "2026-10-21T17:08:41.000Z",
+      "url": "https://x.com/Jersey_Met/status/2112954235340087443"
+    },
+    {
+      "id": "2112920559877038125",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A wind warning was issued at 14:45 UTC on Wednesday 21 October 2026 for the Channel Islands Shipping Area.\nSee https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-21T14:54:52.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2112920559877038125"
+    },
+    {
+      "id": "2112894098281513118",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A Thunderstorm Warning has been issued for Jersey. See https://www.gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-21T13:09:43.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2112894098281513118"
+    },
+    {
+      "id": "2112765337871540312",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "Jersey today\nam: Sunny periods and blustery showers.\npm: Sunny periods and blustery showers, perhaps heavy. Max: 14°C.\n\nWind\nam: West to northwest strong F6 to 7, occasionally with gusts to 55mph.\npm: West to northwest strong F6 to 7, perhaps with gusts to 40mph at first.",
+      "media": [
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVIMjEsWcAAt72P.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVIMjEsWcAAt72P.jpg",
+          "alt": ""
+        },
+        {
+          "type": "photo",
+          "url": "https://pbs.twimg.com/media/HVIMjErX0AA_OsW.jpg",
+          "thumb": "https://pbs.twimg.com/media/HVIMjErX0AA_OsW.jpg",
+          "alt": ""
+        }
+      ],
+      "time": "2026-10-21T04:38:04.000Z",
+      "url": "https://x.com/Jersey_Met/status/2112765337871540312"
+    },
+    {
+      "id": "2112597485503828159",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
+      "text": "Jersey tomorrow\nam: Sunny periods and the odd blustery shower\npm: Sunny periods and the odd blustery shower. Max: 15°C\nWind:\nWest to northwest strong F6, with gusts to 55mph,  occasionally strong F7, decreasing fresh F5 later.",
+      "media": [],
+      "time": "2026-10-20T17:31:05.000Z",
+      "url": "https://x.com/Jersey_Met/status/2112597485503828159"
+    },
+    {
+      "id": "2112560844466733403",
+      "source": "X",
+      "platform": "x",
+      "author": "CI Weather Warnings",
+      "handle": "Jersey_MetCI",
+      "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
+      "text": "A wind warning was issued at 14:41 UTC on Tuesday 20 October 2026 for the Channel Islands Shipping Area. See https://gov.je/weather for more information.",
+      "media": [],
+      "time": "2026-10-20T15:05:29.000Z",
+      "url": "https://x.com/Jersey_MetCI/status/2112560844466733403"
     }
-   ],
-   "time": "2026-10-21T04:38:04.000Z",
-   "url": "https://x.com/Jersey_Met/status/2112765337871540312"
-  },
-  {
-   "id": "2112597485503828159",
-   "source": "X",
-   "platform": "x",
-   "author": "Jersey Met",
-   "handle": "Jersey_Met",
-   "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_bigger.jpg",
-   "text": "Jersey tomorrow\nam: Sunny periods and the odd blustery shower\npm: Sunny periods and the odd blustery shower. Max: 15°C\nWind:\nWest to northwest strong F6, with gusts to 55mph,  occasionally strong F7, decreasing fresh F5 later.",
-   "media": [],
-   "time": "2026-10-20T17:31:05.000Z",
-   "url": "https://x.com/Jersey_Met/status/2112597485503828159"
-  },
-  {
-   "id": "2112560844466733403",
-   "source": "X",
-   "platform": "x",
-   "author": "CI Weather Warnings",
-   "handle": "Jersey_MetCI",
-   "avatar": "https://pbs.twimg.com/profile_images/1572151027020845062/tQ_idYjz_bigger.jpg",
-   "text": "A wind warning was issued at 14:41 UTC on Tuesday 20 October 2026 for the Channel Islands Shipping Area. See https://gov.je/weather for more information.",
-   "media": [],
-   "time": "2026-10-20T15:05:29.000Z",
-   "url": "https://x.com/Jersey_MetCI/status/2112560844466733403"
-  }
- ]
+  ]
 }
