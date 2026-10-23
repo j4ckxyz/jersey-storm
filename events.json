@@ -1,26 +1,113 @@
 {
   "version": 1,
-  "updated": "2026-10-23T09:50:00+01:00",
+  "updated": "2026-10-23T12:20:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
     {
-      "id": "2026-10-23-peak-gust-85mph-0400",
-      "start": "2026-10-23T04:00:00+01:00",
-      "end": "2026-10-23T09:37:28+01:00",
-      "title": "85mph peak gust recorded around 4am; severe gales continue",
-      "summary": "Winds of 85mph were recorded in Jersey overnight, peaking around 4am; severe gale F9 winds continue from the west to north-west.",
-      "details": "Bailiwick Express reported a top wind speed of 85mph, reached at around 4am, with severe gale F9 west to north-west winds still blowing across the island. Many services and businesses are closed and Islanders are being told to stay inside; emergency, maternity and urgent care at the hospital remain open [1].",
-      "category": "weather",
+      "id": "2026-10-23-jec-beyond-worst-1200",
+      "start": "2026-10-23T12:00:00+01:00",
+      "title": "Jersey Electricity: moving beyond the worst of the storm",
+      "summary": "Jersey Electricity's 12pm update says the island is moving beyond the worst of Storm Austen, with its teams continuing work.",
+      "details": "Jersey Electricity posted a 12pm Storm Austen update saying that as the island moves beyond the worst of the storm, its teams are continuing their work [1].",
+      "category": "power",
+      "severity": "notable",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "bluesky",
+          "publisher": "today.je (Bluesky)",
+          "title": "JEC 12pm Storm Austen update",
+          "url": "https://bsky.app/profile/today.je/post/3myjztijcgl2k",
+          "time": "2026-10-23T12:04:49+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-ice-rink-damage",
+      "start": "2026-10-23T11:25:47+01:00",
+      "title": "Ice rink damaged, won't open on Saturday",
+      "summary": "SoJDC says the ice rink was damaged in Storm Austen and won't open as planned on Saturday 24 October.",
+      "details": "SoJDC said the ice rink sustained damage during Storm Austen and will not open as planned on Saturday 24 October [1].",
+      "category": "damage",
+      "severity": "info",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "bluesky",
+          "publisher": "today.je (Bluesky)",
+          "title": "SoJDC ice rink update",
+          "url": "https://bsky.app/profile/today.je/post/3myjxnpo3fs2i",
+          "time": "2026-10-23T11:25:47+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-gov-update-1100",
+      "start": "2026-10-23T11:00:00+01:00",
+      "title": "Government 11am update: stay in until lunchtime, parks closed",
+      "summary": "Islanders are still advised to stay indoors and avoid unnecessary travel until lunchtime while roads are cleared; parks and Active sites stay closed.",
+      "details": "The government said winds are predicted to drop later today but trees and debris continue to fall and block roads. Union Street's Customer Hub reopens at 1pm; all parks and Active sites remain closed until further notice. Flights should be checked with airlines and buses with LibertyBus [1][2].",
+      "category": "advice",
       "severity": "major",
       "area": "jersey",
       "sources": [
         {
-          "type": "news",
-          "publisher": "Bailiwick Express",
-          "author": "James Lewis",
-          "title": "Islanders wake to fallen trees and travel disruption as Storm Austen continues",
-          "url": "https://www.bailiwickexpress.com/news/islanders-wake-to-fallen-trees-and-travel-disruption-as-storm-austen-continues/",
-          "time": "2026-10-23T09:37:28+01:00"
+          "type": "gov",
+          "publisher": "Government of Jersey",
+          "title": "Storm Austen: Update for Islanders",
+          "url": "https://www.gov.je/News/2026/Pages/StormAustenMorningUpdate.aspx",
+          "time": "2026-10-23T11:00:00+01:00",
+          "author": ""
+        },
+        {
+          "type": "x",
+          "publisher": "@GovJersey",
+          "title": "Stay indoors until lunchtime while roads are cleared",
+          "url": "https://x.com/GovJersey/status/2113574861960290801",
+          "time": "2026-10-23T11:14:50+01:00",
+          "author": "GovJersey"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-ie-111-reports-1000",
+      "start": "2026-10-23T10:00:00+01:00",
+      "title": "111 storm reports so far, 91 of them fallen trees",
+      "summary": "Infrastructure and Environment had received 111 Storm Austen reports by 10am, including 91 fallen trees.",
+      "details": "Infrastructure and Environment's 10am update said it had received 111 reports related to Storm Austen, 91 of them about trees [1]. Fallen trees and debris can be reported on the gov.je incident map.",
+      "category": "closures",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "bluesky",
+          "publisher": "today.je (Bluesky)",
+          "title": "Infrastructure and Environment 10am update",
+          "url": "https://bsky.app/profile/today.je/post/3myjusgasua2r",
+          "time": "2026-10-23T10:34:44+01:00",
+          "author": "today.je"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-red-warning-reissued-0951",
+      "start": "2026-10-23T09:51:00+01:00",
+      "title": "Red warning re-issued at 9:51am: severe gale F9 continuing",
+      "summary": "Jersey Met re-issued the red Channel Islands wind warning: W to NW severe gale F9 with gusts to 65kt continuing.",
+      "details": "Jersey Met re-issued the red wind warning for the Channel Islands shipping area at 9:51am, with west to north-west severe gale F9 and gusts to 65 knots continuing [1].",
+      "category": "warning",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "gov",
+          "publisher": "Jersey Met",
+          "title": "Jersey warnings",
+          "url": "https://www.gov.je/weather/jerseywarnings/",
+          "time": "2026-10-23T09:51:00+01:00",
+          "author": ""
         }
       ]
     },
@@ -132,6 +219,27 @@
           "title": "Gusts of up to 80mph forecast today as schools close and Islanders work from home",
           "url": "https://jerseyeveningpost.com/news/2026/10/23/gusts-of-up-to-80mph-forecast-today-as-schools-close-and-islanders-work-from-home/",
           "time": "2026-10-23T05:36:00+01:00"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-23-peak-gust-85mph-0400",
+      "start": "2026-10-23T04:00:00+01:00",
+      "end": "2026-10-23T09:37:28+01:00",
+      "title": "85mph peak gust recorded around 4am; severe gales continue",
+      "summary": "Winds of 85mph were recorded in Jersey overnight, peaking around 4am; severe gale F9 winds continue from the west to north-west.",
+      "details": "Bailiwick Express reported a top wind speed of 85mph, reached at around 4am, with severe gale F9 west to north-west winds still blowing across the island. Many services and businesses are closed and Islanders are being told to stay inside; emergency, maternity and urgent care at the hospital remain open [1].",
+      "category": "weather",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "news",
+          "publisher": "Bailiwick Express",
+          "author": "James Lewis",
+          "title": "Islanders wake to fallen trees and travel disruption as Storm Austen continues",
+          "url": "https://www.bailiwickexpress.com/news/islanders-wake-to-fallen-trees-and-travel-disruption-as-storm-austen-continues/",
+          "time": "2026-10-23T09:37:28+01:00"
         }
       ]
     },

@@ -1,11 +1,13 @@
 {
-  "updatedAt": "2026-10-23T09:50:00+01:00",
+  "updatedAt": "2026-10-23T12:20:00+01:00",
   "note": "Edit this file to update the summary box. Links use [label](https://...) syntax. 'posts' lists X/Bluesky post URLs to show as cards (X posts must also be in x-posts.json).",
-  "headline": "A **red wind warning** is in force for the Channel Islands. Jersey Met re-issued it at 3:41am: south **severe gale F9 with gusts to 60 knots**, veering west to north-west **storm F10 with gusts to 70 knots now imminent** ([Jersey Met](https://www.gov.je/weather/jerseywarnings/)). Gales are expected to stay severe, locally storm F10, until about midday, then ease to gale F7–8 by late afternoon ([Jersey Weather Updates](https://bsky.app/profile/jsyweather.bsky.social/post/3myj6honn6c26)). A **yellow thunderstorm warning** also runs until about 1:25pm. Islanders are advised to **stay indoors during the worst of the weather and avoid unnecessary travel until lunchtime on Friday** ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx), [@GovJersey](https://x.com/GovJersey/status/2113309137278820555)).",
+  "headline": "The **red wind warning** for the Channel Islands was re-issued at 9:51am: west to north-west **severe gale F9 with gusts to 65 knots continuing** ([Jersey Met](https://www.gov.je/weather/jerseywarnings/)). **Winds are now easing** and Jersey Electricity says the island is moving beyond the worst of Storm Austen ([today.je on Bluesky](https://bsky.app/profile/today.je/post/3myjztijcgl2k)). A **yellow thunderstorm warning** also runs until about 1:25pm. Islanders are still advised to **stay indoors and avoid unnecessary travel until lunchtime today** while teams clear roads, as trees and debris continue to fall ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenMorningUpdate.aspx), [@GovJersey](https://x.com/GovJersey/status/2113574861960290801)).",
   "sections": [
     {
       "title": "So far",
       "points": [
+        "The government's 11am update: Infrastructure and Environment teams are clearing roads; the Union Street Customer Hub reopens at 1pm, but **all parks and Active sites stay closed until further notice**. Check flights with your airline and buses with [LibertyBus](https://libertybus.je/news/storm-austen) ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenMorningUpdate.aspx)).",
+        "By 10am Infrastructure and Environment had received **111 storm reports, 91 of them fallen trees** ([today.je on Bluesky](https://bsky.app/profile/today.je/post/3myjusgasua2r)). Report fallen trees or debris on the [gov.je incident map](https://roadworks.gov.je/EWXPublic/). The ice rink was damaged and won't open as planned on Saturday 24 October ([today.je on Bluesky](https://bsky.app/profile/today.je/post/3myjxnpo3fs2i)).",
         "**Winds of 85mph were recorded overnight**, peaking around 4am, and severe gale F9 winds are still blowing from the west to north-west ([Bailiwick Express](https://www.bailiwickexpress.com/news/islanders-wake-to-fallen-trees-and-travel-disruption-as-storm-austen-continues/)).",
         "**Wind speeds topped 80mph** on Friday morning and many businesses and services have closed; emergency, urgent and maternity services are running as normal ([Bailiwick Express](https://www.bailiwickexpress.com/news/businesses-and-services-close-as-storm-austen-hit/)). Trinity Parish Office is closed today ([today.je](https://bsky.app/profile/today.je/post/3myjp5r5rss2k)), and Rubis has posted a customer update ([Rubis](https://rubis-ci.co.uk/news/storm-austen-customer-update/)).",
         "Jersey Met's 7:37am forecast: WNW **severe gale F9 with gusts to 75mph, briefly storm F10 with gusts to 85mph**, gale F8 later, with sunny periods and blustery showers this afternoon ([@Jersey_Met](https://x.com/Jersey_Met/status/2113520077521715326)). **Fallen trees and blocked roads** are being reported as the island wakes up ([@Channel103](https://x.com/Channel103/status/2113513817623662704)), and the JEP reports the **airport, harbour and other closures** as the storm sweeps over ([JEP](https://jerseyeveningpost.com/news/2026/10/23/airport-harbour-and-other-closures-as-storm-austen-sweeps-over-jersey/)).",
@@ -51,6 +53,7 @@
     }
   ],
   "posts": [
+    "https://x.com/GovJersey/status/2113574861960290801",
     "https://x.com/Jersey_Met/status/2113520077521715326",
     "https://x.com/Channel103/status/2113513817623662704",
     "https://x.com/Jersey_Met/status/2113487629950054732",
