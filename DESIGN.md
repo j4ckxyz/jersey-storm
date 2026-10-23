@@ -215,7 +215,7 @@ A cool sea-mist neutral base, one Channel Blue accent for interaction and live s
 ## Layout
 
 The layout is a centred column with a maximum width of 1200px and side gutters of at least 16px, respecting the safe-area insets. On desktop:
-- the "Right now" panel spans the full width, with its warnings in a second column;
+- the "Simple | Detailed" segmented control, the warning banner and the one-line "now" strip span the full width. Detailed sections (Weather now, Travel, Maps & imagery, Sources) follow in a two-column grid, only when Detailed is on;
 - below it, a two-column grid has the main updates column on the left and a 380px sidebar on the right (forecast, useful links, emergency information), with 32px between columns and sections.
 
 **Spacing** follows a 4px-based scale (4, 8, 12, 16, 24, 32, 48). Related items sit 8–12px apart, sections 32px apart, and there's more space above a heading than below it.
@@ -273,6 +273,12 @@ Avatars are circles. Borders are always 1px. Severity is never shown as a thick 
 
 ### Inputs / Fields
 - **Guernsey switch:** a 34×20px rounded track, a Strong Hairline grey when off and Harbour Ink when on. The 16px knob slides 14px. It's a real checkbox with `role="switch"`, so it works with the keyboard and screen readers.
+
+### Segmented control (Simple | Detailed)
+A fully round Deeper Sea Mist track with two 34px text buttons (44px hit areas). The selected one is a Paper pill with the ambient shadow (Strong Hairline in dark mode). Always labelled in words, never icon-only.
+
+### Now strip
+One line of live readings in Slate-weight body text (two lines at most on phones, with that space held from the start). Each part is a quiet underlined text button that opens Detailed at its section. No cards, tiles or icons.
 
 ### Navigation
 - **Header:** sticky, translucent Sea Mist with a blur. It holds the logo tile (a Channel Blue square with a wind glyph), the title, the live status, the gust chip and the icon buttons.

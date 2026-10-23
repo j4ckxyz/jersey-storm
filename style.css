@@ -94,8 +94,7 @@ h1{font-size:1.06rem;font-weight:700;white-space:nowrap}
 .gust-chip.sev-amber{background:color-mix(in oklab,var(--amber) var(--fill),transparent);color:var(--amber-ink)}
 .gust-chip.sev-yellow{background:color-mix(in oklab,var(--yellow) var(--fill),transparent);color:var(--yellow-ink)}
 @media (max-width:480px){
-  .where,.gc-l,.sw-x{display:none}
-  .mode-btn{width:38px;padding:0;justify-content:center}
+  .where,.gc-l,.sw-x,.lu-x{display:none}
   .logo{display:none} /* room for the status line beside four header controls */
   .gust-chip{padding:0 10px}
   .warn:not([open]) .warn-sub{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
@@ -103,6 +102,25 @@ h1{font-size:1.06rem;font-weight:700;white-space:nowrap}
 
 .intro{margin:var(--space-sm) 0 0;font-size:.88rem;color:var(--muted)}
 .intro[hidden]{display:none}
+
+/* ---------- Simple | Detailed ---------- */
+.viewbar{margin-top:var(--space-md);display:flex}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.seg button{position:relative;height:34px;min-width:88px;padding:0 16px;border:0;border-radius:999px;background:none;color:var(--muted);font-size:.9rem;font-weight:650;transition:background-color .2s var(--ease-out),color .2s var(--ease-out),transform .12s var(--ease-out)}
+.seg button::after{content:"";position:absolute;inset:-5px 0}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{background:var(--line-2)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{background:var(--line-2)}}
+.seg button:active{transform:scale(.96)}
+
+/* ---------- now strip: one line of live readings ---------- */
+.strip-wrap{display:flex}
+.now-strip{flex:1;min-width:0;margin-top:var(--space-sm);min-height:1.38rem;font-size:.92rem;line-height:1.5;color:var(--muted);font-variant-numeric:tabular-nums;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.now-strip .sk{display:inline-block;width:70%;height:13px;margin:0;vertical-align:-1px}
+.now-strip button{display:inline;padding:10px 0;margin:-10px 0;border:0;background:none;color:var(--text);font:inherit;text-align:left;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px;text-decoration-thickness:1px}
+.now-strip button:hover{color:var(--accent);text-decoration-color:currentColor}
+.now-strip b{font-weight:650}
 
 /* ---------- cards & sections ---------- */
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
@@ -115,10 +133,10 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .sum-sec[hidden]{display:none}
 
 /* ---------- right now ---------- */
-.now{margin-top:var(--space-md);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space-lg);display:grid;gap:var(--space-md) var(--space-xl);grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-template-areas:"head todo" "main todo" "latest todo";align-items:start}
+.now{display:grid;gap:var(--space-sm) var(--space-xl);grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"head head" "main latest";align-items:start}
 .now-live{display:contents}
 .now-head{grid-area:head;display:flex;align-items:center;gap:var(--space-sm)}
-.now-head h2{font-size:.95rem;font-weight:650;letter-spacing:0;color:var(--muted)}
+.now-head h3{font-size:.95rem;font-weight:650;color:var(--muted);margin:0}
 .now-main{grid-area:main;display:flex;flex-direction:column;gap:var(--space-xs)}
 .now-line{font-size:1.75rem;font-weight:700;line-height:1.15;letter-spacing:-.025em;text-wrap:balance}
 .now-line b{display:inline-block;font-weight:800;font-variant-numeric:tabular-nums}
@@ -126,14 +144,6 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .now-line.sev-amber b{color:var(--amber)}
 .now-line.sev-yellow b{color:color-mix(in srgb,var(--yellow) 70%,var(--text))}
 .now-sub{color:var(--muted);font-size:.95rem}
-.wg-h{font-size:.88rem;font-weight:650;color:var(--muted)}
-/* what to do tonight: short sourced actions beside "Right now" */
-.todo{grid-area:todo;display:flex;flex-direction:column;gap:var(--space-xs)}
-.todo ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column}
-.todo li{padding:var(--space-xs) 0;border-top:1px solid var(--line);font-size:.95rem;line-height:1.45}
-.todo li:first-child{border-top:0;padding-top:0}
-.todo a[href^="tel:"],.todo a[href^="mailto:"]{font-weight:650;white-space:nowrap}
-.todo-src{font-size:.82rem;color:var(--muted);white-space:nowrap}
 /* one warning banner: the most serious Jersey Met warning, in its own colour */
 .warn-banner{--wc:var(--yellow);--wb:var(--yellow-bg);margin-top:var(--space-md);display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-sm);align-items:start;padding:var(--space-sm) var(--space-md);background:var(--wb);border:1px solid color-mix(in oklab,var(--wc) 40%,transparent);border-left-width:4px;border-left-color:var(--wc);border-radius:12px;color:var(--text);text-decoration:none}
 .warn-banner[hidden]{display:none}
@@ -149,7 +159,7 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .wb-sum{font-size:.92rem}
 .wb-meta{font-size:.82rem;color:var(--muted)}
 .warn-banner:hover .wb-meta{color:var(--accent)}
-.latest{grid-area:latest;display:flex;flex-direction:column;gap:var(--space-2xs);padding-top:var(--space-md);border-top:1px solid var(--line);text-decoration:none;color:var(--text)}
+.latest{grid-area:latest;display:flex;flex-direction:column;gap:var(--space-2xs);padding-left:var(--space-lg);border-left:1px solid var(--line);text-decoration:none;color:var(--text)}
 .latest:hover .l-title{color:var(--accent)}
 .l-meta{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
 .l-meta b{color:var(--text);margin-right:2px}
@@ -170,6 +180,7 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.015em}
 .pill.st-severe{color:var(--red)}
 .pill.st-easing{color:var(--accent)}
 .sum-lead{font-size:1.08rem;line-height:1.55;font-weight:500}
+@media (max-width:600px){body:not(.detailed) .summary:not(.open) .sum-lead{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}}
 .highlights{display:flex;gap:8px;margin-top:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .highlights::-webkit-scrollbar{display:none}
 .hl{flex:none;display:flex;flex-direction:column;padding:8px 12px;border-radius:12px;background:var(--surface-2);text-decoration:none;color:inherit;min-width:96px}
@@ -325,8 +336,6 @@ a.hl:hover{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
 .evs-t{grid-column:3/-1;font-size:.84rem;line-height:1.4;color:var(--muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .posts-toggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:44px;margin-top:4px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--muted);font-size:.88rem;font-weight:600}
 .posts-toggle[hidden]{display:none}
-/* detailed-only parts stay hidden unless app.js has switched the detailed view on, so a script failure can't expose them */
-body:not(.detailed) .posts-toggle{display:none}
 .posts-toggle:hover{color:var(--text);border-color:var(--line-2)}
 .posts-toggle .cnt{font-variant-numeric:tabular-nums}
 .posts-toggle svg{width:16px;height:16px;transition:transform .2s}
@@ -426,7 +435,7 @@ body:not(.detailed) .posts-toggle{display:none}
 @media (min-width:601px) and (max-width:899px){.sk-wrap2{display:none}}
 .hour .sk-label{width:72px}
 .latest .sk-text{margin-top:8px}
-.summary[aria-busy="true"]{min-height:460px}
+.summary[aria-busy="true"]{min-height:280px}
 .filters:empty{min-height:45px}
 @keyframes shimmer{to{background-position:-200% 0}}
 
@@ -438,9 +447,9 @@ body:not(.detailed) .posts-toggle{display:none}
 
 /* bottom tab bar (mobile) */
 /* ---------- right now: observation tiles ---------- */
-.obs{margin-top:var(--space-md);display:flex;flex-direction:column} /* the mobile tab rule sets display:flex !important, so the direction must be set here */
+.obs{display:flex;flex-direction:column}
 .obs-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-sm);flex-wrap:wrap;margin-bottom:var(--space-xs)}
-.obs-head h2{font-size:.95rem;font-weight:650;color:var(--muted)}
+.obs-head h3{margin:0;font-size:.95rem;font-weight:650;color:var(--muted)}
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .tiles[hidden],.tile[hidden]{display:none}
 .tile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:108px;padding:12px 14px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;color:var(--text);box-shadow:var(--shadow);cursor:pointer;transition:border-color .15s,transform .12s var(--ease-out)}
@@ -452,19 +461,22 @@ body:not(.detailed) .posts-toggle{display:none}
 .t-s{font-size:.8rem;color:var(--muted);line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .trend{font-size:1.2rem;color:var(--muted);align-self:center}
 .dir-arrow{width:24px;height:24px;flex:none;align-self:center;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s var(--ease-out)}
-.travel-sum{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;min-height:58px;margin-top:10px;padding:10px 14px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;color:var(--text);font-size:.9rem;line-height:1.4;box-shadow:var(--shadow);cursor:pointer}
+.travel-sum{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:58px;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;font-size:.9rem;line-height:1.4;box-shadow:var(--shadow)}
 .travel-sum[hidden]{display:none}
-.travel-sum:hover{border-color:var(--line-2)}
 .travel-sum .sk{width:80%}
-.detail-btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:10px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--accent);font-weight:650;font-size:.92rem}
-.detail-btn:hover{border-color:var(--line-2)}
-.mode-btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:.84rem;font-weight:600}
-.mode-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.mode-btn[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
 
 /* ---------- detailed view ---------- */
-.detail{display:none;margin-top:var(--space-md);gap:var(--space-md);grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-body.detailed .detail{display:grid}
+/* hidden unless app.js switches it on (index.html repeats the rule inline, so a stale stylesheet can't show it) */
+.detail{display:none;margin-top:var(--space-md);flex-direction:column;gap:var(--space-xl)}
+body.detailed .detail{display:flex}
+.dsec{display:grid;gap:var(--space-md);grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.dsec-h,.dwide{grid-column:1/-1}
+.dsec-h{margin-bottom:calc(var(--space-xs) * -1)}
+.src-status{list-style:none;margin:0;padding:0}
+.src-status li{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
+.src-status li:first-child{border-top:0;padding-top:0}
+.src-status li:last-child{padding-bottom:0}
+.src-status .asof,.src-status .src-na{font-size:.84rem}
 .detail h3{font-size:.95rem;font-weight:650;margin-bottom:var(--space-xs)}
 .detail h4{font-size:.82rem;font-weight:650;color:var(--muted);margin:var(--space-sm) 0 4px}
 .img-tabs{display:flex;gap:6px;margin-bottom:var(--space-sm);flex-wrap:wrap}
@@ -477,7 +489,6 @@ body.detailed .detail{display:grid}
 .img-panel figcaption{margin-top:6px;font-size:.82rem;color:var(--muted)}
 .windy-frame{aspect-ratio:800/612;border-radius:10px;overflow:hidden;background:var(--surface-2);margin-bottom:6px}
 .windy-frame iframe{width:100%;height:100%;border:0;display:block}
-.detail-pair{display:contents}
 .readout{margin:0;display:flex;flex-direction:column}
 .readout div{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:.92rem}
 .readout div:first-child{border-top:0}
@@ -491,7 +502,6 @@ body.detailed .detail{display:grid}
 .tide-t tr.next td{font-weight:700}
 .tide-t tr.next td:first-child::after{content:" · next";font-weight:500;color:var(--muted)}
 .tides p,.metar p,.windy p{margin-top:var(--space-xs)}
-.services{grid-column:1/-1}
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
 .svc{display:flex;flex-direction:column;gap:2px;min-height:56px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--text)}
 .svc:hover{border-color:var(--line-2)}
@@ -499,7 +509,7 @@ body.detailed .detail{display:grid}
 .svc b{font-size:.92rem}
 .svc b::after{content:"";display:inline-block;width:.8em;height:.8em;margin-left:.3em;background:var(--muted);-webkit-mask:var(--icon-ext) center/contain no-repeat;mask:var(--icon-ext) center/contain no-repeat}
 .svc span{font-size:.8rem;color:var(--muted)}
-.svc-cam{border-color:color-mix(in oklab,var(--accent) 40%,var(--line));background:color-mix(in oklab,var(--accent) 6%,var(--surface))}
+.svc.svc-cam{border-color:color-mix(in oklab,var(--accent) 40%,var(--line));background:color-mix(in oklab,var(--accent) 6%,var(--surface))}
 /* flight and ferry boards */
 .board-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .board-head .img-tabs{margin-bottom:0}
@@ -518,7 +528,9 @@ body.detailed .detail{display:grid}
 /* shown in place of a stuck skeleton (app.js offerReload) */
 .broken-btn{display:block;width:100%;min-height:44px;padding:10px 14px;border:1px dashed var(--line-2);border-radius:12px;background:var(--surface);color:var(--accent);font-weight:650;font-size:.92rem}
 #obs-time .broken-btn{display:inline;width:auto;min-height:0;padding:0;border:0;background:none;font-size:inherit}
-/* "as of 9:15pm": quiet, amber once older than that source normally gets */
+/* "as of 9:15pm": quiet, amber once older than that source normally gets. Detailed view only: the simple view
+   has the one status line in the header instead */
+body:not(.detailed) :is(.asof,.asof-w){display:none}
 .asof{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .asof.stale{color:color-mix(in oklab,var(--amber) 75%,var(--text));font-weight:600}
 /* "New since your last visit" */
@@ -537,16 +549,16 @@ body.detailed .detail{display:grid}
 
 @media (max-width:899px){
   :root{--hdr:56px;--tabbar:calc(64px + env(safe-area-inset-bottom))}
-  .layout{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:16px}
+  .layout{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:var(--space-sm)}
   .col-side{gap:20px}
   [data-view]{display:none !important}
   body[data-active="updates"] [data-view~="updates"],
   body[data-active="forecast"] [data-view~="forecast"],
   body[data-active="info"] [data-view~="info"]{display:flex !important}
   body:not([data-active="updates"]) .intro{display:none}
-  .now{flex-direction:column;align-items:stretch;gap:var(--space-md);padding:var(--space-md);margin-top:var(--space-sm)}
+  .now{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "main" "latest"}
+  .now .latest{padding:var(--space-sm) 0 0;border-left:0;border-top:1px solid var(--line)}
   .now-line{font-size:1.5rem}
-  .now .latest{order:1}
   .warn-banner{margin-top:var(--space-sm)}
   .warn-banner.pending{height:174px}
   .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;height:var(--tabbar);padding:6px max(8px,env(safe-area-inset-left)) env(safe-area-inset-bottom);background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);border-top:1px solid var(--line)}
@@ -560,11 +572,12 @@ body.detailed .detail{display:grid}
   #ev-filters button::after{content:"";position:absolute;inset:-3px 0}
   #ev-filters:empty{min-height:49px}
   .area-sw{height:44px}
-  .summary[aria-busy="true"]{min-height:760px}
+  .summary[aria-busy="true"]{min-height:250px}
   .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .detail{grid-template-columns:minmax(0,1fr)}
+  .dsec{grid-template-columns:minmax(0,1fr)}
   body.detailed:not([data-active="updates"]) .detail{display:none}
-  .obs{margin-top:var(--space-sm)}
+  .viewbar{margin-top:var(--space-xs)}
+  .now-strip{min-height:2.76rem} /* up to two lines here, held from the start so filling it in moves nothing */
 }
 @media (max-width:600px){
   .ev-controls{flex-direction:column;align-items:stretch;gap:0}
