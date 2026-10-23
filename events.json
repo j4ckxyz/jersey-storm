@@ -1,8 +1,28 @@
 {
   "version": 1,
-  "updated": "2026-10-23T20:15:00+01:00",
+  "updated": "2026-10-23T22:10:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-orange-shipping-warning-2135",
+      "start": "2026-10-23T21:35:00+01:00",
+      "title": "Orange shipping-area wind warning re-issued",
+      "summary": "Jersey Met re-issued the orange wind warning for the Channel Islands Shipping Area: W to NW F7, backing SW gale F8 with gusts to 50 knots later.",
+      "details": "Jersey Met re-issued its orange wind warning for the Channel Islands Shipping Area at 9:35pm: west to north-west wind F7, backing south-west gale F8 with gusts to 50 knots later [1].",
+      "category": "warning",
+      "severity": "notable",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "web",
+          "publisher": "Jersey Met",
+          "title": "ORANGE Channel Islands Shipping Area Wind warning",
+          "url": "https://www.gov.je/weather/jerseywarnings/",
+          "time": "2026-10-23T21:35:00+01:00",
+          "author": ""
+        }
+      ]
+    },
     {
       "id": "2026-10-23-day-of-disruption-wrap-1958",
       "start": "2026-10-23T19:58:59+01:00",
