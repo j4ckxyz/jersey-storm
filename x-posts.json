@@ -1,6 +1,30 @@
 {
-  "generatedAt": "2026-10-23T07:05:00+01:00",
+  "generatedAt": "2026-10-23T08:15:00+01:00",
   "posts": [
+    {
+      "id": "2113520077521715326",
+      "source": "X",
+      "platform": "x",
+      "author": "Jersey Met",
+      "handle": "Jersey_Met",
+      "avatar": "https://pbs.twimg.com/profile_images/1859262056265924609/JIBulToH_normal.jpg",
+      "text": "Jersey today: Cloudy with heavy showers or longer spells of rain, perhaps thundery. Sunny periods developing this afternoon with blustery showers likely, perhaps heavy. Max: 15°C\nWind: WNW severe gale F9 with gusts to 75mph, briefly storm F10 with gusts to 85mph,  gale F8 later.",
+      "media": [],
+      "time": "2026-10-23T06:37:08.000Z",
+      "url": "https://x.com/Jersey_Met/status/2113520077521715326"
+    },
+    {
+      "id": "2113513817623662704",
+      "source": "X",
+      "platform": "x",
+      "author": "Channel 103",
+      "handle": "Channel103",
+      "avatar": "https://pbs.twimg.com/profile_images/1806293131232452608/nic59g2V_normal.jpg",
+      "text": "Fallen trees and blocked roads are beginning to be reported as Jersey begins the day",
+      "media": [],
+      "time": "2026-10-23T06:12:15.000Z",
+      "url": "https://x.com/Channel103/status/2113513817623662704"
+    },
     {
       "id": "2113487629950054732",
       "source": "X",

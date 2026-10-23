@@ -1,8 +1,53 @@
 {
   "version": 1,
-  "updated": "2026-10-23T07:05:00+01:00",
+  "updated": "2026-10-23T08:15:00+01:00",
   "timezone": "Europe/Jersey",
   "events": [
+    {
+      "id": "2026-10-23-trees-roads-closures-morning",
+      "start": "2026-10-23T07:12:15+01:00",
+      "end": "2026-10-23T07:37:08+01:00",
+      "title": "Fallen trees, blocked roads and closures",
+      "summary": "Fallen trees and blocked roads reported as Jersey wakes up; airport, harbour and other closures; Jersey Met still forecasts gusts to 85mph.",
+      "details": "Channel 103 reported fallen trees and blocked roads beginning to come in [1]. The JEP reported airport, harbour and other closures as Storm Austen swept over [2]. Jersey Electricity posted a 7:30am storm update [3]. Jersey Met's 7:37am forecast kept WNW severe gale F9 with gusts to 75mph, briefly storm F10 with gusts to 85mph [4].",
+      "category": "closures",
+      "severity": "major",
+      "area": "jersey",
+      "sources": [
+        {
+          "type": "x",
+          "publisher": "Channel 103",
+          "author": "Channel103",
+          "title": "Fallen trees and blocked roads are beginning to be reported",
+          "url": "https://x.com/Channel103/status/2113513817623662704",
+          "time": "2026-10-23T07:12:15+01:00"
+        },
+        {
+          "type": "jep",
+          "publisher": "Jersey Evening Post",
+          "author": "",
+          "title": "Airport, Harbour and other closures as Storm Austen sweeps over Jersey",
+          "url": "https://jerseyeveningpost.com/news/2026/10/23/airport-harbour-and-other-closures-as-storm-austen-sweeps-over-jersey/",
+          "time": "2026-10-23T07:18:23+01:00"
+        },
+        {
+          "type": "bluesky",
+          "publisher": "Jersey Electricity (via today.je)",
+          "author": "today.je",
+          "title": "Storm Austen Update, 7.30am",
+          "url": "https://bsky.app/profile/today.je/post/3myjlw3e3qr2o",
+          "time": "2026-10-23T07:55:43+01:00"
+        },
+        {
+          "type": "x",
+          "publisher": "Jersey Met",
+          "author": "Jersey_Met",
+          "title": "Jersey today: gusts to 75mph, briefly storm F10 85mph",
+          "url": "https://x.com/Jersey_Met/status/2113520077521715326",
+          "time": "2026-10-23T07:37:08+01:00"
+        }
+      ]
+    },
     {
       "id": "2026-10-23-met-forecast-0528",
       "start": "2026-10-23T05:28:12+01:00",

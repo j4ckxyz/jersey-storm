@@ -1,11 +1,12 @@
 {
-  "updatedAt": "2026-10-23T07:05:00+01:00",
+  "updatedAt": "2026-10-23T08:15:00+01:00",
   "note": "Edit this file to update the summary box. Links use [label](https://...) syntax. 'posts' lists X/Bluesky post URLs to show as cards (X posts must also be in x-posts.json).",
   "headline": "A **red wind warning** is in force for the Channel Islands. Jersey Met re-issued it at 3:41am: south **severe gale F9 with gusts to 60 knots**, veering west to north-west **storm F10 with gusts to 70 knots now imminent** ([Jersey Met](https://www.gov.je/weather/jerseywarnings/)). Gales are expected to stay severe, locally storm F10, until about midday, then ease to gale F7–8 by late afternoon ([Jersey Weather Updates](https://bsky.app/profile/jsyweather.bsky.social/post/3myj6honn6c26)). A **yellow thunderstorm warning** also runs until about 1:25pm. Islanders are advised to **stay indoors during the worst of the weather and avoid unnecessary travel until lunchtime on Friday** ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenAdvice.aspx), [@GovJersey](https://x.com/GovJersey/status/2113309137278820555)).",
   "sections": [
     {
       "title": "So far",
       "points": [
+        "Jersey Met's 7:37am forecast: WNW **severe gale F9 with gusts to 75mph, briefly storm F10 with gusts to 85mph**, gale F8 later, with sunny periods and blustery showers this afternoon ([@Jersey_Met](https://x.com/Jersey_Met/status/2113520077521715326)). **Fallen trees and blocked roads** are being reported as the island wakes up ([@Channel103](https://x.com/Channel103/status/2113513817623662704)), and the JEP reports the **airport, harbour and other closures** as the storm sweeps over ([JEP](https://jerseyeveningpost.com/news/2026/10/23/airport-harbour-and-other-closures-as-storm-austen-sweeps-over-jersey/)).",
         "Jersey Met's 5:28am forecast: west to north-west **severe gale F9 with gusts to 75mph, perhaps storm F10 with gusts to 85mph**, decreasing gale F8 then strong F7 later, with heavy rain turning to blustery showers ([@Jersey_Met](https://x.com/Jersey_Met/status/2113487629950054732)). BBC News reports power cuts across the South West and Channel Islands as the storm hits ([BBC News live](https://www.bbc.com/news/live/cm87zg08je9gt)).",
         "Jersey Met re-issued the **red warning** at 3:41am: south severe gale F9 with gusts to 60 knots, veering west to north-west **storm F10 with gusts to 70 knots imminent**. Damage to moored boats is likely and damage to infrastructure is possible ([Jersey Met](https://www.gov.je/weather/jerseywarnings/), [Jersey Met](https://www.gov.je/weather/)).",
         "A **yellow thunderstorm warning** for Jersey, Guernsey and Alderney was re-issued at 10:22pm, valid for 15 hours. Isolated thunderstorms could bring localised flooding of roads, standing water, hail and lightning damage ([Jersey Met](https://www.gov.je/weather/), [@Jersey_MetCI](https://x.com/Jersey_MetCI/status/2113381342972960861)).",
@@ -34,7 +35,7 @@
         "**Shops and fuel on Friday:** Co-op food and pharmacy stores, Waitrose and M&S open at 1pm ([Channel 103](https://www.channel103.com/news/jersey/storm-austen-all-you-need-to-know/), [Channel Islands Co-op](https://www.channelislands.coop/your-society/blog-and-news/storm-austen-update/)). Rubis has paused fuel deliveries and forecourts until at least midday ([Channel 103](https://www.channel103.com/local/stormausten/)).",
         "**Friday closures:** La Collette recycling and green waste site, Howard Davis, Coronation and Sir Winston Churchill parks, the Jersey and Western libraries (morning), and sports centres until at least 3pm ([gov.je](https://www.gov.je/News/2026/Pages/StormAustenUpdates.aspx)). All Jersey Heritage sites and the JEC Powerhouse store are closed, and the Arts Centre is closed until 10am ([Channel 103](https://www.channel103.com/local/stormausten/)). The government's Union Street Customer Hub will now be **closed on Friday morning** and expects to reopen at 1pm ([@GovJersey](https://x.com/GovJersey/status/2113359001207316556), [gov.je on Bluesky](https://bsky.app/profile/gov.je/post/3myih4cnjz72w)).",
         "Queen's Valley and Val de la Mare reservoirs are closed until further notice. No disruption to water supply is expected ([Jersey Water](https://www.jerseywater.je/storm-austen-jersey-water-prepares-for-severe-weather/)).",
-        "**Power:** no storm power cuts had been reported in the sources checked as of 11:10pm Thursday. Jersey Electricity urges pay-as-you-go customers to top up today. To report a power cut or electrical hazard, call 01534 505050 ([Jersey Electricity](https://www.jec.co.uk/the-energy-blog/215pm-thursday-22-october-storm-austen/), [JEP](https://jerseyeveningpost.com/news/2026/10/22/%e2%99%a6-jep-live-storm-austen-set-to-batter-jersey/))."
+        "**Power:** Jersey Electricity posted a Storm Austen update at 7:30am Friday as its teams respond to the storm ([Jersey Electricity via today.je](https://bsky.app/profile/today.je/post/3myjlw3e3qr2o)). To report a power cut or electrical hazard, call 01534 505050."
       ]
     },
     {
@@ -48,6 +49,8 @@
     }
   ],
   "posts": [
+    "https://x.com/Jersey_Met/status/2113520077521715326",
+    "https://x.com/Channel103/status/2113513817623662704",
     "https://x.com/Jersey_Met/status/2113487629950054732",
     "https://x.com/Jersey_MetCI/status/2113381342972960861",
     "https://x.com/GuernseyMet/status/2113369285783388415",
